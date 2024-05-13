@@ -11,6 +11,7 @@ import dev.xkmc.l2backpack.content.drawer.DrawerItem;
 import dev.xkmc.l2backpack.init.registrate.BackpackBlocks;
 import dev.xkmc.l2library.util.Proxy;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -139,28 +140,39 @@ public class BaseItemRenderer extends BlockEntityWithoutLevelRenderer {
 		poseStack.pushPose(); // transform hack
 
 		poseStack.pushPose();
-		BlockState state = BackpackBlocks.ENDER_DRAWER.getDefaultState();
-		if (stack.getItem() instanceof DrawerItem) {
-			state = BackpackBlocks.DRAWER.getDefaultState();
-		}
-		BakedModel model = Minecraft.getInstance().getModelManager().getBlockModelShaper().getBlockModel(state);
-		model = model.applyTransform(type, poseStack, false);
-		poseStack.translate(-.5F, -.5F, -.5F);
-
-		ModelBlockRenderer renderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
-		PoseStack.Pose pose = poseStack.last();
-
-		random.setSeed(42);
-		for (RenderType rt : model.getRenderTypes(state, random, ModelData.EMPTY)) {
-			renderer.renderModel(pose, bufferSource.getBuffer(ForgeHooksClient.getEntityRenderType(rt, false)),
-					state, model, 1F, 1F, 1F, light, overlay, ModelData.EMPTY, rt);
-		}
 
 		Item item = BaseDrawerItem.getItem(stack);
 		int count = stack.getItem() instanceof DrawerItem ? DrawerItem.getCount(stack) : 1;
 		ItemStack inv = new ItemStack(item, count);
-		renderItemInside(inv, item instanceof BlockItem ? 0.5D : 0.625D, poseStack, type, bufferSource, light, overlay);
 
+		if (inv.isEmpty() || !Screen.hasShiftDown()) {
+			BlockState state = BackpackBlocks.ENDER_DRAWER.getDefaultState();
+			if (stack.getItem() instanceof DrawerItem) {
+				state = BackpackBlocks.DRAWER.getDefaultState();
+			}
+			BakedModel model = Minecraft.getInstance().getModelManager().getBlockModelShaper().getBlockModel(state);
+			model = model.applyTransform(type, poseStack, false);
+			poseStack.translate(-.5F, -.5F, -.5F);
+
+			ModelBlockRenderer renderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
+			PoseStack.Pose pose = poseStack.last();
+
+			random.setSeed(42);
+			for (RenderType rt : model.getRenderTypes(state, random, ModelData.EMPTY)) {
+				renderer.renderModel(pose, bufferSource.getBuffer(ForgeHooksClient.getEntityRenderType(rt, false)),
+						state, model, 1F, 1F, 1F, light, overlay, ModelData.EMPTY, rt);
+			}
+			renderItemInside(inv, item instanceof BlockItem ? 0.5D : 0.625D, poseStack, type, bufferSource, light, overlay);
+		} else {
+			var r = Minecraft.getInstance().getItemRenderer();
+			boolean flat = !r.getModel(inv, null, null, 0).usesBlockLight();
+			if (flat) Lighting.setupForFlatItems();
+			r.renderStatic(inv, type, light, overlay, poseStack, bufferSource, null, 0);
+			if (bufferSource instanceof MultiBufferSource.BufferSource bf) {
+				bf.endBatch();
+			}
+			if (flat) Lighting.setupFor3DItems();
+		}
 		poseStack.popPose();
 	}
 
