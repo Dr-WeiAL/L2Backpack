@@ -3,10 +3,12 @@ package dev.xkmc.l2backpack.content.drawer;
 import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.common.ContentTransfer;
 import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
+import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.data.LangData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -176,6 +178,13 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 	public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
 		var access = new DrawerInvAccess(stack, this);
 		return new DrawerInvWrapper(stack, trace -> access);
+	}
+
+	private static final ResourceLocation BG = new ResourceLocation(L2Backpack.MODID, "textures/block/drawer/drawer_side.png");
+
+	@Override
+	public ResourceLocation backgroundLoc() {
+		return BG;
 	}
 
 }

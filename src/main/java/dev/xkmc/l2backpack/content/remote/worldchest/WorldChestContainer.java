@@ -1,6 +1,7 @@
 package dev.xkmc.l2backpack.content.remote.worldchest;
 
 import dev.xkmc.l2backpack.content.backpack.BackpackMenu;
+import dev.xkmc.l2backpack.content.common.DrawerQuickInsert;
 import dev.xkmc.l2backpack.content.remote.common.StorageContainer;
 import dev.xkmc.l2backpack.init.registrate.BackpackMenus;
 import dev.xkmc.l2library.base.menu.base.BaseContainerMenu;
@@ -8,12 +9,14 @@ import dev.xkmc.l2library.util.annotation.ServerOnly;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class WorldChestContainer extends BaseContainerMenu<WorldChestContainer> {
+public class WorldChestContainer extends BaseContainerMenu<WorldChestContainer> implements DrawerQuickInsert {
 
 	public static WorldChestContainer fromNetwork(MenuType<WorldChestContainer> type, int windowId, Inventory inv) {
 		return new WorldChestContainer(windowId, inv, new SimpleContainer(27), null, null);
@@ -58,6 +61,26 @@ public class WorldChestContainer extends BaseContainerMenu<WorldChestContainer> 
 			}
 		}
 		return storage == null || storage.isValid();
+	}
+
+	public ItemStack quickMoveStack(Player pl, int id) {
+		ItemStack stack = this.slots.get(id).getItem();
+		if (quickMove(pl, this, stack, id)) {
+			this.slots.get(id).setChanged();
+		}
+		return ItemStack.EMPTY;
+	}
+
+	@Override
+	public boolean quickMove(Player pl, AbstractContainerMenu menu, ItemStack stack, int id) {
+		int n = this.container.getContainerSize();
+		boolean moved;
+		if (id >= 36) {
+			moved = DrawerQuickInsert.moveItemStackTo(pl, this, stack, 0, 36, true);
+		} else {
+			moved = DrawerQuickInsert.moveItemStackTo(pl, this, stack, 36, 36 + n, false);
+		}
+		return moved;
 	}
 
 }

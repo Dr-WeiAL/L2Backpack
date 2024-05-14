@@ -82,7 +82,7 @@ public class ClientEventHandler {
 
 	private static boolean onRelease(ScreenEvent.MouseButtonReleased.Pre event) {
 		Screen screen = event.getScreen();
-		if (screen instanceof AbstractContainerScreen cont) {
+		if (screen instanceof AbstractContainerScreen<?> cont) {
 			Slot slot = cont.getSlotUnderMouse();
 			ItemStack carried = cont.getMenu().getCarried();
 			boolean bypass = !carried.isEmpty() &&
@@ -101,7 +101,7 @@ public class ClientEventHandler {
 
 	private static boolean onPress(ScreenEvent.MouseButtonPressed.Pre event) {
 		Screen screen = event.getScreen();
-		if (screen instanceof AbstractContainerScreen cont) {
+		if (screen instanceof AbstractContainerScreen<?> cont) {
 			Slot slot = cont.getSlotUnderMouse();
 			ItemStack carried = cont.getMenu().getCarried();
 			boolean bypass = !carried.isEmpty() &&
@@ -151,7 +151,10 @@ public class ClientEventHandler {
 			return false;
 		}
 		if (drawer.mayClientTake() && stack.isEmpty()) {
-			sendDrawerPacket(DrawerInteractToServer.Type.TAKE, cont, slot);
+			if (Screen.hasShiftDown())
+				sendDrawerPacket(DrawerInteractToServer.Type.QUICK_MOVE, cont, slot);
+			else
+				sendDrawerPacket(DrawerInteractToServer.Type.TAKE, cont, slot);
 			return true;
 		}
 		return false;

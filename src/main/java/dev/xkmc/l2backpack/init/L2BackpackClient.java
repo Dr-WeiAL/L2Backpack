@@ -5,6 +5,7 @@ import dev.xkmc.l2backpack.content.common.InvTooltip;
 import dev.xkmc.l2backpack.content.quickswap.common.QuickSwapOverlay;
 import dev.xkmc.l2backpack.content.quickswap.quiver.Quiver;
 import dev.xkmc.l2backpack.content.render.BackpackModel;
+import dev.xkmc.l2backpack.content.render.DrawerCountDeco;
 import dev.xkmc.l2backpack.content.render.EnderPreviewOverlay;
 import dev.xkmc.l2backpack.content.render.RenderEvents;
 import dev.xkmc.l2backpack.init.data.BackpackKeys;
@@ -38,6 +39,13 @@ public class L2BackpackClient {
 	public static void registerOverlay(RegisterGuiOverlaysEvent event) {
 		event.registerAbove(VanillaGuiOverlay.CROSSHAIR.id(), "arrow_bag", new QuickSwapOverlay());
 		event.registerAbove(VanillaGuiOverlay.CROSSHAIR.id(), "ender_drawer", new EnderPreviewOverlay());
+	}
+
+	@SubscribeEvent
+	public static void registerDeco(RegisterItemDecorationsEvent event) {
+		var deco = new DrawerCountDeco();
+		event.register(BackpackItems.DRAWER.get(), deco);
+		event.register(BackpackItems.ENDER_DRAWER.get(), deco);
 	}
 
 	@SubscribeEvent

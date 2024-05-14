@@ -7,11 +7,13 @@ import dev.xkmc.l2backpack.content.drawer.DrawerInvWrapper;
 import dev.xkmc.l2backpack.content.remote.common.DrawerAccess;
 import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.events.TooltipUpdateEvents;
+import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.advancement.BackpackTriggers;
 import dev.xkmc.l2backpack.init.data.LangData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -178,5 +180,12 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 		if (EnderDrawerItem.getOwner(storage).map(e -> !e.equals(player.getUUID())).orElse(false)) {
 			BackpackTriggers.SHARE.trigger(player);
 		}
+	}
+
+	private static final ResourceLocation BG = new ResourceLocation(L2Backpack.MODID, "textures/block/drawer/ender_side.png");
+
+	@Override
+	public ResourceLocation backgroundLoc() {
+		return BG;
 	}
 }

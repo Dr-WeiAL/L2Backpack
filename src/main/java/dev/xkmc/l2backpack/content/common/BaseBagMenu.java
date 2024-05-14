@@ -9,6 +9,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -17,7 +18,7 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 
 import java.util.UUID;
 
-public abstract class BaseBagMenu<T extends BaseBagMenu<T>> extends BaseContainerMenu<T> {
+public abstract class BaseBagMenu<T extends BaseBagMenu<T>> extends BaseContainerMenu<T> implements DrawerQuickInsert {
 
 	protected final Player player;
 	public final PlayerSlot<?> item_slot;
@@ -82,17 +83,22 @@ public abstract class BaseBagMenu<T extends BaseBagMenu<T>> extends BaseContaine
 
 	public ItemStack quickMoveStack(Player pl, int id) {
 		ItemStack stack = this.slots.get(id).getItem();
-		int n = this.handler.getSlots();
-		boolean moved;
-		if (id >= 36) {
-			moved = this.moveItemStackTo(stack, 0, 36, true);
-		} else {
-			moved = this.moveItemStackTo(stack, 36, 36 + n, false);
-		}
-		if (moved) {
+		if (quickMove(pl, this, stack, id)) {
 			this.slots.get(id).setChanged();
 		}
 		return ItemStack.EMPTY;
+	}
+
+	@Override
+	public boolean quickMove(Player pl, AbstractContainerMenu menu, ItemStack stack, int id) {
+		int n = this.handler.getSlots();
+		boolean moved;
+		if (id >= 36) {
+			moved = DrawerQuickInsert.moveItemStackTo(pl, this, stack, 0, 36, true);
+		} else {
+			moved = DrawerQuickInsert.moveItemStackTo(pl, this, stack, 36, 36 + n, false);
+		}
+		return moved;
 	}
 
 }

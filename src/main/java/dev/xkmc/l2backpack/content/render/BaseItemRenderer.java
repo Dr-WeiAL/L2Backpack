@@ -145,7 +145,7 @@ public class BaseItemRenderer extends BlockEntityWithoutLevelRenderer {
 		int count = stack.getItem() instanceof DrawerItem ? DrawerItem.getCount(stack) : 1;
 		ItemStack inv = new ItemStack(item, count);
 
-		if (inv.isEmpty() || !Screen.hasShiftDown()) {
+		if (inv.isEmpty() || !Screen.hasShiftDown() || type != ItemDisplayContext.GUI) {
 			BlockState state = BackpackBlocks.ENDER_DRAWER.getDefaultState();
 			if (stack.getItem() instanceof DrawerItem) {
 				state = BackpackBlocks.DRAWER.getDefaultState();

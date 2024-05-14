@@ -1,5 +1,6 @@
 package dev.xkmc.l2backpack.network;
 
+import dev.xkmc.l2backpack.content.common.DrawerQuickInsert;
 import dev.xkmc.l2backpack.content.insert.OverlayInsertItem;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2serial.network.SerialPacketBase;
@@ -13,7 +14,7 @@ import net.minecraftforge.network.NetworkEvent;
 public class DrawerInteractToServer extends SerialPacketBase {
 
 	public enum Type {
-		INSERT, TAKE
+		INSERT, TAKE, QUICK_MOVE
 	}
 
 	@SerialClass.SerialField
@@ -58,6 +59,14 @@ public class DrawerInteractToServer extends SerialPacketBase {
 				carried = stack;
 			} else {
 				menu.setCarried(stack);
+			}
+		} else if (type == Type.QUICK_MOVE) {
+			ItemStack stack = drawerItem.takeItem(storage, player);
+			if (menu instanceof DrawerQuickInsert ins) {
+				ins.quickMove(player, menu, stack, slot);
+				if (!stack.isEmpty()) {
+					drawerItem.attemptInsert(storage, stack, player);
+				}
 			}
 		} else {
 			drawerItem.attemptInsert(storage, carried, player);

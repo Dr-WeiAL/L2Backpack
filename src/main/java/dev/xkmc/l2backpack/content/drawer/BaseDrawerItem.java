@@ -129,4 +129,6 @@ public interface BaseDrawerItem extends PickupBagItem, OverlayInsertItem {
 		}
 	}
 
+	ResourceLocation backgroundLoc();
+
 }
