@@ -19,8 +19,12 @@ public class MouseTweakCompat {
 				if (carried.isEmpty()) {
 					ClientEventHandler.clientDrawerTake(menu, slot);
 				} else {
-					ClientEventHandler.clientDrawerInsert(menu, slot);
+					ClientEventHandler.clientDrawerInsert(menu, slot, 0);
 				}
+				return true;
+			}
+			if (btn == MouseButton.RIGHT && !shift) {
+				ClientEventHandler.clientDrawerInsert(menu, slot, 1);
 				return true;
 			}
 		}
@@ -34,13 +38,13 @@ public class MouseTweakCompat {
 				return ItemStack.EMPTY;
 			}
 			Item item = BaseDrawerItem.getItem(stack);
-			int cap = BaseDrawerItem.getStacking(stack) * BaseDrawerItem.getStackingFactor(stack);
 			int max = item.getMaxStackSize();
+			int cap = max * BaseDrawerItem.getStacking(stack);
 			if (max == 1) {
 				return new ItemStack(item, 1);
 			}
 			if (cap - count < max / 2) {
-				return new ItemStack(item, max + count - cap);
+				return new ItemStack(item, max / 2 + count - cap);
 			}
 			if (count < max / 2) {
 				return new ItemStack(item, count);

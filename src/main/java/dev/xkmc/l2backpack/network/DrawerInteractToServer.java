@@ -8,6 +8,7 @@ import dev.xkmc.l2serial.serialization.SerialClass;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.network.NetworkEvent;
 
 @SerialClass
@@ -17,14 +18,21 @@ public class DrawerInteractToServer extends SerialPacketBase {
 		INSERT, TAKE, QUICK_MOVE
 	}
 
+	public enum Callback {
+		REGULAR, SUPPRESS, SCRAMBLE
+	}
+
 	@SerialClass.SerialField
 	public Type type;
 
 	@SerialClass.SerialField
-	public int wid, slot;
+	public int wid, slot, limit;
 
 	@SerialClass.SerialField
 	public ItemStack stack;
+
+	@SerialClass.SerialField
+	public Callback suppress;
 
 
 	@Deprecated
@@ -32,11 +40,13 @@ public class DrawerInteractToServer extends SerialPacketBase {
 
 	}
 
-	public DrawerInteractToServer(Type type, int wid, int slot, ItemStack carried) {
+	public DrawerInteractToServer(Type type, int wid, int slot, ItemStack carried, Callback suppress, int limit) {
 		this.type = type;
 		this.wid = wid;
 		this.slot = slot;
 		this.stack = carried;
+		this.suppress = suppress;
+		this.limit = limit;
 	}
 
 	@Override
@@ -59,6 +69,7 @@ public class DrawerInteractToServer extends SerialPacketBase {
 				carried = stack;
 			} else {
 				menu.setCarried(stack);
+				if (suppress == Callback.SUPPRESS) menu.setRemoteCarried(stack.copy());
 			}
 		} else if (type == Type.QUICK_MOVE) {
 			ItemStack stack = drawerItem.takeItem(storage, player);
@@ -69,14 +80,31 @@ public class DrawerInteractToServer extends SerialPacketBase {
 				}
 			}
 		} else {
-			drawerItem.attemptInsert(storage, carried, player);
+			if (limit == 0) {
+				drawerItem.attemptInsert(storage, carried, player);
+			} else {
+				ItemStack split = carried.split(limit);
+				drawerItem.attemptInsert(storage, split, player);
+				carried.grow(split.getCount());
+			}
+			if (suppress == Callback.SUPPRESS) menu.setRemoteCarried(menu.getCarried().copy());
 		}
 		if (wid != 0) {
 			menu.getSlot(slot).setChanged();
 		}
 		if (player.isCreative() && wid == 0) {
 			L2Backpack.HANDLER.toClientPlayer(new CreativeSetCarryToClient(carried), player);
+		} else if (suppress == Callback.SCRAMBLE) scramble(menu);
+	}
+
+	private static void scramble(AbstractContainerMenu menu) {
+		ItemStack carried = menu.getCarried();
+		if (carried.isEmpty()) {
+			menu.setRemoteCarried(new ItemStack(Items.FARMLAND, 65));
+		} else {
+			menu.setRemoteCarried(ItemStack.EMPTY);
 		}
+		menu.broadcastChanges();
 	}
 
 }

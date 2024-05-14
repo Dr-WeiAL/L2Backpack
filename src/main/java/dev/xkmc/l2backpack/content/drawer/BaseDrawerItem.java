@@ -97,17 +97,18 @@ public interface BaseDrawerItem extends PickupBagItem, OverlayInsertItem {
 	boolean canSetNewItem(ItemStack drawer);
 
 	@Override
-	default boolean clientInsert(ItemStack storage, ItemStack carried, int cid, Slot slot, boolean perform, int button) {
+	default boolean clientInsert(ItemStack storage, ItemStack carried, int cid, Slot slot, boolean perform, int button,
+								 DrawerInteractToServer.Callback suppress, int limit) {
 		if (carried.isEmpty()) return false;
 		if (carried.hasTag()) return true;
 		if (canSetNewItem(storage)) {
 			if (perform)
-				sendInsertPacket(cid, carried, slot);
+				sendInsertPacket(cid, carried, slot, suppress, limit);
 			return true;
 		}
 		if (BaseDrawerItem.canAccept(storage, carried)) {
 			if (perform)
-				sendInsertPacket(cid, carried, slot);
+				sendInsertPacket(cid, carried, slot, suppress, limit);
 			return true;
 		}
 		return false;

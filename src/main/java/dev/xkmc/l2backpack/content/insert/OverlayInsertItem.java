@@ -8,7 +8,8 @@ import net.minecraft.world.item.ItemStack;
 
 public interface OverlayInsertItem {
 
-	boolean clientInsert(ItemStack storage, ItemStack carried, int cid, Slot slot, boolean perform, int button);
+	boolean clientInsert(ItemStack storage, ItemStack carried, int cid, Slot slot, boolean perform, int button,
+						 DrawerInteractToServer.Callback suppress, int limit);
 
 	boolean mayClientTake();
 
@@ -20,10 +21,10 @@ public interface OverlayInsertItem {
 
 	void attemptInsert(ItemStack storage, ItemStack carried, ServerPlayer player);
 
-	default void sendInsertPacket(int cid, ItemStack carried, Slot slot) {
+	default void sendInsertPacket(int cid, ItemStack carried, Slot slot, DrawerInteractToServer.Callback suppress, int limit) {
 		int index = cid == 0 ? slot.getSlotIndex() : slot.index;
 		L2Backpack.HANDLER.toServer(new DrawerInteractToServer(DrawerInteractToServer.Type.INSERT,
-				cid, index, carried));
+				cid, index, carried, suppress, limit));
 	}
 
 

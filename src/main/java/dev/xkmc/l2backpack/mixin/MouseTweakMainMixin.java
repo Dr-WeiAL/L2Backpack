@@ -13,16 +13,23 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(targets = "yalter.mousetweaks.Main", remap = false)
 public class MouseTweakMainMixin {
 
-	@WrapOperation(method = "findPushSlots", at = @At(value = "INVOKE",
+	@WrapOperation(method = "findPushSlots", at = @At(value = "INVOKE", remap = true,
 			target = "Lnet/minecraft/world/inventory/Slot;getItem()Lnet/minecraft/world/item/ItemStack;"))
 	private static ItemStack l2backpack$pushItem$drawerDelegate(Slot instance, Operation<ItemStack> original) {
 		ItemStack stack = original.call(instance);
 		return MouseTweakCompat.wrapSlotGet(stack);
 	}
 
-	@WrapOperation(method = "findPullSlot", at = @At(value = "INVOKE",
+	@WrapOperation(method = "findPullSlot", at = @At(value = "INVOKE", remap = true,
 			target = "Lnet/minecraft/world/inventory/Slot;getItem()Lnet/minecraft/world/item/ItemStack;"))
 	private static ItemStack l2backpack$pullItem$drawerDelegate(Slot instance, Operation<ItemStack> original) {
+		ItemStack stack = original.call(instance);
+		return MouseTweakCompat.wrapSlotGet(stack);
+	}
+
+	@WrapOperation(method = "onMouseScrolled", at = @At(value = "INVOKE", remap = true,
+			target = "Lnet/minecraft/world/inventory/Slot;getItem()Lnet/minecraft/world/item/ItemStack;"))
+	private static ItemStack l2backpack$scrollItem$drawerDelegate(Slot instance, Operation<ItemStack> original) {
 		ItemStack stack = original.call(instance);
 		return MouseTweakCompat.wrapSlotGet(stack);
 	}
