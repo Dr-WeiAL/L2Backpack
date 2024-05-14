@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import dev.xkmc.l2backpack.compat.CuriosCompat;
 import dev.xkmc.l2backpack.content.capability.PickupBagItem;
 import dev.xkmc.l2backpack.content.drawer.BaseDrawerItem;
+import dev.xkmc.l2backpack.content.drawer.DrawerItem;
 import dev.xkmc.l2backpack.content.insert.OverlayInsertItem;
 import dev.xkmc.l2backpack.content.tool.IBagTool;
 import dev.xkmc.l2backpack.init.L2Backpack;
@@ -163,6 +164,41 @@ public class ClientEventHandler {
 	private static void sendDrawerPacket(DrawerInteractToServer.Type type, AbstractContainerScreen<?> cont, Slot slot) {
 		int index = cont.getMenu().containerId == 0 ? slot.getSlotIndex() : slot.index;
 		L2Backpack.HANDLER.toServer(new DrawerInteractToServer(type, cont.getMenu().containerId, index, cont.getMenu().getCarried()));
+	}
+
+	public static boolean clientDrawerTake(AbstractContainerScreen<?> cont, Slot slot) {
+		ItemStack stack = cont.getMenu().getCarried();
+		ItemStack drawerStack = slot.getItem();
+		if (!(drawerStack.getItem() instanceof DrawerItem drawer)) {
+			return false;
+		}
+		Player player = Proxy.getClientPlayer();
+		if (player == null || !slot.allowModification(player)) {
+			return false;
+		}
+		if (drawer.mayClientTake() && stack.isEmpty()) {
+			cont.getMenu().setCarried(drawer.takeItem(drawerStack, Integer.MAX_VALUE, Proxy.getClientPlayer(), false));
+			sendDrawerPacket(DrawerInteractToServer.Type.TAKE, cont, slot);
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean clientDrawerInsert(AbstractContainerScreen<?> cont, Slot slot) {
+		ItemStack storage = slot.getItem();
+		ItemStack carried = cont.getMenu().getCarried();
+		if (!(storage.getItem() instanceof OverlayInsertItem drawer)) {
+			return false;
+		}
+		Player player = Proxy.getClientPlayer();
+		if (player == null || !slot.allowModification(player)) {
+			return false;
+		}
+		boolean ans = drawer.clientInsert(storage, carried, cont.getMenu().containerId, slot, true, 0);
+		if (ans) {
+			cont.getMenu().setCarried(ItemStack.EMPTY);
+		}
+		return ans;
 	}
 
 }

@@ -205,10 +205,7 @@ dependencies {
     implementation fg.deobf("mezz.jei:jei-${jei_minecraft_version}:${jei_version}")
     implementation fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
 
-    //runtimeOnly fg.deobf('curse.maven:wthit-forge-455982:4512108')
-    //runtimeOnly fg.deobf('curse.maven:badpackets-615134:4438956')
-    //runtimeOnly fg.deobf('curse.maven:attributefix-280510:4445193')
-    //runtimeOnly fg.deobf('curse.maven:max-health-fix-492246:4447240')
+    implementation fg.deobf("curse.maven:mouse-tweaks-60089:5338457")
 
     runtimeOnly fg.deobf("curse.maven:patchouli-306770:4636277")
 

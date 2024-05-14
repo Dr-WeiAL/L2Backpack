@@ -15,7 +15,17 @@ public interface DrawerQuickInsert {
 	}
 
 	static boolean moveItemStackTo(Player pl, BaseContainerMenu<?> menu, ItemStack stack, int start, int end, boolean reverse, boolean split) {
-		boolean flag = false;
+		boolean changed = false;
+		changed |= doMerge(pl, menu, stack, start, end, reverse, false);
+		changed |= doMerge(pl, menu, stack, start, end, reverse, true);
+		if (!stack.isEmpty()) {
+			changed |= doTake(pl, menu, stack, start, end, reverse, split);
+		}
+		return changed;
+	}
+
+	private static boolean doMerge(Player pl, BaseContainerMenu<?> menu, ItemStack stack, int start, int end, boolean reverse, boolean allowEmpty) {
+		boolean changed = false;
 		int i = start;
 		if (reverse) i = end - 1;
 
@@ -25,48 +35,43 @@ public interface DrawerQuickInsert {
 			} else if (i >= end) break;
 
 			Slot slot = menu.slots.get(i);
-			if (tryMerge(pl, stack, slot.getItem(), slot)) {
-				flag = true;
+			if (tryMerge(pl, stack, slot.getItem(), slot, allowEmpty)) {
+				changed = true;
 			}
 			if (reverse) --i;
 			else ++i;
 		}
-
-		if (!stack.isEmpty()) {
-			if (reverse) i = end - 1;
-			else i = start;
-
-
-			while (true) {
-				if (reverse) {
-					if (i < start) {
-						break;
-					}
-				} else if (i >= end) {
-					break;
-				}
-
-				Slot slot = menu.slots.get(i);
-				if (tryTake(pl, stack, slot.getItem(), slot, split)) {
-					flag = true;
-					break;
-				}
-
-				if (reverse) {
-					--i;
-				} else {
-					++i;
-				}
-			}
-		}
-		return flag;
+		return changed;
 	}
 
-	private static boolean tryMerge(Player pl, ItemStack src, ItemStack dst, Slot slot) {
+	private static boolean doTake(Player pl, BaseContainerMenu<?> menu, ItemStack stack, int start, int end, boolean reverse, boolean split) {
+		boolean changed = false;
+		int i;
+		if (reverse) i = end - 1;
+		else i = start;
+		while (true) {
+			if (reverse) {
+				if (i < start) break;
+			} else if (i >= end) break;
+
+			Slot slot = menu.slots.get(i);
+			if (tryTake(pl, stack, slot.getItem(), slot, split)) {
+				changed = true;
+				break;
+			}
+
+			if (reverse) --i;
+			else ++i;
+
+		}
+		return changed;
+	}
+
+	private static boolean tryMerge(Player pl, ItemStack src, ItemStack dst, Slot slot, boolean allowEmpty) {
 		if (dst.isEmpty()) return false;
 		if (pl instanceof ServerPlayer sp && src.getTag() == null) {
 			if (dst.getItem() instanceof BaseDrawerItem item) {
-				if (item.canSetNewItem(dst)) return false;
+				if (!allowEmpty && item.canSetNewItem(dst)) return false;
 				int count = src.getCount();
 				item.attemptInsert(dst, src, sp);
 				return count != src.getCount();
