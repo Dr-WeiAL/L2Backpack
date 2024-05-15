@@ -64,6 +64,7 @@ public class DrawerInteractToServer extends SerialPacketBase {
 			carried = stack;
 		}
 		if (type == Type.TAKE) {
+			if (!carried.isEmpty()) return;
 			ItemStack stack = drawerItem.takeItem(storage, player);
 			if (player.isCreative() && wid == 0) {
 				carried = stack;
@@ -72,8 +73,8 @@ public class DrawerInteractToServer extends SerialPacketBase {
 				if (suppress == Callback.SUPPRESS) menu.setRemoteCarried(stack.copy());
 			}
 		} else if (type == Type.QUICK_MOVE) {
-			ItemStack stack = drawerItem.takeItem(storage, player);
 			if (menu instanceof DrawerQuickInsert ins) {
+				ItemStack stack = drawerItem.takeItem(storage, player);
 				ins.quickMove(player, menu, stack, slot);
 				if (!stack.isEmpty()) {
 					drawerItem.attemptInsert(storage, stack, player);

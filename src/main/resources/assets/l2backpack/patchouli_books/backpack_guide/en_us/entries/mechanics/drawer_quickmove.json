@@ -1,0 +1,9 @@
+{
+  "name": "Drawer Quick Move",
+  "icon": "l2backpack:drawer",
+  "category": "l2backpack:mechanics",
+  "pages": [
+	"Items with this feature: $(li)$(l:items/5_drawer)Drawers$(/l)$(li)$(l:items/6_ender_drawer)Ender Drawers$(/l)$(br2)In backpack or Dimensional Storage UI, drawers are treated as a large stack of items when doing quick move (moving items to the other end, inventory to container or container to inventory). You can shift click items to have the items moved into drawers, or shift right-click drawers to have 1 stack of items inside to move into slots or drawers.",
+    "MouseTweak Drawer Compat$(br2)Mouse Tweak allows you to scroll on a stack to quick move items one by one quickly. Drawer (but not Ender Drawer) supports such action that in any UI you can scroll on drawers to have items moving in and out of drawers."
+  ]
+}

@@ -1,5 +1,5 @@
-
-- add wand page TODO
+2.4.20
+- Drawer shift-click and MouseTweak scrolling
 
 2.4.19
 - Fix bug that when player put item into a new backpack inside dimensional backpack

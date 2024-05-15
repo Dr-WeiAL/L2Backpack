@@ -204,7 +204,11 @@ public class ClientEventHandler {
 		boolean ans = drawer.clientInsert(storage, carried, cont.getMenu().containerId, slot, true, 0,
 				limit == 0 ? DrawerInteractToServer.Callback.SCRAMBLE : DrawerInteractToServer.Callback.SUPPRESS, limit);
 		if (ans) {
-			cont.getMenu().setCarried(ItemStack.EMPTY);
+			if (limit == 0) {
+				cont.getMenu().setCarried(ItemStack.EMPTY);
+			} else {
+				cont.getMenu().getCarried().shrink(limit);
+			}
 		}
 		return ans;
 	}

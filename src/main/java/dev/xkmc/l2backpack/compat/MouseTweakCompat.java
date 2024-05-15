@@ -44,7 +44,7 @@ public class MouseTweakCompat {
 				return new ItemStack(item, 1);
 			}
 			if (cap - count < max / 2) {
-				return new ItemStack(item, max / 2 + count - cap);
+				return new ItemStack(item, max + count - cap);
 			}
 			if (count < max / 2) {
 				return new ItemStack(item, count);
