@@ -6,6 +6,7 @@
   "refmap": "l2backpack.refmap.json",
   "mixins": [
 	"AbstractArrowMixin",
+	"AbstractContainerMenuMixin",
 	"ItemStackMixin",
 	"MouseTweakHandlerMixin",
 	"MouseTweakMainMixin"

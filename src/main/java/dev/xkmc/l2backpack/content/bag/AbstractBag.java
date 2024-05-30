@@ -5,6 +5,7 @@ import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.common.ContentTransfer;
 import dev.xkmc.l2backpack.content.common.InvTooltip;
 import dev.xkmc.l2backpack.content.common.TooltipInvItem;
+import dev.xkmc.l2backpack.content.doubleclick.DoubleClickItem;
 import dev.xkmc.l2backpack.content.insert.InsertOnlyItem;
 import dev.xkmc.l2backpack.init.data.LangData;
 import net.minecraft.ChatFormatting;
@@ -17,6 +18,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -36,7 +38,7 @@ import java.util.function.Supplier;
 
 
 public abstract class AbstractBag extends Item
-		implements ContentTransfer.Quad, PickupBagItem, InsertOnlyItem, TooltipInvItem {
+		implements ContentTransfer.Quad, PickupBagItem, InsertOnlyItem, TooltipInvItem, DoubleClickItem {
 
 	public static final int SIZE = 64;
 
@@ -177,6 +179,28 @@ public abstract class AbstractBag extends Item
 			}
 		}
 		return ans;
+	}
+
+	@Override
+	public int remainingSpace(ItemStack stack) {
+		return SIZE - getSize(stack);
+	}
+
+	@Override
+	public boolean canAbsorb(Slot src, ItemStack stack) {
+		return matches(stack, src.getItem());
+	}
+
+	@Override
+	public void mergeStack(ItemStack stack, ItemStack taken) {
+		var list = getContent(stack);
+		for (int i = 0; i < SIZE; i++) {
+			if (list.get(i).isEmpty()) {
+				list.set(i, taken);
+				break;
+			}
+		}
+		setContent(stack, list);
 	}
 
 	@Override

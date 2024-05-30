@@ -1,3 +1,7 @@
+2.4.21-pre1
+- Right click to recursive insert TODO
+- Double Click drawer / bags to collect all similar items TODO
+
 2.4.21-pre0
 - Drawers now show content directly when pressing alt / ctrl / shift, or when rendering backpack previews
 - Add config to make drawers always render content directly
