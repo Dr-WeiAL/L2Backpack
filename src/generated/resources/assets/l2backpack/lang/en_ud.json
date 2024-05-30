@@ -131,6 +131,7 @@
   "l2backpack.chat.feedback.no_item": "˙pǝɔɐןd ǝq ʇouuɐƆ ˙ɹǝʍɐɹp ɹǝpuǝ ɹoɟ ʇǝs ɯǝʇı oN",
   "l2backpack.loot.unnamed.item": "ɹǝɹoןdxƎ pǝɯɐuu∩ ǝɥʇ ɟo ʞɔɐdʞɔɐᗺ",
   "l2backpack.loot.unnamed.name": "ɹǝɹoןdxƎ pǝɯɐuu∩ ǝɥʇ",
+  "l2backpack.tooltip.alt_content": "ʇuǝʇuoɔ ʍoɥs oʇ ]⟘ꞀⱯ[ ssǝɹԀ",
   "l2backpack.tooltip.backpack_slot": "%s/%s :ǝpɐɹbd∩",
   "l2backpack.tooltip.collect.drawer": "ʎɹoʇuǝʌuı uo sɯǝʇı buıɥɔʇɐɯ ǝɹoʇs oʇ ʞɔıןɔ ʇɥbıɹ + ʇɟıɥS",
   "l2backpack.tooltip.collect.item": "ɹɐqʇoɥ uɐɥʇ ɹǝɥʇo 'ʎɹoʇuǝʌuı uı sɯǝʇı buıɥɔʇɐɯ ǝɹoʇs oʇ ʞɔıןɔ ʇɥbıᴚ",
@@ -169,7 +170,7 @@
   "l2backpack.tooltip.owner": "%s :ɹǝuʍO",
   "l2backpack.tooltip.patchouli": "sןıɐʇǝp ɹoɟ ʞooᗺ ıןnoɥɔʇɐԀ pɐǝᴚ",
   "l2backpack.tooltip.place": "ʞɔoןq ɐ sɐ ʇı ǝɔɐןd oʇ ʞɔıןɔ ʇɥbıɹ + ʇɟıɥS",
-  "l2backpack.tooltip.shift": "ǝbɐsn ʍoɥs oʇ ]ʇɟıɥs[ ssǝɹԀ",
+  "l2backpack.tooltip.shift": "ǝbɐsn ʍoɥs oʇ ]⟘ℲIHS[ ssǝɹԀ",
   "patchouli.l2backpack.landing": "poɯ ǝbɐɹoʇs ǝʌısɹnɔǝɹ ɐ 'ʞɔɐdʞɔɐᗺᄅꞀ oʇ ǝɯoɔןǝM",
   "patchouli.l2backpack.title": "ǝpın⅁ ʞɔɐdʞɔɐᗺᄅꞀ"
 }

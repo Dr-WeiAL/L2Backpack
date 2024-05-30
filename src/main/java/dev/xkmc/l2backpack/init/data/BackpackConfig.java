@@ -20,6 +20,8 @@ public class BackpackConfig {
 		public final ForgeConfigSpec.BooleanValue popupToolOnSwitch;
 		public final ForgeConfigSpec.BooleanValue popupArmorOnSwitch;
 
+		public final ForgeConfigSpec.BooleanValue drawerAlwaysRenderFlat;
+
 		public final ForgeConfigSpec.BooleanValue reverseScroll;
 		public final ForgeConfigSpec.BooleanValue backpackInsertRequiresShift;
 		public final ForgeConfigSpec.BooleanValue backpackEnableLeftClickInsert;
@@ -50,6 +52,9 @@ public class BackpackConfig {
 
 			backpackEnableRightClickInsert = builder.comment("Backpack inventory quick insert allows right click insert")
 					.define("backpackEnableRightClickInsert", true);
+
+			drawerAlwaysRenderFlat = builder.comment("Draws Always render content directly")
+					.define("drawerAlwaysRenderFlat", false);
 
 		}
 

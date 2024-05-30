@@ -68,7 +68,8 @@ public class LangData {
 	}
 
 	public enum Info {
-		SHIFT("tooltip.shift", "Press [shift] to show usage"),
+		SHIFT("tooltip.shift", "Press [SHIFT] to show usage"),
+		ALT_CONTENT("tooltip.alt_content", "Press [ALT] to show content"),
 		PATCHOULI("tooltip.patchouli", "Read Patchouli Book for details"),
 		COLLECT_BAG("tooltip.collect.item", "Right click to store matching items in inventory, other than hotbar"),
 		COLLECT_DRAWER("tooltip.collect.drawer", "Shift + right click to store matching items on inventory"),
@@ -107,7 +108,7 @@ public class LangData {
 			this.key = key;
 		}
 
-		private MutableComponent get() {
+		public MutableComponent get() {
 			Object[] arr = new Object[key.length];
 			for (int i = 0; i < key.length; i++) {
 				arr[i] = L2Keys.SWAP.map.getKey().getDisplayName().copy().withStyle(ChatFormatting.YELLOW);

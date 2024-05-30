@@ -7,6 +7,10 @@ import java.util.List;
 
 public interface TooltipInvItem {
 
+	default int getRowSize(){
+		return 9;
+	}
+
 	int getInvSize(ItemStack stack);
 
 	List<ItemStack> getInvItems(ItemStack stack, Player player);

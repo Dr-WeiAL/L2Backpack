@@ -1,3 +1,11 @@
+2.4.21-pre0
+- Drawers now show content directly when pressing alt / ctrl / shift, or when rendering backpack previews
+- Add config to make drawers always render content directly
+- Auto Pickup now supports pickup advancements, and plays sounds
+- Storage Bags now support pickup modes and auto pickup
+- Storage Bags now support left click insert
+- Storage Bags now support tooltip preview
+
 2.4.20
 - Drawer shift-click and MouseTweak scrolling
 

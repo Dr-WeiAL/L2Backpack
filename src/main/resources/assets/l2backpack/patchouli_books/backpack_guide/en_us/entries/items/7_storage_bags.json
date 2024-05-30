@@ -8,7 +8,7 @@
 	{
 	  "type": "patchouli:spotlight",
 	  "item": "tag:l2backpack:bags",
-	  "text": "Features:$(li)Bag Collect: Right click to store matching items in inventory, other than hotbar.$(li)Bag Extract: Shift + right click to throw out all stored items.$(li)$(l:mechanics/chest)Load / Dump with Chest$(/l)"
+	  "text": "Features:$(li)Bag Collect: Right click to store matching items in inventory, other than hotbar.$(li)Bag Extract: Shift + right click to throw out all stored items.$(li)$(l:mechanics/chest)Load / Dump with Chest$(/l)$(li)$(l:mechanics/quick_insert)Quick Insert$(/l)$(li)$(l:mechanics/pickup)Recursive Pickup$(/l)"
 	}
   ]
 }

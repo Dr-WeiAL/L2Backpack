@@ -8,7 +8,7 @@
 	{
 	  "type": "patchouli:spotlight",
 	  "item": "tag:l2backpack:bags",
-	  "text": "物品功能：$(li)储物袋收集：手持储物袋右键收集物品栏中（除了工具栏以外）所有符合的物品$(li)储物袋倾倒：潜行右键倒出袋中所有物品$(li)$(l:mechanics/chest)箱子快速装卸$(/l)"
+	  "text": "物品功能：$(li)储物袋收集：手持储物袋右键收集物品栏中（除了工具栏以外）所有符合的物品$(li)储物袋倾倒：潜行右键倒出袋中所有物品$(li)$(l:mechanics/chest)箱子快速装卸$(/l)$(li)$(l:mechanics/quick_insert)物品便捷插入$(/l)$(li)$(l:mechanics/pickup)物品自动归类模式$(/l)"
 	}
   ]
 }

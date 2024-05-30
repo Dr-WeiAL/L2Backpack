@@ -131,6 +131,7 @@
   "l2backpack.chat.feedback.no_item": "No item set for ender drawer. Cannot be placed.",
   "l2backpack.loot.unnamed.item": "Backpack of the Unnamed Explorer",
   "l2backpack.loot.unnamed.name": "the Unnamed Explorer",
+  "l2backpack.tooltip.alt_content": "Press [ALT] to show content",
   "l2backpack.tooltip.backpack_slot": "Upgrade: %s/%s",
   "l2backpack.tooltip.collect.drawer": "Shift + right click to store matching items on inventory",
   "l2backpack.tooltip.collect.item": "Right click to store matching items in inventory, other than hotbar",
@@ -169,7 +170,7 @@
   "l2backpack.tooltip.owner": "Owner: %s",
   "l2backpack.tooltip.patchouli": "Read Patchouli Book for details",
   "l2backpack.tooltip.place": "Shift + right click to place it as a block",
-  "l2backpack.tooltip.shift": "Press [shift] to show usage",
+  "l2backpack.tooltip.shift": "Press [SHIFT] to show usage",
   "patchouli.l2backpack.landing": "Welcome to L2Backpack, a recursive storage mod",
   "patchouli.l2backpack.title": "L2Backpack Guide"
 }

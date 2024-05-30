@@ -1,5 +1,6 @@
 package dev.xkmc.l2backpack.content.common;
 
+import dev.xkmc.l2backpack.content.bag.AbstractBag;
 import dev.xkmc.l2backpack.content.remote.player.EnderBackpackItem;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
@@ -14,7 +15,7 @@ public record InvTooltip(TooltipInvItem item, ItemStack stack) implements Toolti
 			return Optional.empty();
 		}
 		var list = BaseBagItem.getListTag(stack);
-		if (list.size() > 0) {
+		if (!list.isEmpty()) {
 			return Optional.of(new InvTooltip(item, stack));
 		}
 		return Optional.empty();
@@ -25,6 +26,14 @@ public record InvTooltip(TooltipInvItem item, ItemStack stack) implements Toolti
 			return Optional.empty();
 		}
 		return Optional.of(new InvTooltip(item, stack));
+	}
+
+
+	public static Optional<TooltipComponent> get(AbstractBag item, ItemStack stack) {
+		if (Screen.hasAltDown()) {
+			return Optional.of(new InvTooltip(item, stack));
+		}
+		return Optional.empty();
 	}
 
 }

@@ -52,7 +52,8 @@
 	  },
 	  "load": "支持直接从箱子中批量提取/向箱子倒出物品",
 	  "place": "蹲下右键放置方块形式",
-	  "shift": "按[shift]显示使用方法",
+	  "shift": "按[SHIFT]显示使用方法",
+	  "alt_content": "按[ALT]显示内容物",
 	  "keybind": "可以放到胸甲栏或饰品栏，然后绑定按键快捷打开"
 	},
 	"chat.feedback": {

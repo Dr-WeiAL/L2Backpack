@@ -3,7 +3,7 @@
   "icon": "l2backpack:pickup_tweaker_tool",
   "category": "l2backpack:mechanics",
   "pages": [
-	"有这个功能的物品：$(li)$(l:items/1_backpacks)背包$(/l)$(li)$(l:items/2_dimensional_storages)空间背包$(/l)$(li)$(l:items/3_ender_backpack)末影背包$(/l)$(li)$(l:items/4_swaps)快捷切换袋$(/l)$(li)$(l:items/5_drawer)水晶匣子$(/l)$(li)$(l:items/6_ender_drawer)末影匣子$(/l)$(br2)物品自动归类模式可以把你捡起来的物品直接放入背包中，甚至是背包中的匣子中。用归类模式配置器右键物品改变归类模式。",
+	"有这个功能的物品：$(li)$(l:items/1_backpacks)背包$(/l)$(li)$(l:items/2_dimensional_storages)空间背包$(/l)$(li)$(l:items/3_ender_backpack)末影背包$(/l)$(li)$(l:items/4_swaps)快捷切换袋$(/l)$(li)$(l:items/5_drawer)水晶匣子$(/l)$(li)$(l:items/6_ender_drawer)末影匣子$(/l)$(li)$(l:items/7_storage_bags)储物袋$(/l)$(br2)物品自动归类模式可以把你捡起来的物品直接放入背包中，甚至是背包中的匣子中。用归类模式配置器右键物品改变归类模式。",
 	{
 	  "type": "patchouli:spotlight",
 	  "item": "l2backpack:pickup_tweaker_tool",
