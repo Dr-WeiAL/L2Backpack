@@ -207,6 +207,6 @@ dependencies {
 
     compileOnly fg.deobf("curse.maven:mouse-tweaks-60089:5338457")
 
-    runtimeOnly fg.deobf("curse.maven:patchouli-306770:4636277")
+    implementation fg.deobf("curse.maven:patchouli-306770:4636277")
 
 }

@@ -7,6 +7,7 @@ import dev.xkmc.l2backpack.init.registrate.BackpackItems;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.TickEvent;
@@ -20,6 +21,8 @@ public class StartUpGiveItemEvents {
 	public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
 		if (event.phase != TickEvent.Phase.END || event.player.tickCount != 10) return;
 		if (!(event.player instanceof ServerPlayer sp)) return;
+		var time = sp.getStats().getValue(Stats.CUSTOM.get(Stats.PLAY_TIME));
+		if (time > 100) return;
 		var adv = sp.server.getAdvancements().getAdvancement(new ResourceLocation(L2Backpack.MODID, "detection"));
 		if (adv == null) return;
 		var prog = sp.getAdvancements().getOrStartProgress(adv);

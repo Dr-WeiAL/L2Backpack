@@ -9,6 +9,7 @@ import dev.xkmc.l2backpack.content.remote.player.EnderSyncCap;
 import dev.xkmc.l2backpack.content.remote.player.EnderSyncPacket;
 import dev.xkmc.l2backpack.events.BackpackSel;
 import dev.xkmc.l2backpack.events.BackpackSlotClickListener;
+import dev.xkmc.l2backpack.events.PatchouliClickListener;
 import dev.xkmc.l2backpack.init.advancement.BackpackTriggers;
 import dev.xkmc.l2backpack.init.data.*;
 import dev.xkmc.l2backpack.init.loot.LootGen;
@@ -23,6 +24,7 @@ import dev.xkmc.l2library.serial.config.PacketHandler;
 import dev.xkmc.l2serial.serialization.custom_handler.Handlers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -74,7 +76,11 @@ public class L2Backpack {
 		REGISTRATE.addDataGenerator(ProviderType.LOOT, LootGen::genLoot);
 		REGISTRATE.addDataGenerator(ProviderType.BLOCK_TAGS, TagGen::onBlockTagGen);
 		REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, TagGen::onItemTagGen);
-		if (ModList.get().isLoaded("patchouli")) PatchouliCompat.gen();
+		if (ModList.get().isLoaded("patchouli")) {
+			PatchouliCompat.gen();
+			new PatchouliClickListener();
+			MinecraftForge.EVENT_BUS.register(PatchouliClickListener.class);
+		}
 	}
 
 	public L2Backpack() {

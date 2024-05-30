@@ -14,7 +14,8 @@
 - Right click with wand to adjust backpack
 - Alt click to recursive insert
 - Fix drawer pickup ignoring tags
-
+- Grant player a backpack if they are spawned with 6 or more items (configurable)
+- Right click Patchouli Book to read
 
 2.4.20
 - Drawer shift-click and MouseTweak scrolling
