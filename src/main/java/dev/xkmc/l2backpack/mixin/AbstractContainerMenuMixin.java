@@ -1,6 +1,6 @@
 package dev.xkmc.l2backpack.mixin;
 
-import dev.xkmc.l2backpack.content.doubleclick.DoubleClickHandler;
+import dev.xkmc.l2backpack.content.click.DoubleClickHandler;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;

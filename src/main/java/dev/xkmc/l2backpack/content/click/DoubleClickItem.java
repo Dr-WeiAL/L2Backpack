@@ -1,4 +1,4 @@
-package dev.xkmc.l2backpack.content.doubleclick;
+package dev.xkmc.l2backpack.content.click;
 
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;

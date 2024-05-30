@@ -9,7 +9,7 @@ public class EquipmentBag extends AbstractBag {
 	}
 
 	@Override
-	public boolean matches(ItemStack self, ItemStack stack) {
+	public boolean isValidContent(ItemStack stack) {
 		return stack.isDamageableItem();
 	}
 

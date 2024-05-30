@@ -1,12 +1,14 @@
 package dev.xkmc.l2backpack.network;
 
-import dev.xkmc.l2backpack.content.common.DrawerQuickInsert;
+import dev.xkmc.l2backpack.content.click.DrawerQuickInsert;
+import dev.xkmc.l2backpack.content.click.VanillaQuickInsert;
 import dev.xkmc.l2backpack.content.insert.OverlayInsertItem;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2serial.network.SerialPacketBase;
 import dev.xkmc.l2serial.serialization.SerialClass;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.network.NetworkEvent;
@@ -76,6 +78,13 @@ public class DrawerInteractToServer extends SerialPacketBase {
 			if (menu instanceof DrawerQuickInsert ins) {
 				ItemStack stack = drawerItem.takeItem(storage, player);
 				ins.quickMove(player, menu, stack, slot);
+				if (!stack.isEmpty()) {
+					drawerItem.attemptInsert(storage, stack, player);
+				}
+			}
+			if (menu instanceof ChestMenu ins) {
+				ItemStack stack = drawerItem.takeItem(storage, player);
+				((VanillaQuickInsert)ins).l2backpack$quickMove(player, menu, stack, slot);
 				if (!stack.isEmpty()) {
 					drawerItem.attemptInsert(storage, stack, player);
 				}

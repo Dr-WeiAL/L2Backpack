@@ -1,4 +1,4 @@
-package dev.xkmc.l2backpack.content.doubleclick;
+package dev.xkmc.l2backpack.content.click;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;

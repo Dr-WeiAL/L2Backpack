@@ -55,7 +55,7 @@ public record FastBagItemHandler(AbstractBag bag, ItemStack bagStack,
 
 	@Override
 	public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-		return bag.matches(bagStack, stack);
+		return bag.isValidContent(stack);
 	}
 
 }

@@ -55,7 +55,7 @@ public record BagItemHandler(AbstractBag bag, ItemStack bagStack) implements IIt
 
 	@Override
 	public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-		return bag.matches(bagStack, stack);
+		return bag.isValidContent(stack);
 	}
 
 	public FastBagItemHandler toFast() {

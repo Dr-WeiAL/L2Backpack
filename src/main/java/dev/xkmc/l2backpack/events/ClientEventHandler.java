@@ -93,8 +93,8 @@ public class ClientEventHandler {
 				return insertItem(event, cont, slot, true, event.getButton());
 			}
 			if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_RIGHT && slot != null) {
-				return slot.getItem().getItem() instanceof BaseDrawerItem &&
-						!cont.getMenu().getCarried().isEmpty();
+				return slot.getItem().getItem() instanceof OverlayInsertItem item &&
+						item.mayClientTake() && !cont.getMenu().getCarried().isEmpty();
 			}
 		}
 		return false;

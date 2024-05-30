@@ -5,14 +5,15 @@ import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.common.ContentTransfer;
 import dev.xkmc.l2backpack.content.common.InvTooltip;
 import dev.xkmc.l2backpack.content.common.TooltipInvItem;
-import dev.xkmc.l2backpack.content.doubleclick.DoubleClickItem;
-import dev.xkmc.l2backpack.content.insert.InsertOnlyItem;
+import dev.xkmc.l2backpack.content.click.DoubleClickItem;
+import dev.xkmc.l2backpack.content.insert.CapInsertItem;
 import dev.xkmc.l2backpack.init.data.LangData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -25,20 +26,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
-import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Optional;
-import java.util.Queue;
-import java.util.function.Supplier;
 
 
 public abstract class AbstractBag extends Item
-		implements ContentTransfer.Quad, PickupBagItem, InsertOnlyItem, TooltipInvItem, DoubleClickItem {
+		implements ContentTransfer.Quad, PickupBagItem, CapInsertItem, TooltipInvItem, DoubleClickItem {
 
 	public static final int SIZE = 64;
 
@@ -78,7 +75,7 @@ public abstract class AbstractBag extends Item
 			ContentTransfer.playSound(player);
 		if (!client && shift && !right && target != null) {
 			NonNullList<ItemStack> list = getContent(stack);
-			int count = ContentTransfer.loadFrom(list, target, player, e -> matches(stack, e));
+			int count = ContentTransfer.loadFrom(list, target, player, this::isValidContent);
 			setContent(stack, list);
 			ContentTransfer.onLoad(player, count, stack);
 		} else if (client && shift && !right && target != null)
@@ -96,27 +93,11 @@ public abstract class AbstractBag extends Item
 		if (player.isShiftKeyDown()) {
 			throwOut(list, player, stack);
 		} else {
-			Queue<Holder<ItemStack>> queue = new ArrayDeque<>();
-			player.getCapability(ForgeCapabilities.ITEM_HANDLER)
-					.resolve().ifPresent(e -> {
-						for (int i = 9; i < 36; i++) {
-							ItemStack inv_stack = player.getInventory().items.get(i);
-							if (matches(stack, inv_stack)) {
-								int finalI = i;
-								queue.add(new Holder<>(
-										() -> e.getStackInSlot(finalI),
-										() -> e.extractItem(finalI, 1, false)));
-							}
-						}
-					});
-			int moved = add(list, queue);
-			ContentTransfer.onCollect(player, moved, stack);
+			add(list, player, stack);
 		}
 		setContent(stack, list);
 		return InteractionResultHolder.success(stack);
 	}
-
-	public abstract boolean matches(ItemStack self, ItemStack stack);
 
 	@Override
 	public int getRowSize() {
@@ -182,13 +163,32 @@ public abstract class AbstractBag extends Item
 	}
 
 	@Override
+	public boolean mayClientTake() {
+		return true;
+	}
+
+	@Override
+	public ItemStack takeItem(ItemStack storage, ServerPlayer player) {
+		var list = getContent(storage);
+		for (int i = 0; i < SIZE; i++) {
+			if (!list.get(i).isEmpty()) {
+				ItemStack ans = list.get(i).copy();
+				list.set(i, ItemStack.EMPTY);
+				setContent(storage, list);
+				return ans;
+			}
+		}
+		return ItemStack.EMPTY;
+	}
+
+	@Override
 	public int remainingSpace(ItemStack stack) {
 		return SIZE - getSize(stack);
 	}
 
 	@Override
 	public boolean canAbsorb(Slot src, ItemStack stack) {
-		return matches(stack, src.getItem());
+		return isValidContent(src.getItem());
 	}
 
 	@Override
@@ -210,33 +210,36 @@ public abstract class AbstractBag extends Item
 
 	private void throwOut(NonNullList<ItemStack> list, Player player, ItemStack bag) {
 		int count = 0;
-		for (ItemStack stack : list) {
+		int stackCount = 0;
+		for (int i = 0; i < SIZE; i++) {
+			ItemStack stack = list.get(i);
 			if (!stack.isEmpty()) {
 				count += stack.getCount();
-				player.getInventory().placeItemBackInInventory(stack.copy());
+				stackCount++;
+				BagUtils.placeItemBackInInventory(player.getInventory(), stack.copy());
+				list.set(i, ItemStack.EMPTY);
+				if (stackCount >= 16) break;
 			}
 		}
 		ContentTransfer.onExtract(player, count, bag);
-		list.clear();
 	}
 
-	private static int add(NonNullList<ItemStack> list, Queue<Holder<ItemStack>> toAdd) {
+	private void add(NonNullList<ItemStack> list, Player player, ItemStack bag) {
 		int count = 0;
-		for (int i = 0; i < SIZE; i++) {
-			if (list.get(i).isEmpty()) {
-				if (toAdd.isEmpty()) return count;
-				Holder<ItemStack> item = toAdd.poll();
-				list.set(i, item.getter.get().copy());
-				item.remove.run();
-				count++;
+		int slot = 0;
+		var inv = player.getInventory();
+		for (int i = 9; i < 36; i++) {
+			ItemStack stack = inv.items.get(i);
+			if (isValidContent(stack)) {
+				while (slot < SIZE && !list.get(slot).isEmpty()) slot++;
+				if (slot >= SIZE) break;
+				list.set(slot, stack);
+				count += stack.getCount();
+				inv.items.set(i, ItemStack.EMPTY);
+				slot++;
 			}
 		}
-		return count;
+		ContentTransfer.onCollect(player, count, bag);
 	}
-
-	private record Holder<T>(Supplier<T> getter, Runnable remove) {
-
-	}
-
 
 }

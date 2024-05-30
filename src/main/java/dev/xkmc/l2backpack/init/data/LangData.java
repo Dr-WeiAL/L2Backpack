@@ -73,7 +73,7 @@ public class LangData {
 		PATCHOULI("tooltip.patchouli", "Read Patchouli Book for details"),
 		COLLECT_BAG("tooltip.collect.item", "Right click to store matching items in inventory, other than hotbar"),
 		COLLECT_DRAWER("tooltip.collect.drawer", "Shift + right click to store matching items on inventory"),
-		EXTRACT_BAG("tooltip.extract.item", "Shift + right click to throw out all stored items"),
+		EXTRACT_BAG("tooltip.extract.item", "Shift + right click to throw out stored items. Would at most throw 16 at a time."),
 		EXTRACT_DRAWER("tooltip.extract.drawer", "Right click to take one stack item out"),
 		LOAD("tooltip.load", "Supports Load / Dump with Chest"),
 		PLACE("tooltip.place", "Shift + right click to place it as a block"),
@@ -94,9 +94,9 @@ public class LangData {
 		ENDER_SWITCH_INFO("tooltip.info.ender_switch", "This is a Combined Swap and an Ender Backpack at the same time. Note that the arrows, tools, and armors are stored within this item still, not in remote inventory. It inherits all properties of a backpack and an ender backpack."),
 		INHERIT("tooltip.info.inherit", "Inherit all properties of a regular backpack, except that it cannot be upgraded. Can be placed in regular backpacks, but cannot open directly in regular backpack. Put it in dimensional storage for quick access."),
 		PICKUP("tooltip.info.pickup", "Supports recursive pickup"),
-		PICKUP_TWEAKER("tooltip.info.pickup_tweaker", "Right click backpacks or drawers in inventory with this item to switch pickup mode."),
-		DESTROY_TWEAKER("tooltip.info.destroy_tweaker", "Right click backpacks or drawers in inventory with this item to switch destroy mode."),
-		;
+		PICKUP_TWEAKER("tooltip.info.pickup_tweaker", "Right click backpack / drawer / bag in inventory with this item to switch pickup mode."),
+		DESTROY_TWEAKER("tooltip.info.destroy_tweaker", "Right click backpack / drawer / bag in inventory with this item to switch destroy mode."),
+		TWEAKER_BACK("tooltip.info.tweaker_back","Right click in hand to adjust mode for backpacks on your back.");
 
 		private final String id, def;
 		private final L2Keys[] key;
