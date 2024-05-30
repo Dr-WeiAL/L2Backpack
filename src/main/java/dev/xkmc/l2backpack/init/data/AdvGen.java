@@ -12,14 +12,16 @@ import dev.xkmc.l2library.serial.advancements.AdvancementGenerator;
 import dev.xkmc.l2library.serial.advancements.CriterionBuilder;
 import dev.xkmc.l2screentracker.screen.base.ScreenTrackerRegistry;
 import dev.xkmc.l2screentracker.screen.triggers.ExitMenuTrigger;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemUsedOnLocationTrigger;
+import net.minecraft.advancements.critereon.LocationPredicate;
+import net.minecraft.advancements.critereon.PlayerTrigger;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.common.Tags;
 
 import java.util.Arrays;
 
@@ -28,15 +30,17 @@ import static dev.xkmc.l2backpack.content.backpack.BackpackItem.MAX_ROW;
 public class AdvGen {
 
 	public static void genAdvancements(RegistrateAdvancementProvider pvd) {
+		pvd.accept(Advancement.Builder.advancement().addCriterion("locate",
+						PlayerTrigger.TriggerInstance.located(LocationPredicate.ANY))
+				.build(new ResourceLocation(L2Backpack.MODID, "detection")));
 		AdvancementGenerator gen = new AdvancementGenerator(pvd, L2Backpack.MODID);
 		gen.new TabBuilder("backpacks").root("root", backpack(DyeColor.WHITE),
-						CriterionBuilder.item(Tags.Items.CHESTS),
+						CriterionBuilder.one(PlayerTrigger.TriggerInstance.tick()),
 						"Welcome to L2Backpack", "Guide to Backpacks")
-
-				.root().patchouli(L2Backpack.REGISTRATE, CriterionBuilder.item(TagGen.BOOK),
+				.root().patchouli(L2Backpack.REGISTRATE,
+						CriterionBuilder.one(PlayerTrigger.TriggerInstance.tick()),
 						new ResourceLocation(L2Backpack.MODID, "backpack_guide"),
 						"Intro to Backpacks", "Read the backpack guide")
-
 				.root().create("backpack", backpack(DyeColor.RED),
 						CriterionBuilder.item(TagGen.BACKPACKS),
 						"Your First Backpack!", "Obtain a Backpack")

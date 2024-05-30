@@ -1,4 +1,4 @@
-// 1.20.1	2024-05-30T23:29:13.381188	Registrate Provider for l2backpack [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider, Patchouli Provider]
+// 1.20.1	2024-05-31T02:31:33.648335	Registrate Provider for l2backpack [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider, Patchouli Provider]
 530cfc8939fcc948a19b693d06af8389391a97a4 assets/l2backpack/blockstates/dimensional_storage.json
 c8a12d1045e3e7eccdfa66ade2f5fd44f2359d78 assets/l2backpack/blockstates/drawer.json
 1b95dd478e92493373a61b041acce8ee59dfdec7 assets/l2backpack/blockstates/ender_drawer.json
@@ -97,15 +97,16 @@ cc644d62b7cada1bb195a546b2b591fe7ccb46a4 data/l2backpack/advancements/backpacks/
 69fb5b41360b1b4ef42f6cbfdda812656c62542a data/l2backpack/advancements/backpacks/folder_structure.json
 532f9489b1ecbf2fd4235c13f1edfbf5fb085484 data/l2backpack/advancements/backpacks/interact_dump.json
 ab73c834e968263cd9236bacd38a4bed8550ffbb data/l2backpack/advancements/backpacks/interact_load.json
-0c0e0e69c33e95e954ebe588f01c52f92609272e data/l2backpack/advancements/backpacks/patchouli.json
+3fc448de671f568ad1bb5883fb7568dcbf8ed3fd data/l2backpack/advancements/backpacks/patchouli.json
 0eff162944fee7ad52ad0dff2f06f983d6e58cc6 data/l2backpack/advancements/backpacks/press_b.json
 ac007b7e53f73fe4379acf9653948230c328cbe4 data/l2backpack/advancements/backpacks/quick_access.json
 9b55fddb9aefabf4fd8d9c3e63138376bb711622 data/l2backpack/advancements/backpacks/quiver.json
-942b20eeb505a19f8d11d4d9979007a407c9eb2f data/l2backpack/advancements/backpacks/root.json
+931eb31eafb8a57d655178deee04f83a4a41be01 data/l2backpack/advancements/backpacks/root.json
 91113c1fdf06e4cc18f440a7cb115394cbaed0b9 data/l2backpack/advancements/backpacks/safe_storage.json
 4874c02be72814f1c4aed16b6c01e010466f42eb data/l2backpack/advancements/backpacks/scabbard.json
 7e0557220e6065cceed00199f5c0dd689696f210 data/l2backpack/advancements/backpacks/upgrade.json
 f7ca15517e58d8c626b9c37fd9fd27063bb4f58f data/l2backpack/advancements/backpacks/upgrade_max.json
+8864a502008ab35b949c35d148569321bb2b7afb data/l2backpack/advancements/detection.json
 117876e56e6bf3261f6153fee02a4f9008e6c3b4 data/l2backpack/advancements/recipes/book.json
 857d5989ea3ee39f1805173aff0193689d6f9413 data/l2backpack/advancements/recipes/misc/armor_bag.json
 6bfc0877b3cb4e319cd89f6e881dc14c7f8862bf data/l2backpack/advancements/recipes/misc/armor_swap.json
@@ -289,7 +290,6 @@ e3c9f4ec2d7dfe787211d0f0d754a19ecdcc7972 data/l2backpack/recipes/suit_swap.json
 7d3c7079242f5d155ea0e72ff49778384eb6db14 data/l2backpack/recipes/tool_swap.json
 d073f52e56888ad66ca6d37fb92fa6f83d45ba87 data/l2backpack/tags/items/backpacks.json
 180eadcbad0557c7030d6d1f2a0554b2104d0a88 data/l2backpack/tags/items/bags.json
-d7706ef336d90dfba8df16719cfff2ecb22195b2 data/l2backpack/tags/items/book_trigger.json
 18b21298f3a3681bb8a5d5b00cf70da4830d66eb data/l2backpack/tags/items/dimensional_storages.json
 ebe2d7d77ead816ee898199e1cb2819168e40ba7 data/l2backpack/tags/items/drawers.json
 bec38628b80e512b2ccb8daaecb79b72fa4a49b0 data/l2backpack/tags/items/ender_chest_access.json

@@ -8,14 +8,8 @@
   ],
   "criteria": {
     "0": {
-      "conditions": {
-        "items": [
-          {
-            "tag": "l2backpack:book_trigger"
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
+      "conditions": {},
+      "trigger": "minecraft:tick"
     }
   },
   "display": {
