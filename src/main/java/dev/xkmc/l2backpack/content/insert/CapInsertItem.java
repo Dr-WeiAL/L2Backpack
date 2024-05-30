@@ -23,7 +23,6 @@ public interface CapInsertItem extends OverlayInsertItem {
 								 DrawerInteractToServer.Callback suppress, int limit) {
 		if (carried.isEmpty()) return false;
 		if (!isValidContent(carried)) return false;
-		if (!BackpackConfig.CLIENT.allowBackpackInsert(button)) return false;
 		if (perform)
 			sendInsertPacket(cid, carried, slot, suppress, limit);
 		return true;

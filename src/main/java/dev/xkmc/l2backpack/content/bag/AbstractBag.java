@@ -134,18 +134,6 @@ public abstract class AbstractBag extends Item
 		}
 	}
 
-	public boolean isBarVisible(ItemStack stack) {
-		return getSize(stack) < SIZE;
-	}
-
-	public int getBarWidth(ItemStack stack) {
-		return (int) Math.ceil(getSize(stack) * 13f / SIZE);
-	}
-
-	public int getBarColor(ItemStack stack) {
-		return 0xFFFFFF;
-	}
-
 	@Override
 	public boolean canFitInsideContainerItems() {
 		return false;

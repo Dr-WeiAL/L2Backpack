@@ -33,7 +33,9 @@ public abstract class TweakerTool extends Item implements IBagTool {
 			if (!level.isClientSide()) {
 				click(bag);
 				if (player instanceof ServerPlayer sp) {
-					sp.sendSystemMessage(message(PickupConfig.getPickupMode(bag)), true);
+					var msg = bag.getHoverName().copy().append(": ")
+							.append(message(PickupConfig.getPickupMode(bag)));
+					sp.sendSystemMessage(msg, true);
 				}
 			}
 			return InteractionResultHolder.success(stack);

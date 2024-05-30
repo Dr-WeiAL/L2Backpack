@@ -1,5 +1,7 @@
 package dev.xkmc.l2backpack.network;
 
+import dev.xkmc.l2backpack.content.capability.InvPickupCap;
+import dev.xkmc.l2backpack.content.capability.PickupTrace;
 import dev.xkmc.l2backpack.content.click.DrawerQuickInsert;
 import dev.xkmc.l2backpack.content.click.VanillaQuickInsert;
 import dev.xkmc.l2backpack.content.insert.OverlayInsertItem;
@@ -17,7 +19,7 @@ import net.minecraftforge.network.NetworkEvent;
 public class DrawerInteractToServer extends SerialPacketBase {
 
 	public enum Type {
-		INSERT, TAKE, QUICK_MOVE
+		INSERT, TAKE, QUICK_MOVE, PICKUP
 	}
 
 	public enum Callback {
@@ -89,7 +91,7 @@ public class DrawerInteractToServer extends SerialPacketBase {
 					drawerItem.attemptInsert(storage, stack, player);
 				}
 			}
-		} else {
+		} else if (type == Type.INSERT) {
 			if (limit == 0) {
 				drawerItem.attemptInsert(storage, carried, player);
 			} else {
@@ -98,6 +100,18 @@ public class DrawerInteractToServer extends SerialPacketBase {
 				carried.grow(split.getCount());
 			}
 			if (suppress == Callback.SUPPRESS) menu.setRemoteCarried(menu.getCarried().copy());
+		} else if (type == Type.PICKUP) {
+			var cap = storage.getCapability(InvPickupCap.TOKEN).resolve();
+			if (cap.isPresent()) {
+				if (limit == 0) {
+					cap.get().doPickup(carried, new PickupTrace(player));
+				} else {
+					ItemStack split = carried.split(limit);
+					cap.get().doPickup(split, new PickupTrace(player));
+					carried.grow(split.getCount());
+				}
+				if (suppress == Callback.SUPPRESS) menu.setRemoteCarried(menu.getCarried().copy());
+			}
 		}
 		if (wid != 0) {
 			menu.getSlot(slot).setChanged();

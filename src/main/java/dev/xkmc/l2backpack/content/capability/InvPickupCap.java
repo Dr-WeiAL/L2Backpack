@@ -9,7 +9,12 @@ public abstract class InvPickupCap<T extends IItemHandlerModifiable> implements 
 	@Nullable
 	public abstract T getInv(PickupTrace trace);
 
+	public boolean isValid(ItemStack stack) {
+		return true;
+	}
+
 	public boolean mayStack(T inv, int slot, ItemStack stack, PickupConfig config) {
+		if (!isValid(stack)) return false;
 		ItemStack old = inv.getStackInSlot(slot);
 		if (old.getCapability(PickupModeCap.TOKEN).resolve().isPresent()) return false;
 		if (config.pickup() == PickupMode.ALL && old.isEmpty()) {
@@ -23,6 +28,7 @@ public abstract class InvPickupCap<T extends IItemHandlerModifiable> implements 
 
 	@Override
 	public int doPickup(ItemStack stack, PickupTrace trace) {
+		if (!isValid(stack)) return 0;
 		if (stack.isEmpty() || getPickupMode().pickup() == PickupMode.NONE) return 0;
 		if (!trace.push(getSignature(), getPickupMode())) return 0;
 		int ans = doPickupInternal(stack, trace);

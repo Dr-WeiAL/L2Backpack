@@ -1,5 +1,8 @@
 2.4.21-pre1
-- Alt click to recursive insert TODO
+- Alt click to recursive insert
+  - test
+  - desc TODO
+  - patchouli TODO
 
 2.4.21-pre0
 - Drawers now show content directly when pressing alt / ctrl / shift, or when rendering backpack previews
@@ -10,10 +13,12 @@
   - left click insert, right click take
   - tooltip preview
   - quick move
+  - content count (yellow)
 - Now Storage Bags only throw out 16 items at a time
 - Double Click drawer / bags to collect all similar items
 - Quick move now support chest and ender chest menu
 - Right click with wand to adjust backpack
+- Fix drawer pickup ignoring tags
 
 2.4.20
 - Drawer shift-click and MouseTweak scrolling

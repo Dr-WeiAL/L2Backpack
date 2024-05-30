@@ -15,15 +15,22 @@ import org.jetbrains.annotations.Nullable;
 
 public class BagCaps extends InvPickupCap<FastBagItemHandler> implements ICapabilityProvider {
 
+	private final AbstractBag bag;
 	private final ItemStack stack;
 	private final LazyOptional<BagCaps> holder = LazyOptional.of(() -> this);
 	private final BagItemHandler itemHandler;
 	private final LazyOptional<BagItemHandler> handler;
 
 	public BagCaps(AbstractBag bag, ItemStack stack) {
+		this.bag = bag;
 		this.stack = stack;
 		itemHandler = new BagItemHandler(bag, stack);
 		handler = LazyOptional.of(() -> itemHandler);
+	}
+
+	@Override
+	public boolean isValid(ItemStack stack) {
+		return bag.isValidContent(stack);
 	}
 
 	@Override
