@@ -4,6 +4,7 @@ import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.loot.LootGen;
 import dev.xkmc.l2itemselector.init.data.L2Keys;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -27,6 +28,15 @@ public class LangData {
 			list.add(Info.SHIFT.get().withStyle(ChatFormatting.GRAY));
 			list.add(Info.PATCHOULI.get().withStyle(ModList.get().isLoaded("patchouli") ?
 					ChatFormatting.GRAY : ChatFormatting.YELLOW));
+		}
+	}
+
+	public static void altInsert(List<Component> list) {
+		if (Screen.hasShiftDown()) return;
+		var player = Minecraft.getInstance().player;
+		var menu = player.containerMenu;
+		if (!menu.getCarried().isEmpty()) {
+			list.add(Info.ALT_INSERT.get().withStyle(ChatFormatting.YELLOW));
 		}
 	}
 
@@ -70,6 +80,7 @@ public class LangData {
 	public enum Info {
 		SHIFT("tooltip.shift", "Press [SHIFT] to show usage"),
 		ALT_CONTENT("tooltip.alt_content", "Press [ALT] to show content"),
+		ALT_INSERT("tooltip.alt_insert", "Left Click with [ALT] to insert as Pickup"),
 		PATCHOULI("tooltip.patchouli", "Read Patchouli Book for details"),
 		COLLECT_BAG("tooltip.collect.item", "Right click to store matching items in inventory, other than hotbar"),
 		COLLECT_DRAWER("tooltip.collect.drawer", "Shift + right click to store matching items on inventory"),

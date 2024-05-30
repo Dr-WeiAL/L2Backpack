@@ -65,6 +65,7 @@ public class EnderBackpackItem extends Item implements
 				LangData.Info.QUICK_ANY_ACCESS,
 				LangData.Info.KEYBIND,
 				LangData.Info.PICKUP);
+		LangData.altInsert(list);
 	}
 
 	@Override

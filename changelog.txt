@@ -1,10 +1,4 @@
-2.4.21-pre1
-- Alt click to recursive insert
-  - test
-  - desc TODO
-  - patchouli TODO
-
-2.4.21-pre0
+2.4.21
 - Drawers now show content directly when pressing alt / ctrl / shift, or when rendering backpack previews
 - Add config to make drawers always render content directly
 - Auto Pickup now supports pickup advancements, and plays item pickup sounds
@@ -18,7 +12,9 @@
 - Double Click drawer / bags to collect all similar items
 - Quick move now support chest and ender chest menu
 - Right click with wand to adjust backpack
+- Alt click to recursive insert
 - Fix drawer pickup ignoring tags
+
 
 2.4.20
 - Drawer shift-click and MouseTweak scrolling

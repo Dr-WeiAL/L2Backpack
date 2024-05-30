@@ -132,6 +132,7 @@
   "l2backpack.loot.unnamed.item": "Backpack of the Unnamed Explorer",
   "l2backpack.loot.unnamed.name": "the Unnamed Explorer",
   "l2backpack.tooltip.alt_content": "Press [ALT] to show content",
+  "l2backpack.tooltip.alt_insert": "Left Click with [ALT] to insert as Pickup",
   "l2backpack.tooltip.backpack_slot": "Upgrade: %s/%s",
   "l2backpack.tooltip.collect.drawer": "Shift + right click to store matching items on inventory",
   "l2backpack.tooltip.collect.item": "Right click to store matching items in inventory, other than hotbar",
