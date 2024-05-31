@@ -19,6 +19,7 @@ import java.util.UUID;
 public class WorldChestContainer extends BaseContainerMenu<WorldChestContainer> implements DrawerQuickInsert {
 
 	public static WorldChestContainer fromNetwork(MenuType<WorldChestContainer> type, int windowId, Inventory inv) {
+		//TODO
 		return new WorldChestContainer(windowId, inv, new SimpleContainer(27), null, null);
 	}
 

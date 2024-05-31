@@ -1,6 +1,8 @@
 package dev.xkmc.l2backpack.content.capability;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Stack;
@@ -11,10 +13,21 @@ public class PickupTrace {
 	private final HashSet<Integer> active = new HashSet<>();
 	private final Stack<Entry> layer = new Stack<>();
 
+	public final boolean simulate;
+	public final ServerLevel level;
+	@Nullable
 	public final ServerPlayer player;
 
-	public PickupTrace(ServerPlayer player) {
+	public PickupTrace(boolean simulate, ServerLevel level) {
+		this.simulate = simulate;
+		this.level = level;
+		this.player = null;
+	}
+
+	public PickupTrace(boolean simulate, ServerPlayer player) {
+		this.simulate = simulate;
 		this.player = player;
+		this.level = player.serverLevel();
 	}
 
 	public boolean push(int sig, PickupConfig mode) {

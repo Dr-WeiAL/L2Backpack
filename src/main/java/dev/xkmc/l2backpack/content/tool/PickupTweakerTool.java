@@ -22,13 +22,18 @@ public class PickupTweakerTool extends TweakerTool {
 	}
 
 	@Override
+	public PickupConfig click(PickupConfig config) {
+		return PickupConfig.iterateMode(config);
+	}
+
+	@Override
 	public Component message(PickupConfig config) {
 		return config.pickup().getTooltip();
 	}
 
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag flag) {
-		LangData.addInfo(list, LangData.Info.PICKUP_TWEAKER, LangData.Info.TWEAKER_BACK);
+		LangData.addInfo(list, LangData.Info.PICKUP_TWEAKER, LangData.Info.TWEAKER_BACK, LangData.Info.TWEAKER_BLOCK);
 	}
 
 }

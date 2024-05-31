@@ -51,12 +51,12 @@ public class CapabilityEvents {
 	public static void tryInsertItem(ServerPlayer player, ItemStack stack) {
 		ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
 		chest.getCapability(PickupModeCap.TOKEN).resolve().ifPresent(
-				cap -> cap.doPickup(stack, new PickupTrace(player)));
+				cap -> cap.doPickup(stack, new PickupTrace(false, player)));
 		if (stack.isEmpty()) return;
 		CuriosCompat.getSlot(player, e -> {
 			if (stack.isEmpty()) return false;
 			e.getCapability(PickupModeCap.TOKEN).resolve().ifPresent(
-					cap -> cap.doPickup(stack, new PickupTrace(player)));
+					cap -> cap.doPickup(stack, new PickupTrace(false, player)));
 			return false;
 		});
 	}

@@ -30,7 +30,8 @@
 		"pickup": "支持递归归类模式",
 		"pickup_tweaker": "右键物品栏中的背包/匣子/收纳袋来调整归类模式。",
 		"destroy_tweaker": "右键物品栏中的背包/匣子/收纳袋来调整销毁模式。",
-		"tweaker_back": "手持右键调整背上的背包的模式"
+		"tweaker_back": "手持右键调整背上的背包的模式",
+		"tweaker_block": "右键空间背包方块调整方块的模式"
 	  },
 	  "mode": {
 		"all": "全部拾取",

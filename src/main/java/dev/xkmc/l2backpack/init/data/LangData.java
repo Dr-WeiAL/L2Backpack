@@ -107,7 +107,8 @@ public class LangData {
 		PICKUP("tooltip.info.pickup", "Supports recursive pickup"),
 		PICKUP_TWEAKER("tooltip.info.pickup_tweaker", "Right click backpack / drawer / bag in inventory with this item to switch pickup mode."),
 		DESTROY_TWEAKER("tooltip.info.destroy_tweaker", "Right click backpack / drawer / bag in inventory with this item to switch destroy mode."),
-		TWEAKER_BACK("tooltip.info.tweaker_back","Right click in hand to adjust mode for backpacks on your back.");
+		TWEAKER_BACK("tooltip.info.tweaker_back","Right click in hand to adjust mode for backpacks on your back."),
+		TWEAKER_BLOCK("tooltip.info.tweaker_block","Right click dimensional storage block to adjust mode for that block.");
 
 		private final String id, def;
 		private final L2Keys[] key;

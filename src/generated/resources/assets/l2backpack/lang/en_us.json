@@ -162,6 +162,7 @@
   "l2backpack.tooltip.info.suit_bag": "Same as Armor Swap but swaps full set at a time. It will exchange equipped items and selected items. Takes down player armor if the selected row has empty slot.",
   "l2backpack.tooltip.info.tool_bag": "Put in off hand or chest slot (or back slot of Curios). Sneak and hold tools or weapons in main hand (or hold nothing and press alt) to preview, choose, and swap tools from scabbard. Press up/down or [sneak] + number to switch tools. Press %s to swap",
   "l2backpack.tooltip.info.tweaker_back": "Right click in hand to adjust mode for backpacks on your back.",
+  "l2backpack.tooltip.info.tweaker_block": "Right click dimensional storage block to adjust mode for that block.",
   "l2backpack.tooltip.info.upgrade": "Upgrade by applying an Ender Pocket in Smithing Table. Content and name will be preserved.",
   "l2backpack.tooltip.item.size": "Content: %s/%s",
   "l2backpack.tooltip.keybind": "This can be put on chest slot (or back slot of Curios), and can be opened via key bind.",

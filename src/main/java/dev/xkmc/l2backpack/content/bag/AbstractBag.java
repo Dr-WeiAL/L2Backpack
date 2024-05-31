@@ -2,10 +2,10 @@ package dev.xkmc.l2backpack.content.bag;
 
 import dev.xkmc.l2backpack.content.capability.PickupBagItem;
 import dev.xkmc.l2backpack.content.capability.PickupConfig;
+import dev.xkmc.l2backpack.content.click.DoubleClickItem;
 import dev.xkmc.l2backpack.content.common.ContentTransfer;
 import dev.xkmc.l2backpack.content.common.InvTooltip;
 import dev.xkmc.l2backpack.content.common.TooltipInvItem;
-import dev.xkmc.l2backpack.content.click.DoubleClickItem;
 import dev.xkmc.l2backpack.content.insert.CapInsertItem;
 import dev.xkmc.l2backpack.init.data.LangData;
 import net.minecraft.ChatFormatting;
@@ -38,6 +38,10 @@ public abstract class AbstractBag extends Item
 		implements ContentTransfer.Quad, PickupBagItem, CapInsertItem, TooltipInvItem, DoubleClickItem {
 
 	public static final int SIZE = 64;
+
+	public static boolean isFilled(ItemStack bag) {
+		return ((AbstractBag) bag.getItem()).getSize(bag) > 0;
+	}
 
 	public AbstractBag(Properties props) {
 		super(props.stacksTo(1));

@@ -53,7 +53,7 @@ public abstract class InvPickupCap<T extends IItemHandlerModifiable> implements 
 					boolean empty = inv.getStackInSlot(i).isEmpty();
 					if ((!doClear && empty) || destroy.attemptInsert) {
 						int count = stack.getCount();
-						ItemStack result = inv.insertItem(i, stack.copy(), false);
+						ItemStack result = inv.insertItem(i, stack.copy(), trace.simulate);
 						int remain = result.getCount();
 						stack.setCount(remain);
 						ans += count - remain;

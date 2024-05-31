@@ -1,5 +1,8 @@
 package dev.xkmc.l2backpack.content.remote.worldchest;
 
+import dev.xkmc.l2backpack.content.capability.DestroyMode;
+import dev.xkmc.l2backpack.content.capability.PickupConfig;
+import dev.xkmc.l2backpack.content.capability.PickupMode;
 import dev.xkmc.l2backpack.content.remote.common.StorageContainer;
 import dev.xkmc.l2backpack.content.remote.common.WorldStorage;
 import dev.xkmc.l2backpack.init.data.LangData;
@@ -40,7 +43,9 @@ public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvid
 	@SerialClass.SerialField
 	long password;
 	@SerialClass.SerialField(toClient = true)
-	private int color;
+	public int color;
+	@SerialClass.SerialField(toClient = true)
+	public PickupConfig config = new PickupConfig(PickupMode.NONE, DestroyMode.NONE);
 
 	private Component name;
 
@@ -55,12 +60,19 @@ public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvid
 	public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
 		if (level != null && !this.remove &&
 				cap == ForgeCapabilities.ITEM_HANDLER) {
-			if (level.isClientSide()) {
+			if (!(level instanceof ServerLevel sl)) {
 				return LazyOptional.of(() -> new InvWrapper(new SimpleContainer(27))).cast();
 			}
 			if (handler == null) {
-				Optional<StorageContainer> storage = WorldStorage.get((ServerLevel) level).getOrCreateStorage(owner_id, color, password, null, null, 0);
-				handler = storage.isEmpty() ? LazyOptional.empty() : LazyOptional.of(() -> new WorldChestInvWrapper(storage.get().container, owner_id));
+				Optional<StorageContainer> storage = WorldStorage.get((ServerLevel) level)
+						.getOrCreateStorage(owner_id, color, password, null, null, 0);
+				if (storage.isEmpty()) handler = LazyOptional.empty();
+				else if (config == null || config.pickup() == PickupMode.NONE) {
+					handler = LazyOptional.of(() -> new WorldChestInvWrapper(storage.get().container, owner_id));
+				} else {
+					handler = LazyOptional.of(() -> new BlockPickupInvWrapper(sl, this, storage.get(), config));
+				}
+
 			}
 			return this.handler.cast();
 		}
@@ -150,6 +162,13 @@ public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvid
 
 	@Override
 	public void containerChanged(Container p_18983_) {
+		setChanged();
+	}
+
+	public void setPickupMode(PickupConfig click) {
+		this.config = click;
+		handler = null;
+		sync();
 		setChanged();
 	}
 }

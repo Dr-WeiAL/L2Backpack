@@ -172,7 +172,7 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 
 	@Override
 	public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-		return new DrawerInvWrapper(stack, trace -> new EnderDrawerInvAccess(stack, this, trace.player));
+		return new DrawerInvWrapper(stack, trace -> trace.player == null ? null : new EnderDrawerInvAccess(stack, this, trace.player));
 	}
 
 	@Override

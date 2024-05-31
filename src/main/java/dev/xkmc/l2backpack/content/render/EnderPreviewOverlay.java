@@ -1,7 +1,9 @@
 package dev.xkmc.l2backpack.content.render;
 
+import dev.xkmc.l2backpack.content.capability.PickupMode;
 import dev.xkmc.l2backpack.content.drawer.DrawerBlockEntity;
 import dev.xkmc.l2backpack.content.remote.drawer.EnderDrawerBlockEntity;
+import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestBlockEntity;
 import dev.xkmc.l2backpack.events.TooltipUpdateEvents;
 import dev.xkmc.l2backpack.init.data.LangData;
 import dev.xkmc.l2library.util.Proxy;
@@ -40,6 +42,13 @@ public class EnderPreviewOverlay implements IGuiOverlay {
 				gui.setupOverlayRenderState(true, false);
 				Component text = LangData.IDS.DRAWER_CONTENT.get(item.getDescription(), count < 0 ? "???" : count);
 				renderText(gui, g, screenWidth / 2, screenHeight / 2 + 16, text);
+			}
+			if (entity instanceof WorldChestBlockEntity be) {
+				if (be.config != null && be.config.pickup() != PickupMode.NONE) {
+					int off = gui.getFont().lineHeight;
+					renderText(gui, g, screenWidth / 2, screenHeight / 2 + 16, be.config.pickup().getTooltip());
+					renderText(gui, g, screenWidth / 2, screenHeight / 2 + 16 + off, be.config.destroy().getTooltip());
+				}
 			}
 		}
 	}

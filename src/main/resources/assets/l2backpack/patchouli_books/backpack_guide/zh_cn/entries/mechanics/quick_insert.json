@@ -4,6 +4,6 @@
   "category": "l2backpack:mechanics",
   "pages": [
 	"有这个功能的物品：$(li)$(l:items/1_backpacks)背包$(/l)$(li)$(l:items/2_dimensional_storages)空间背包$(/l)$(li)$(l:items/3_ender_backpack)末影背包$(/l)$(li)$(l:items/4_swaps)快捷切换袋$(/l)$(li)$(l:items/5_drawer)水晶匣子$(/l)$(li)$(l:items/6_ender_drawer)末影匣子$(/l)$(li)$(l:items/7_storage_bags)储物袋$(/l)$(br2)",
-	"在任何容器UI中，拿物品左键有这个功能的物品可以直接把物品塞进去。$(br2)对于各种背包和切换袋，右键也可以。抽屉右键是取出物品，所以不支持右键插入。$(br2)即使你不能直接打开箱子里的背包，你可以用这个方法往箱子里的背包塞物品。"
+	"在任何容器UI中，拿物品左键有这个功能的物品可以直接把物品塞进去。$(br2)对于各种背包和切换袋，右键也可以。匣子右键是取出物品，所以不支持右键插入。$(br2)即使你不能直接打开箱子里的背包，你可以用这个方法往箱子里的背包塞物品。"
   ]
 }

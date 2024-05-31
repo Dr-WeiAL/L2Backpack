@@ -104,10 +104,10 @@ public class DrawerInteractToServer extends SerialPacketBase {
 			var cap = storage.getCapability(InvPickupCap.TOKEN).resolve();
 			if (cap.isPresent()) {
 				if (limit == 0) {
-					cap.get().doPickup(carried, new PickupTrace(player));
+					cap.get().doPickup(carried, new PickupTrace(false, player));
 				} else {
 					ItemStack split = carried.split(limit);
-					cap.get().doPickup(split, new PickupTrace(player));
+					cap.get().doPickup(split, new PickupTrace(false, player));
 					carried.grow(split.getCount());
 				}
 				if (suppress == Callback.SUPPRESS) menu.setRemoteCarried(menu.getCarried().copy());
