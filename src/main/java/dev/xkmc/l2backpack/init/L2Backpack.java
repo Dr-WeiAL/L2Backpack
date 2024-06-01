@@ -1,6 +1,7 @@
 package dev.xkmc.l2backpack.init;
 
 import com.tterrag.registrate.providers.ProviderType;
+import dev.xkmc.l2backpack.LCCompat;
 import dev.xkmc.l2backpack.compat.GolemCompat;
 import dev.xkmc.l2backpack.compat.PatchouliCompat;
 import dev.xkmc.l2backpack.content.capability.PickupModeCap;
@@ -18,6 +19,7 @@ import dev.xkmc.l2backpack.init.registrate.BackpackItems;
 import dev.xkmc.l2backpack.init.registrate.BackpackMenus;
 import dev.xkmc.l2backpack.init.registrate.BackpackMisc;
 import dev.xkmc.l2backpack.network.*;
+import dev.xkmc.l2complements.init.L2Complements;
 import dev.xkmc.l2itemselector.select.SelectionRegistry;
 import dev.xkmc.l2library.base.L2Registrate;
 import dev.xkmc.l2library.serial.config.PacketHandler;
@@ -71,6 +73,7 @@ public class L2Backpack {
 		PickupModeCap.register();
 		EnderSyncCap.register();
 		if (ModList.get().isLoaded("modulargolems")) GolemCompat.register();
+		if (ModList.get().isLoaded(L2Complements.MODID)) MinecraftForge.EVENT_BUS.register(LCCompat.class);
 		REGISTRATE.addDataGenerator(ProviderType.RECIPE, RecipeGen::genRecipe);
 		REGISTRATE.addDataGenerator(ProviderType.ADVANCEMENT, AdvGen::genAdvancements);
 		REGISTRATE.addDataGenerator(ProviderType.LOOT, LootGen::genLoot);
