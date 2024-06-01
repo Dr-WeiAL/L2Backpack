@@ -34,3 +34,9 @@ Also have some specialized bag for equipments, enchant books, and arrows.
     mandatory=false
     versionRange="[5.3.4,)"
     side="BOTH"
+[[dependencies.l2backpack]]
+    modId="l2complements"
+    mandatory=false
+    versionRange="[2.4.37,)"
+    side="BOTH"
+    ordering="NONE"

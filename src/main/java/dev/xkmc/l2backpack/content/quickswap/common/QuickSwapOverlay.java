@@ -48,16 +48,20 @@ public class QuickSwapOverlay extends SelectionSideBar<ISwapEntry<?>, QuickSwapO
 		return BackpackSel.INSTANCE.isClientActive(player);
 	}
 
+	public static boolean hasAltDown() {
+		return Screen.hasAltDown();
+	}
+
 	@Override
 	protected boolean isOnHold() {
-		return super.isOnHold() || Screen.hasAltDown() || L2Keys.SWAP.map.isDown();
+		return super.isOnHold() || hasAltDown() || L2Keys.SWAP.map.isDown();
 	}
 
 	@Override
 	public Pair<List<ISwapEntry<?>>, Integer> getItems() {
 		LocalPlayer player = Proxy.getClientPlayer();
 		assert player != null;
-		IQuickSwapToken<?> token = QuickSwapManager.getToken(player, Screen.hasAltDown());
+		IQuickSwapToken<?> token = QuickSwapManager.getToken(player, hasAltDown());
 		assert token != null;
 		List<? extends ISwapEntry<?>> list = token.getList();
 		int selected = token.getSelected();
@@ -72,7 +76,7 @@ public class QuickSwapOverlay extends SelectionSideBar<ISwapEntry<?>, QuickSwapO
 	public BackpackSignature getSignature() {
 		LocalPlayer player = Proxy.getClientPlayer();
 		assert player != null;
-		IQuickSwapToken<?> token = QuickSwapManager.getToken(player, Screen.hasAltDown());
+		IQuickSwapToken<?> token = QuickSwapManager.getToken(player, hasAltDown());
 		assert token != null;
 		int selected = token.getSelected();
 		boolean ignoreOther = false;

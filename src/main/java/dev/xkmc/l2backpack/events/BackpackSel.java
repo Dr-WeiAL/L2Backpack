@@ -31,13 +31,13 @@ public class BackpackSel implements ISelectionListener {
 	@Override
 	public boolean isClientActive(Player player) {
 		if (Minecraft.getInstance().screen != null) return false;
-		IQuickSwapToken token = QuickSwapManager.getToken(player, Screen.hasAltDown());
+		IQuickSwapToken<?> token = QuickSwapManager.getToken(player, QuickSwapOverlay.hasAltDown());
 		return token != null;
 	}
 
 	@Override
 	public void handleServerSetSelection(SetSelectedToServer packet, Player player) {
-		IQuickSwapToken token = QuickSwapManager.getToken(player, packet.isAltDown);
+		IQuickSwapToken<?> token = QuickSwapManager.getToken(player, packet.isAltDown);
 		if (token == null) return;
 		if (packet.slot == SWAP)
 			token.swap(player);
