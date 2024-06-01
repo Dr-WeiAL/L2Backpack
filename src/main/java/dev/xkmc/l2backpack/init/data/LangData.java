@@ -91,15 +91,15 @@ public class LangData {
 		KEYBIND("tooltip.keybind", "This can be put on chest slot (or back slot of Curios), and can be opened via key bind."),
 		QUICK_INV_ACCESS("tooltip.info.quick_inv", "Right click to open. Or right click in inventory / ender chest / dimensional storage GUI to open directly."),
 		QUICK_ANY_ACCESS("tooltip.info.quick_any", "Right click to open. Or right click in any GUI to open directly."),
-		ARROW_INFO("tooltip.info.arrow_bag", "Put in off hand or chest slot (or back slot of Curios) and hold bow in main hand to preview, choose, and shoot arrows from quiver. Press up/down or [sneak] + number to switch arrows"),
+		ARROW_INFO("tooltip.info.arrow_bag", "Put in off hand or chest slot (or back slot of Curios) and hold bow in main hand to preview, choose, and shoot arrows from quiver. Press up/down or [%s] + number to switch arrows", L2Keys.SHIFT),
 		DRAWER_USE("tooltip.info.drawer", "In inventory, left click drawer with a stack to store item. Right click drawer to take item out. Drawer can only store 1 kind of simple item that has no NBT, but can store up to 64 stacks, or 512 stacks with full upgrades."),
 		ENDER_DRAWER_USE("tooltip.info.ender_drawer_block", "For ender drawer block, right click it with item to store, and right click it with empty hand to retrieve a stack. For bulk transport, use drawer item to interact with it."),
 		DIMENSIONAL("tooltip.info.dimensional", "All dimensional storage with the same color and owned by the same player shares the same inventory space, for both item and block form."),
 		ENDER_DRAWER("tooltip.info.ender_drawer", "Same usage as drawer. All ender drawer set to the same item and owned by the same player shares the same inventory space, for both item and block form. Has same pickup option as regular drawer."),
 		UPGRADE("tooltip.info.upgrade", "Upgrade by applying an Ender Pocket in Smithing Table. Content and name will be preserved."),
 		EXIT("tooltip.info.exit", "When exiting GUI, it will return to the previous GUI if opened in accessible GUI. Press Shift + Esc to close all."),
-		SCABBARD_INFO("tooltip.info.tool_bag", "Put in off hand or chest slot (or back slot of Curios). Sneak and hold tools or weapons in main hand (or hold nothing and press alt) to preview, choose, and swap tools from scabbard. Press up/down or [sneak] + number to switch tools. Press %s to swap", L2Keys.SWAP),
-		ARMORBAG_INFO("tooltip.info.armor_bag", "Put in off hand or chest slot (or back slot of Curios). Sneak and hold nothing in main hand to preview, choose, and swap armors. Press up/down or [sneak] + number to switch armors. Press %s to swap", L2Keys.SWAP),
+		SCABBARD_INFO("tooltip.info.tool_bag", "Put in off hand or chest slot (or back slot of Curios).  Hold tools or weapons in main hand and press [%1$s] (or hold nothing and press [%2$s]) to preview, choose, and swap tools from scabbard. Press up/down or [%1$s] + number to switch tools. Press %3$s to swap", L2Keys.SHIFT, L2Keys.ALT, L2Keys.SWAP),
+		ARMORBAG_INFO("tooltip.info.armor_bag", "Put in off hand or chest slot (or back slot of Curios). Hold nothing in main hand and press [%1$s] to preview, choose, and swap armors. Press up/down or [%1$s] + number to switch armors. Press %2$s to swap", L2Keys.SHIFT, L2Keys.SWAP),
 		SUIT_BAG_INFO("tooltip.info.suit_bag", "Same as Armor Swap but swaps full set at a time. It will exchange equipped items and selected items. Takes down player armor if the selected row has empty slot."),
 		MULTI_SWITCH_INFO("tooltip.info.multi_switch", "This is a Quiver, a Tool Swap, and an Armor Swap at the same time. Sneak and hold respective items to trigger each mode. When holding nothing and pressing alt, tool swap mode is activated."),
 		ENDER_SWITCH_INFO("tooltip.info.ender_switch", "This is a Combined Swap and an Ender Backpack at the same time. Note that the arrows, tools, and armors are stored within this item still, not in remote inventory. It inherits all properties of a backpack and an ender backpack."),
@@ -123,7 +123,7 @@ public class LangData {
 		public MutableComponent get() {
 			Object[] arr = new Object[key.length];
 			for (int i = 0; i < key.length; i++) {
-				arr[i] = L2Keys.SWAP.map.getKey().getDisplayName().copy().withStyle(ChatFormatting.YELLOW);
+				arr[i] = key[i].map.getKey().getDisplayName().copy().withStyle(ChatFormatting.YELLOW);
 			}
 			return Component.translatable(L2Backpack.MODID + "." + id, arr);
 		}
