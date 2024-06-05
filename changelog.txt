@@ -4,6 +4,7 @@ TODO experience module
 
 2.4.22
 - L2C ender reach compat
+- Keybind for holding and switching selector
 
 2.4.21
 - Drawers now show content directly when pressing alt / ctrl / shift, or when rendering backpack previews
