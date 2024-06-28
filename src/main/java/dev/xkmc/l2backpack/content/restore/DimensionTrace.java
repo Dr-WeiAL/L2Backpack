@@ -3,12 +3,11 @@ package dev.xkmc.l2backpack.content.restore;
 import dev.xkmc.l2backpack.content.remote.common.WorldStorage;
 import dev.xkmc.l2backpack.content.remote.worldchest.SimpleStorageMenuPvd;
 import dev.xkmc.l2backpack.init.registrate.BackpackMenus;
-import dev.xkmc.l2screentracker.screen.base.LayerPopType;
-import dev.xkmc.l2screentracker.screen.track.TrackedEntryType;
+import dev.xkmc.l2menustacker.screen.base.LayerPopType;
+import dev.xkmc.l2menustacker.screen.track.TrackedEntryType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
@@ -21,7 +20,7 @@ public class DimensionTrace extends TrackedEntryType<DimensionTraceData> {
 		}
 		var op = WorldStorage.get((ServerLevel) player.level()).getStorageWithoutPassword(data.uuid(), data.color());
 		if (op.isPresent()) {
-			NetworkHooks.openScreen(player, new SimpleStorageMenuPvd(comp, op.get()));
+			player.openMenu(new SimpleStorageMenuPvd(comp, op.get()));
 			return LayerPopType.REMAIN;
 		}
 		return LayerPopType.FAIL;

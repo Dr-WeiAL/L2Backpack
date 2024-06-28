@@ -4,15 +4,16 @@ import dev.xkmc.l2backpack.content.common.DrawerQuickInsert;
 import dev.xkmc.l2backpack.content.insert.OverlayInsertItem;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2serial.network.SerialPacketBase;
-import dev.xkmc.l2serial.serialization.SerialClass;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.network.NetworkEvent;
 
-@SerialClass
-public class DrawerInteractToServer extends SerialPacketBase {
+public record DrawerInteractToServer(
+		int wid, int slot, ItemStack stack,
+		int limit, Type type, Callback suppress
+) implements SerialPacketBase<DrawerInteractToServer> {
 
 	public enum Type {
 		INSERT, TAKE, QUICK_MOVE
@@ -22,37 +23,9 @@ public class DrawerInteractToServer extends SerialPacketBase {
 		REGULAR, SUPPRESS, SCRAMBLE
 	}
 
-	@SerialClass.SerialField
-	public Type type;
-
-	@SerialClass.SerialField
-	public int wid, slot, limit;
-
-	@SerialClass.SerialField
-	public ItemStack stack;
-
-	@SerialClass.SerialField
-	public Callback suppress;
-
-
-	@Deprecated
-	public DrawerInteractToServer() {
-
-	}
-
-	public DrawerInteractToServer(Type type, int wid, int slot, ItemStack carried, Callback suppress, int limit) {
-		this.type = type;
-		this.wid = wid;
-		this.slot = slot;
-		this.stack = carried;
-		this.suppress = suppress;
-		this.limit = limit;
-	}
-
 	@Override
-	public void handle(NetworkEvent.Context context) {
-		ServerPlayer player = context.getSender();
-		if (player == null) return;
+	public void handle(Player pl) {
+		if (!(pl instanceof ServerPlayer player)) return;
 		AbstractContainerMenu menu = player.containerMenu;
 		if (menu.containerId != wid) return;
 		if (wid != 0 && !menu.getSlot(slot).allowModification(player)) return;

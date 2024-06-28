@@ -1,35 +1,17 @@
 package dev.xkmc.l2backpack.network;
 
 import dev.xkmc.l2serial.network.SerialPacketBase;
-import dev.xkmc.l2serial.serialization.SerialClass;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.network.NetworkEvent;
 
-@SerialClass
-public class CreativeSetCarryToServer extends SerialPacketBase {
-
-	@SerialClass.SerialField
-	public ItemStack stack;
-
-	@SerialClass.SerialField
-	public int count;
-
-	@Deprecated
-	public CreativeSetCarryToServer() {
-
-	}
-
-	public CreativeSetCarryToServer(ItemStack stack) {
-		this.stack = stack;
-	}
+public record CreativeSetCarryToServer(
+		ItemStack stack
+) implements SerialPacketBase<CreativeSetCarryToServer> {
 
 	@Override
-	public void handle(NetworkEvent.Context context) {
-		var player = context.getSender();
-		if (player == null) return;
+	public void handle(Player player) {
 		if (!player.getAbilities().instabuild) return;
 		player.containerMenu.setCarried(stack);
 	}
-
 
 }

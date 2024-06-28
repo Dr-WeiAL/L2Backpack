@@ -3,9 +3,9 @@ package dev.xkmc.l2backpack.content.backpack;
 import dev.xkmc.l2backpack.content.common.BaseBagMenu;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.registrate.BackpackMenus;
-import dev.xkmc.l2library.base.menu.base.SpriteManager;
-import dev.xkmc.l2screentracker.screen.source.PlayerSlot;
-import net.minecraft.network.FriendlyByteBuf;
+import dev.xkmc.l2core.base.menu.base.SpriteManager;
+import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
@@ -23,7 +23,7 @@ public class BackpackMenu extends BaseBagMenu<BackpackMenu> {
 		}
 	}
 
-	public static BackpackMenu fromNetwork(MenuType<BackpackMenu> type, int windowId, Inventory inv, FriendlyByteBuf buf) {
+	public static BackpackMenu fromNetwork(MenuType<BackpackMenu> type, int windowId, Inventory inv, RegistryFriendlyByteBuf buf) {
 		PlayerSlot<?> slot = PlayerSlot.read(buf);
 		UUID id = buf.readUUID();
 		int row = buf.readInt();

@@ -3,7 +3,7 @@ package dev.xkmc.l2backpack.content.common;
 import dev.xkmc.l2backpack.content.capability.PickupBagItem;
 import dev.xkmc.l2backpack.content.insert.InsertOnlyItem;
 import dev.xkmc.l2library.util.Proxy;
-import dev.xkmc.l2screentracker.screen.source.PlayerSlot;
+import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientLevel;

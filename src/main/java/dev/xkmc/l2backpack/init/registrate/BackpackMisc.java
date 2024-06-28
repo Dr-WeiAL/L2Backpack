@@ -1,8 +1,6 @@
 package dev.xkmc.l2backpack.init.registrate;
 
-import com.mojang.serialization.Codec;
 import com.tterrag.registrate.util.entry.MenuEntry;
-import com.tterrag.registrate.util.entry.RegistryEntry;
 import dev.xkmc.l2backpack.content.common.BaseBagMenu;
 import dev.xkmc.l2backpack.content.recipe.BackpackDyeRecipe;
 import dev.xkmc.l2backpack.content.recipe.BackpackUpgradeRecipe;
@@ -11,48 +9,60 @@ import dev.xkmc.l2backpack.content.recipe.MultiSwitchCraftRecipe;
 import dev.xkmc.l2backpack.content.restore.*;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.loot.BackpackLootModifier;
-import dev.xkmc.l2library.serial.recipe.AbstractShapedRecipe;
-import dev.xkmc.l2library.serial.recipe.AbstractShapelessRecipe;
-import dev.xkmc.l2library.serial.recipe.AbstractSmithingRecipe;
-import dev.xkmc.l2screentracker.screen.base.ScreenTrackerRegistry;
-import dev.xkmc.l2screentracker.screen.source.MenuSourceRegistry;
-import dev.xkmc.l2screentracker.screen.source.PlayerSlot;
-import dev.xkmc.l2screentracker.screen.source.SimpleSlotData;
+import dev.xkmc.l2core.init.reg.simple.CdcReg;
+import dev.xkmc.l2core.init.reg.simple.CdcVal;
+import dev.xkmc.l2core.init.reg.simple.SR;
+import dev.xkmc.l2core.init.reg.simple.Val;
+import dev.xkmc.l2core.serial.recipe.AbstractShapedRecipe;
+import dev.xkmc.l2core.serial.recipe.AbstractShapelessRecipe;
+import dev.xkmc.l2core.serial.recipe.AbstractSmithingRecipe;
+import dev.xkmc.l2menustacker.screen.base.L2MSReg;
+import dev.xkmc.l2menustacker.screen.source.ItemSource;
+import dev.xkmc.l2menustacker.screen.source.MenuSourceRegistry;
+import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
+import dev.xkmc.l2menustacker.screen.source.SimpleSlotData;
+import dev.xkmc.l2menustacker.screen.track.ItemBasedTraceData;
+import dev.xkmc.l2menustacker.screen.track.MenuTraceRegistry;
+import dev.xkmc.l2menustacker.screen.track.TrackedEntry;
+import dev.xkmc.l2menustacker.screen.track.TrackedEntryType;
 import dev.xkmc.l2screentracker.screen.track.ItemBasedTraceData;
-import dev.xkmc.l2screentracker.screen.track.MenuTraceRegistry;
-import dev.xkmc.l2screentracker.screen.track.TrackedEntry;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.Optional;
 
-import static dev.xkmc.l2backpack.init.L2Backpack.REGISTRATE;
-
 public class BackpackMisc {
 
-	public static final RegistryEntry<AbstractShapelessRecipe.Serializer<BackpackDyeRecipe>> RSC_BAG_DYE =
-			REGISTRATE.simple("backpack_dye", ForgeRegistries.Keys.RECIPE_SERIALIZERS, () -> new AbstractShapelessRecipe.Serializer<>(BackpackDyeRecipe::new));
-	public static final RegistryEntry<AbstractSmithingRecipe.Serializer<BackpackUpgradeRecipe>> RSC_BAG_UPGRADE =
-			REGISTRATE.simple("backpack_upgrade", ForgeRegistries.Keys.RECIPE_SERIALIZERS, () -> new AbstractSmithingRecipe.Serializer<>(BackpackUpgradeRecipe::new));
-	public static final RegistryEntry<AbstractSmithingRecipe.Serializer<DrawerUpgradeRecipe>> RSC_DRAWER_UPGRADE =
-			REGISTRATE.simple("drawer_upgrade", ForgeRegistries.Keys.RECIPE_SERIALIZERS, () -> new AbstractSmithingRecipe.Serializer<>(DrawerUpgradeRecipe::new));
-	public static final RegistryEntry<AbstractShapedRecipe.Serializer<MultiSwitchCraftRecipe>> RSC_BAG_CRAFT =
-			REGISTRATE.simple("multiswitch_craft", ForgeRegistries.Keys.RECIPE_SERIALIZERS, () -> new AbstractShapedRecipe.Serializer<>(MultiSwitchCraftRecipe::new));
+	private static final SR<RecipeSerializer<?>> RS = SR.of(L2Backpack.REG, BuiltInRegistries.RECIPE_SERIALIZER);
 
-	public static final RegistryEntry<Codec<BackpackLootModifier>> SER = REGISTRATE.simple("main", ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, () -> BackpackLootModifier.CODEC);
+	public static final Val<AbstractShapelessRecipe.Serializer<BackpackDyeRecipe>> RSC_BAG_DYE =
+			RS.reg("backpack_dye", () -> new AbstractShapelessRecipe.Serializer<>(BackpackDyeRecipe::new));
+	public static final Val<AbstractSmithingRecipe.Serializer<BackpackUpgradeRecipe>> RSC_BAG_UPGRADE =
+			RS.reg("backpack_upgrade", () -> new AbstractSmithingRecipe.Serializer<>(BackpackUpgradeRecipe::new));
+	public static final Val<AbstractSmithingRecipe.Serializer<DrawerUpgradeRecipe>> RSC_DRAWER_UPGRADE =
+			RS.reg("drawer_upgrade", () -> new AbstractSmithingRecipe.Serializer<>(DrawerUpgradeRecipe::new));
+	public static final Val<AbstractShapedRecipe.Serializer<MultiSwitchCraftRecipe>> RSC_BAG_CRAFT =
+			RS.reg("multiswitch_craft", () -> new AbstractShapedRecipe.Serializer<>(MultiSwitchCraftRecipe::new));
 
-	public static final RegistryEntry<DimensionItemSource> IS_DIM = L2Backpack.REGISTRATE.simple("dimension", ScreenTrackerRegistry.ITEM_SOURCE.key(), DimensionItemSource::new);
-	public static final RegistryEntry<DimensionTrace> TE_DIM = L2Backpack.REGISTRATE.simple("dimension", ScreenTrackerRegistry.TRACKED_ENTRY_TYPE.key(), DimensionTrace::new);
-	public static final RegistryEntry<BackpackTrace> TE_BAG = L2Backpack.REGISTRATE.simple("backpack", ScreenTrackerRegistry.TRACKED_ENTRY_TYPE.key(), BackpackTrace::new);
+	private static final CdcReg<IGlobalLootModifier> GLM = CdcReg.of(L2Backpack.REG, NeoForgeRegistries.GLOBAL_LOOT_MODIFIER_SERIALIZERS);
 
-	public static void register(IEventBus bus) {
+	public static final CdcVal<BackpackLootModifier> SER = GLM.reg("main", BackpackLootModifier.MAP_CODEC);
+
+	private static final SR<ItemSource<?>> SOURCE = SR.of(L2Backpack.REG, L2MSReg.ITEM_SOURCE.key());
+	private static final SR<TrackedEntryType<?>> TRACKED = SR.of(L2Backpack.REG, L2MSReg.TRACKED_ENTRY_TYPE.key());
+	public static final Val<DimensionItemSource> IS_DIM = SOURCE.reg("dimension", DimensionItemSource::new);
+	public static final Val<DimensionTrace> TE_DIM = TRACKED.reg("dimension", DimensionTrace::new);
+	public static final Val<BackpackTrace> TE_BAG = TRACKED.reg("backpack", BackpackTrace::new);
+
+	public static void register() {
 	}
 
 	public static void commonSetup() {
-
 		MenuSourceRegistry.register(BackpackMenus.MT_ES.get(), (menu, slot, index, wid) ->
 				index >= 36 && index < 63 ?
-						Optional.of(new PlayerSlot<>(ScreenTrackerRegistry.IS_ENDER.get(), new SimpleSlotData(index - 36))) :
+						Optional.of(new PlayerSlot<>(L2MSReg.IS_ENDER.get(), new SimpleSlotData(index - 36))) :
 						Optional.empty());
 
 		MenuSourceRegistry.register(BackpackMenus.MT_WORLD_CHEST.get(), (menu, slot, index, wid) ->

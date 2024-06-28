@@ -3,32 +3,22 @@ package dev.xkmc.l2backpack.content.remote.player;
 import com.mojang.datafixers.util.Pair;
 import dev.xkmc.l2backpack.events.TooltipUpdateEvents;
 import dev.xkmc.l2serial.network.SerialPacketBase;
-import dev.xkmc.l2serial.serialization.SerialClass;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.network.NetworkEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@SerialClass
-public class EnderSyncPacket extends SerialPacketBase {
+public record EnderSyncPacket(
+		ArrayList<Entry> list
+) implements SerialPacketBase<EnderSyncPacket> {
 
-	@SerialClass.SerialField
-	public ArrayList<Entry> list = new ArrayList<>();
-
-	@Deprecated
-	public EnderSyncPacket() {
-
-	}
-
-	public EnderSyncPacket(List<Pair<Integer, ItemStack>> list) {
-		for (var e : list) {
-			this.list.add(new Entry(e.getFirst(), e.getSecond()));
-		}
+	public static EnderSyncPacket of(List<Pair<Integer, ItemStack>> list) {
+		return new EnderSyncPacket(new ArrayList<>(list.stream().map(e -> new Entry(e.getFirst(), e.getSecond())).toList()));
 	}
 
 	@Override
-	public void handle(NetworkEvent.Context context) {
+	public void handle(Player player) {
 		for (var e : list) {
 			TooltipUpdateEvents.onEnderSync(e.slot(), e.stack());
 		}

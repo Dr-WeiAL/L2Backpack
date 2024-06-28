@@ -3,7 +3,7 @@ package dev.xkmc.l2backpack.content.quickswap.armorswap;
 import com.mojang.datafixers.util.Pair;
 import dev.xkmc.l2backpack.content.common.BagSlot;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.world.inventory.InventoryMenu.*;

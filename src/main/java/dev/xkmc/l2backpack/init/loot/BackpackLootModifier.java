@@ -1,6 +1,7 @@
 package dev.xkmc.l2backpack.init.loot;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.xkmc.l2backpack.content.backpack.BackpackItem;
 import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestItem;
@@ -15,7 +16,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.loot.LootModifier;
+import net.neoforged.neoforge.common.loot.LootModifier;
 import org.jetbrains.annotations.NotNull;
 
 public class BackpackLootModifier extends LootModifier {
@@ -27,6 +28,8 @@ public class BackpackLootModifier extends LootModifier {
 					Codec.STRING.fieldOf("loot").forGetter(e -> e.loot.toString()),
 					Codec.LONG.fieldOf("seed").forGetter(e -> e.seed)))
 			.apply(i, BackpackLootModifier::new));
+
+	public static final MapCodec<BackpackLootModifier> MAP_CODEC = CODEC.dispatchMap(e -> e, e -> e.codec());
 
 	private final double chance;
 	private final DyeColor color;
@@ -71,8 +74,8 @@ public class BackpackLootModifier extends LootModifier {
 	}
 
 	@Override
-	public Codec<BackpackLootModifier> codec() {
-		return CODEC;
+	public MapCodec<BackpackLootModifier> codec() {
+		return MAP_CODEC;
 	}
 
 }

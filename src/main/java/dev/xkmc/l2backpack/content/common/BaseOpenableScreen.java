@@ -1,7 +1,7 @@
 package dev.xkmc.l2backpack.content.common;
 
-import dev.xkmc.l2library.base.menu.base.BaseContainerMenu;
-import dev.xkmc.l2library.base.menu.base.BaseContainerScreen;
+import dev.xkmc.l2core.base.menu.base.BaseContainerMenu;
+import dev.xkmc.l2core.base.menu.base.BaseContainerScreen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -19,9 +19,7 @@ public class BaseOpenableScreen<T extends BaseContainerMenu<T>> extends BaseCont
 
 	@Override
 	protected void renderBg(GuiGraphics g, float pt, int mx, int my) {
-		var sm = menu.sprite.get();
-		var sr = sm.getRenderer(this);
-		sr.start(g);
+		getRenderer().start(g);
 	}
 
 }

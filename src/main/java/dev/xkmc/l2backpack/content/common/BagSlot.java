@@ -1,7 +1,7 @@
 package dev.xkmc.l2backpack.content.common;
 
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class BagSlot extends SlotItemHandler {
 

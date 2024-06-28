@@ -2,37 +2,17 @@ package dev.xkmc.l2backpack.network;
 
 import dev.xkmc.l2backpack.events.TooltipUpdateEvents;
 import dev.xkmc.l2serial.network.SerialPacketBase;
-import dev.xkmc.l2serial.serialization.SerialClass;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.network.NetworkEvent;
 
 import java.util.UUID;
 
-@SerialClass
-public class RespondTooltipUpdateEvent extends SerialPacketBase {
-
-	@SerialClass.SerialField
-	public Item item;
-
-	@SerialClass.SerialField
-	public UUID id;
-
-	@SerialClass.SerialField
-	public int count;
-
-	@Deprecated
-	public RespondTooltipUpdateEvent() {
-
-	}
-
-	public RespondTooltipUpdateEvent(Item item, UUID id, int count) {
-		this.item = item;
-		this.id = id;
-		this.count = count;
-	}
+public record RespondTooltipUpdateEvent(
+		Item item, int count, UUID id
+) implements SerialPacketBase<RespondTooltipUpdateEvent> {
 
 	@Override
-	public void handle(NetworkEvent.Context context) {
+	public void handle(Player player) {
 		TooltipUpdateEvents.updateInfo(item, id, count);
 	}
 

@@ -11,11 +11,4 @@ public class WorldChestScreen extends BaseOpenableScreen<WorldChestContainer> {
 		super(cont, plInv, title);
 	}
 
-	@Override
-	protected void renderBg(GuiGraphics stack, float pt, int mx, int my) {
-		var sm = menu.sprite.get();
-		var sr = sm.getRenderer(this);
-		sr.start(stack);
-	}
-
 }
