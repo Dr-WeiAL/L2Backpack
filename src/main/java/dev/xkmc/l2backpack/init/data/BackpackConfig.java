@@ -1,10 +1,10 @@
 package dev.xkmc.l2backpack.init.data;
 
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.IConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.config.IConfigSpec;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.glfw.GLFW;
 
@@ -14,21 +14,21 @@ public class BackpackConfig {
 
 	public static class Client {
 
-		public final ForgeConfigSpec.BooleanValue previewOnCenter;
+		public final ModConfigSpec.BooleanValue previewOnCenter;
 
-		public final ForgeConfigSpec.BooleanValue popupArrowOnSwitch;
-		public final ForgeConfigSpec.BooleanValue popupToolOnSwitch;
-		public final ForgeConfigSpec.BooleanValue popupArmorOnSwitch;
+		public final ModConfigSpec.BooleanValue popupArrowOnSwitch;
+		public final ModConfigSpec.BooleanValue popupToolOnSwitch;
+		public final ModConfigSpec.BooleanValue popupArmorOnSwitch;
 
-		public final ForgeConfigSpec.BooleanValue drawerAlwaysRenderFlat;
+		public final ModConfigSpec.BooleanValue drawerAlwaysRenderFlat;
 
-		public final ForgeConfigSpec.BooleanValue reverseScroll;
-		public final ForgeConfigSpec.BooleanValue backpackInsertRequiresShift;
-		public final ForgeConfigSpec.BooleanValue backpackEnableLeftClickInsert;
-		public final ForgeConfigSpec.BooleanValue backpackEnableRightClickInsert;
+		public final ModConfigSpec.BooleanValue reverseScroll;
+		public final ModConfigSpec.BooleanValue backpackInsertRequiresShift;
+		public final ModConfigSpec.BooleanValue backpackEnableLeftClickInsert;
+		public final ModConfigSpec.BooleanValue backpackEnableRightClickInsert;
 
 
-		Client(ForgeConfigSpec.Builder builder) {
+		Client(ModConfigSpec.Builder builder) {
 			previewOnCenter = builder.comment("Put quiver preview near the center of the screen, rather than edge of the screen")
 					.define("previewOnCenter", true);
 
@@ -77,13 +77,13 @@ public class BackpackConfig {
 
 	}
 
-	public static class Common {
+	public static class Server {
 
-		public final ForgeConfigSpec.IntValue initialRows;
+		public final ModConfigSpec.IntValue initialRows;
 
-		public final ForgeConfigSpec.IntValue startupBackpackCondition;
+		public final ModConfigSpec.IntValue startupBackpackCondition;
 
-		Common(ForgeConfigSpec.Builder builder) {
+		Server(ModConfigSpec.Builder builder) {
 			initialRows = builder.comment("Initial Rows (x9 slots) for backpack")
 					.defineInRange("initialRows", 2, 1, MAX_ROW);
 			startupBackpackCondition = builder.comment("How many items do players need to spawn with to have the privilege of having them in a backpack")
@@ -91,31 +91,31 @@ public class BackpackConfig {
 		}
 	}
 
-	public static final ForgeConfigSpec CLIENT_SPEC;
+	public static final ModConfigSpec CLIENT_SPEC;
 	public static final Client CLIENT;
 
-	public static final ForgeConfigSpec COMMON_SPEC;
-	public static final Common COMMON;
+	public static final ModConfigSpec SERVER_SPEC;
+	public static final Server SERVER;
 
 	static {
-		final Pair<Client, ForgeConfigSpec> client = new ForgeConfigSpec.Builder().configure(Client::new);
+		final Pair<Client, ModConfigSpec> client = new ModConfigSpec.Builder().configure(Client::new);
 		CLIENT_SPEC = client.getRight();
 		CLIENT = client.getLeft();
 
-		final Pair<Common, ForgeConfigSpec> common = new ForgeConfigSpec.Builder().configure(Common::new);
-		COMMON_SPEC = common.getRight();
-		COMMON = common.getLeft();
+		final Pair<Server, ModConfigSpec> server = new ModConfigSpec.Builder().configure(Server::new);
+		SERVER_SPEC = server.getRight();
+		SERVER = server.getLeft();
 	}
 
 	public static void init() {
 		register(ModConfig.Type.CLIENT, CLIENT_SPEC);
-		register(ModConfig.Type.COMMON, COMMON_SPEC);
+		register(ModConfig.Type.SERVER, SERVER_SPEC);
 	}
 
 	private static void register(ModConfig.Type type, IConfigSpec<?> spec) {
 		var mod = ModLoadingContext.get().getActiveContainer();
 		String path = "l2_configs/" + mod.getModId() + "-" + type.extension() + ".toml";
-		ModLoadingContext.get().registerConfig(type, spec, path);
+		mod.registerConfig(type, spec, path);
 	}
 
 }

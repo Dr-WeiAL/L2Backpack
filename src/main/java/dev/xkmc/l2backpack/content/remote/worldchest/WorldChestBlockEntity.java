@@ -6,9 +6,12 @@ import dev.xkmc.l2backpack.content.capability.PickupMode;
 import dev.xkmc.l2backpack.content.remote.common.StorageContainer;
 import dev.xkmc.l2backpack.content.remote.common.WorldStorage;
 import dev.xkmc.l2backpack.init.data.LangData;
+import dev.xkmc.l2core.base.tile.BaseBlockEntity;
 import dev.xkmc.l2library.base.tile.BaseBlockEntity;
 import dev.xkmc.l2modularblock.tile_api.NameSetable;
 import dev.xkmc.l2serial.serialization.SerialClass;
+import dev.xkmc.l2serial.serialization.marker.SerialClass;
+import dev.xkmc.l2serial.serialization.marker.SerialField;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -27,6 +30,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,15 +40,15 @@ import java.util.UUID;
 @SerialClass
 public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvider, NameSetable, ContainerListener {
 
-	@SerialClass.SerialField
+	@SerialField
 	public UUID owner_id;
-	@SerialClass.SerialField(toClient = true)
+	@SerialField(toClient = true)
 	public String owner_name;
-	@SerialClass.SerialField
+	@SerialField
 	long password;
-	@SerialClass.SerialField(toClient = true)
+	@SerialField(toClient = true)
 	public int color;
-	@SerialClass.SerialField(toClient = true)
+	@SerialField(toClient = true)
 	public PickupConfig config = new PickupConfig(PickupMode.NONE, DestroyMode.NONE);
 
 	private Component name;
@@ -65,12 +69,7 @@ public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvid
 			}
 			if (handler == null && level instanceof ServerLevel sl) {
 				Optional<StorageContainer> storage = WorldStorage.get(sl).getOrCreateStorage(sl, owner_id, color, password, null, null, 0);
-				handler = storage.isEmpty() ? LazyOptional.empty() : LazyOptional.of(() -> new WorldChestInvWrapper(storage.get().container, owner_id));
-			}
 
-			if (handler == null) {
-				Optional<StorageContainer> storage = WorldStorage.get((ServerLevel) level)
-						.getOrCreateStorage(owner_id, color, password, null, null, 0);
 				if (storage.isEmpty()) handler = LazyOptional.empty();
 				else if (config == null || config.pickup() == PickupMode.NONE) {
 					handler = LazyOptional.of(() -> new WorldChestInvWrapper(storage.get().container, owner_id));
@@ -78,6 +77,7 @@ public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvid
 					handler = LazyOptional.of(() -> new BlockPickupInvWrapper(sl, this, storage.get(), config));
 				}
 
+				handler = storage.isEmpty() ? LazyOptional.empty() : LazyOptional.of(() -> new WorldChestInvWrapper(storage.get().container, owner_id));
 			}
 
 			return this.handler.cast();

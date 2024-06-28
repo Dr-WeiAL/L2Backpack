@@ -5,7 +5,6 @@ import dev.xkmc.l2backpack.content.common.BaseBagMenu;
 import dev.xkmc.l2backpack.content.recipe.BackpackDyeRecipe;
 import dev.xkmc.l2backpack.content.recipe.BackpackUpgradeRecipe;
 import dev.xkmc.l2backpack.content.recipe.DrawerUpgradeRecipe;
-import dev.xkmc.l2backpack.content.recipe.MultiSwitchCraftRecipe;
 import dev.xkmc.l2backpack.content.restore.*;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.loot.BackpackLootModifier;
@@ -13,19 +12,16 @@ import dev.xkmc.l2core.init.reg.simple.CdcReg;
 import dev.xkmc.l2core.init.reg.simple.CdcVal;
 import dev.xkmc.l2core.init.reg.simple.SR;
 import dev.xkmc.l2core.init.reg.simple.Val;
-import dev.xkmc.l2core.serial.recipe.AbstractShapedRecipe;
 import dev.xkmc.l2core.serial.recipe.AbstractShapelessRecipe;
 import dev.xkmc.l2core.serial.recipe.AbstractSmithingRecipe;
 import dev.xkmc.l2menustacker.screen.base.L2MSReg;
 import dev.xkmc.l2menustacker.screen.source.ItemSource;
 import dev.xkmc.l2menustacker.screen.source.MenuSourceRegistry;
 import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
-import dev.xkmc.l2menustacker.screen.source.SimpleSlotData;
 import dev.xkmc.l2menustacker.screen.track.ItemBasedTraceData;
 import dev.xkmc.l2menustacker.screen.track.MenuTraceRegistry;
 import dev.xkmc.l2menustacker.screen.track.TrackedEntry;
 import dev.xkmc.l2menustacker.screen.track.TrackedEntryType;
-import dev.xkmc.l2screentracker.screen.track.ItemBasedTraceData;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
@@ -43,8 +39,6 @@ public class BackpackMisc {
 			RS.reg("backpack_upgrade", () -> new AbstractSmithingRecipe.Serializer<>(BackpackUpgradeRecipe::new));
 	public static final Val<AbstractSmithingRecipe.Serializer<DrawerUpgradeRecipe>> RSC_DRAWER_UPGRADE =
 			RS.reg("drawer_upgrade", () -> new AbstractSmithingRecipe.Serializer<>(DrawerUpgradeRecipe::new));
-	public static final Val<AbstractShapedRecipe.Serializer<MultiSwitchCraftRecipe>> RSC_BAG_CRAFT =
-			RS.reg("multiswitch_craft", () -> new AbstractShapedRecipe.Serializer<>(MultiSwitchCraftRecipe::new));
 
 	private static final CdcReg<IGlobalLootModifier> GLM = CdcReg.of(L2Backpack.REG, NeoForgeRegistries.GLOBAL_LOOT_MODIFIER_SERIALIZERS);
 
@@ -60,11 +54,6 @@ public class BackpackMisc {
 	}
 
 	public static void commonSetup() {
-		MenuSourceRegistry.register(BackpackMenus.MT_ES.get(), (menu, slot, index, wid) ->
-				index >= 36 && index < 63 ?
-						Optional.of(new PlayerSlot<>(L2MSReg.IS_ENDER.get(), new SimpleSlotData(index - 36))) :
-						Optional.empty());
-
 		MenuSourceRegistry.register(BackpackMenus.MT_WORLD_CHEST.get(), (menu, slot, index, wid) ->
 				Optional.of(new PlayerSlot<>(IS_DIM.get(),
 						new DimensionSourceData(menu.getColor(), index - 36, menu.getOwner()))));
@@ -77,8 +66,6 @@ public class BackpackMisc {
 		addBag(BackpackMenus.MT_ARMOR);
 		addBag(BackpackMenus.MT_ARROW);
 		addBag(BackpackMenus.MT_TOOL);
-		addBag(BackpackMenus.MT_MULTI);
-		addBag(BackpackMenus.MT_ES);
 	}
 
 	private static <T extends BaseBagMenu<T>> void addBag(MenuEntry<T> type) {

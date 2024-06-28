@@ -27,7 +27,7 @@ public class StartUpGiveItemEvents {
 		if (adv == null) return;
 		var prog = sp.getAdvancements().getOrStartProgress(adv);
 		if (prog.isDone()) return;
-		int target = BackpackConfig.COMMON.startupBackpackCondition.get();
+		int target = BackpackConfig.SERVER.startupBackpackCondition.get();
 		var list = sp.getInventory().items;
 		int count = 0;
 		for (ItemStack stack : list) {
@@ -36,7 +36,7 @@ public class StartUpGiveItemEvents {
 			}
 		}
 		if (count < target) return;
-		int initialRow = Math.max(BackpackConfig.COMMON.initialRows.get(), (count - 1) / 9 + 1);
+		int initialRow = Math.max(BackpackConfig.SERVER.initialRows.get(), (count - 1) / 9 + 1);
 		ItemStack stack = BackpackItem.setRow(BackpackItems.BACKPACKS[DyeColor.WHITE.ordinal()].asStack(), initialRow);
 		var ans = NonNullList.withSize(initialRow * 9, ItemStack.EMPTY);
 		int index = 0;

@@ -22,6 +22,7 @@ import dev.xkmc.l2backpack.content.tool.DestroyTweakerTool;
 import dev.xkmc.l2backpack.content.tool.PickupTweakerTool;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.data.TagGen;
+import dev.xkmc.l2core.init.reg.registrate.SimpleEntry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -32,6 +33,7 @@ import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.tags.ITagManager;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
 
 import java.util.Objects;
 
@@ -41,7 +43,7 @@ import static dev.xkmc.l2backpack.init.L2Backpack.REGISTRATE;
 @MethodsReturnNonnullByDefault
 public class BackpackItems {
 
-	public static final RegistryEntry<CreativeModeTab> TAB = REGISTRATE
+	public static final SimpleEntry<CreativeModeTab> TAB = REGISTRATE
 			.buildL2CreativeTab("backpack", "L2 Backpack",
 					e -> e.icon(BackpackItems.ENDER_BACKPACK::asStack));
 
@@ -59,8 +61,6 @@ public class BackpackItems {
 	public static final ItemEntry<Scabbard> SCABBARD;
 	public static final ItemEntry<ArmorSwap> ARMOR_SWAP;
 	public static final ItemEntry<ArmorSetSwap> SUIT_SWAP;
-	public static final ItemEntry<MultiSwitch> MULTI_SWITCH;
-	public static final ItemEntry<EnderSwitch> ENDER_SWITCH;
 
 	public static final ItemEntry<DrawerItem> DRAWER;
 	public static final ItemEntry<EnderDrawerItem> ENDER_DRAWER;
@@ -121,11 +121,6 @@ public class BackpackItems {
 			SCABBARD = REGISTRATE.item("tool_swap", Scabbard::new).defaultModel().tag(curios_tag, TagGen.SWAPS).defaultLang().register();
 			ARMOR_SWAP = REGISTRATE.item("armor_swap", ArmorSwap::new).defaultModel().tag(curios_tag, TagGen.SWAPS).defaultLang().register();
 			SUIT_SWAP = REGISTRATE.item("suit_swap", ArmorSetSwap::new).defaultModel().tag(curios_tag, TagGen.SWAPS).defaultLang().register();
-
-			MULTI_SWITCH = REGISTRATE.item("combined_swap", MultiSwitch::new).defaultModel().tag(curios_tag, TagGen.SWAPS)
-					.removeTab(TAB.getKey()).defaultLang().register();
-			ENDER_SWITCH = REGISTRATE.item("ender_swap", EnderSwitch::new).defaultModel().tag(curios_tag, TagGen.SWAPS, TagGen.ENDER_CHEST)
-					.removeTab(TAB.getKey()).defaultLang().register();
 
 			DRAWER = REGISTRATE.item("drawer", p -> new DrawerItem(BackpackBlocks.DRAWER.get(), p))
 					.model((ctx, pvd) -> pvd.getBuilder(ctx.getName()).parent(

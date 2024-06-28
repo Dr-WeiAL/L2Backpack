@@ -2,7 +2,8 @@ package dev.xkmc.l2backpack.content.remote.drawer;
 
 import dev.xkmc.l2backpack.content.drawer.IDrawerBlockEntity;
 import dev.xkmc.l2backpack.content.remote.common.DrawerAccess;
-import dev.xkmc.l2serial.serialization.SerialClass;
+import dev.xkmc.l2serial.serialization.marker.SerialClass;
+import dev.xkmc.l2serial.serialization.marker.SerialField;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -17,6 +18,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,16 +27,16 @@ import java.util.UUID;
 @SerialClass
 public class EnderDrawerBlockEntity extends IDrawerBlockEntity {
 
-	@SerialClass.SerialField(toClient = true)
+	@SerialField(toClient = true)
 	public UUID owner_id = Util.NIL_UUID;
 
-	@SerialClass.SerialField(toClient = true)
+	@SerialField(toClient = true)
 	public String owner_name = "";
 
-	@SerialClass.SerialField(toClient = true)
+	@SerialField(toClient = true)
 	public Item item = Items.AIR;
 
-	@SerialClass.SerialField(toClient = true)
+	@SerialField(toClient = true)
 	public CompoundTag config = new CompoundTag();
 
 	private LazyOptional<IItemHandler> handler;

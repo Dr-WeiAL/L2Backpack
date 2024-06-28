@@ -1,5 +1,6 @@
 package dev.xkmc.l2backpack.init.advancement;
 
+import dev.xkmc.l2core.serial.advancements.BaseCriterion;
 import dev.xkmc.l2library.serial.advancements.BaseCriterion;
 import dev.xkmc.l2library.serial.advancements.BaseCriterionInstance;
 import dev.xkmc.l2serial.serialization.SerialClass;

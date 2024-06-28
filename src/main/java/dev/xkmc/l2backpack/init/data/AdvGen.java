@@ -8,11 +8,12 @@ import dev.xkmc.l2backpack.init.registrate.BackpackBlocks;
 import dev.xkmc.l2backpack.init.registrate.BackpackItems;
 import dev.xkmc.l2backpack.init.registrate.BackpackMisc;
 import dev.xkmc.l2backpack.network.DrawerInteractToServer;
-import dev.xkmc.l2library.serial.advancements.AdvancementGenerator;
-import dev.xkmc.l2library.serial.advancements.CriterionBuilder;
+import dev.xkmc.l2core.serial.advancements.AdvancementGenerator;
+import dev.xkmc.l2core.serial.advancements.CriterionBuilder;
 import dev.xkmc.l2screentracker.screen.base.ScreenTrackerRegistry;
 import dev.xkmc.l2screentracker.screen.triggers.ExitMenuTrigger;
 import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementType;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemUsedOnLocationTrigger;
@@ -32,7 +33,7 @@ public class AdvGen {
 	public static void genAdvancements(RegistrateAdvancementProvider pvd) {
 		pvd.accept(Advancement.Builder.advancement().addCriterion("locate",
 						PlayerTrigger.TriggerInstance.located(LocationPredicate.ANY))
-				.build(new ResourceLocation(L2Backpack.MODID, "detection")));
+				.build(L2Backpack.loc("detection")));
 		AdvancementGenerator gen = new AdvancementGenerator(pvd, L2Backpack.MODID);
 		gen.new TabBuilder("backpacks").root("root", backpack(DyeColor.WHITE),
 						CriterionBuilder.one(PlayerTrigger.TriggerInstance.tick()),
@@ -99,13 +100,13 @@ public class AdvGen {
 						"Another Ender Chest?", "Obtain a Dimensional Backpack")
 				.create("dimension_recursion", dimension(DyeColor.YELLOW),
 						CriterionBuilder.one(SlotClickTrigger.fromBackpack(BackpackMisc.IS_DIM.get())),
-						"Infinite Recursion", "Open a Backpack in Dimensional Backpack").type(FrameType.GOAL)
+						"Infinite Recursion", "Open a Backpack in Dimensional Backpack").type(AdvancementType.GOAL)
 				.create("dimension_hopper", dimension(DyeColor.LIGHT_GRAY),
 						CriterionBuilder.one(RemoteHopperTrigger.ins()),
-						"Ender Chest with Hopper", "Use Hopper to insert items into a Dimensional Backpack or an Ender Drawer").type(FrameType.GOAL)
+						"Ender Chest with Hopper", "Use Hopper to insert items into a Dimensional Backpack or an Ender Drawer").type(AdvancementType.GOAL)
 				.create("dimension_analog", dimension(DyeColor.RED),
 						CriterionBuilder.one(AnalogSignalTrigger.ins()),
-						"Ender Chest with Comparator", "Use a Comparator to measure a Dimensional Backpack or an Ender Drawer").type(FrameType.CHALLENGE)
+						"Ender Chest with Comparator", "Use a Comparator to measure a Dimensional Backpack or an Ender Drawer").type(AdvancementType.CHALLENGE)
 
 				// drawer
 				.root().enter().create("drawer", BackpackItems.DRAWER.get(),
@@ -133,10 +134,10 @@ public class AdvGen {
 				.create("ender_drawer_place", BackpackItems.ENDER_DRAWER.get(),
 						CriterionBuilder.one(ItemUsedOnLocationTrigger.TriggerInstance
 								.placedBlock(BackpackBlocks.ENDER_DRAWER.get())),
-						"Remote Logistics", "Place down an Ender Drawer").type(FrameType.GOAL)
+						"Remote Logistics", "Place down an Ender Drawer").type(AdvancementType.GOAL)
 				.create("dimension_share", dimension(DyeColor.BLUE),
 						CriterionBuilder.one(SharedDriveTrigger.ins()),
-						"Shared Drive", "Open a Dimensional Backpack or use an Ender Drawer that belongs to someone else").type(FrameType.CHALLENGE)
+						"Shared Drive", "Open a Dimensional Backpack or use an Ender Drawer that belongs to someone else").type(AdvancementType.CHALLENGE)
 
 				// bags
 				.root().create("bag", BackpackItems.ARMOR_BAG.get(),

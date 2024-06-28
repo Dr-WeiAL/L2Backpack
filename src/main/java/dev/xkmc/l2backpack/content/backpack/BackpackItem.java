@@ -50,7 +50,7 @@ public class BackpackItem extends BaseBagItem implements BackpackModelItem {
 	@Override
 	public int getRows(ItemStack stack) {
 		int ans = Mth.clamp(stack.getOrCreateTag().getInt(ROW),
-				BackpackConfig.COMMON.initialRows.get(), MAX_ROW);
+				BackpackConfig.SERVER.initialRows.get(), MAX_ROW);
 		if (!stack.getOrCreateTag().contains(ROW)) {
 			stack.getOrCreateTag().putInt(ROW, ans);
 		}
@@ -62,7 +62,7 @@ public class BackpackItem extends BaseBagItem implements BackpackModelItem {
 		var tag = stack.getOrCreateTag();
 		int rows = tag.getInt("rows");
 		if (rows == 0) {
-			rows = BackpackConfig.COMMON.initialRows.get();
+			rows = BackpackConfig.SERVER.initialRows.get();
 		}
 		list.add(LangData.IDS.BACKPACK_SLOT.get(Math.max(1, rows), MAX_ROW));
 		if (tag.contains("loot")) {
