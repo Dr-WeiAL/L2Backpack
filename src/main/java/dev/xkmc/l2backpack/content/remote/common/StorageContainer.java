@@ -25,7 +25,7 @@ public class StorageContainer implements ContainerListener {
 		this.id = id;
 		this.color = color;
 		this.password = tag.getLong("password");
-		this.container = new SimpleContainer(27);
+		this.container = new SimpleContainer(27);//TODO
 		if (tag.contains("container")) {
 			ListTag list = tag.getList("container", Tag.TAG_COMPOUND);
 			for (int i = 0; i < list.size(); i++) {

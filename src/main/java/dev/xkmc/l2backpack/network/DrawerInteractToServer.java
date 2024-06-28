@@ -1,12 +1,16 @@
 package dev.xkmc.l2backpack.network;
 
-import dev.xkmc.l2backpack.content.common.DrawerQuickInsert;
+import dev.xkmc.l2backpack.content.capability.InvPickupCap;
+import dev.xkmc.l2backpack.content.capability.PickupTrace;
+import dev.xkmc.l2backpack.content.click.DrawerQuickInsert;
+import dev.xkmc.l2backpack.content.click.VanillaQuickInsert;
 import dev.xkmc.l2backpack.content.insert.OverlayInsertItem;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2serial.network.SerialPacketBase;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
@@ -16,7 +20,7 @@ public record DrawerInteractToServer(
 ) implements SerialPacketBase<DrawerInteractToServer> {
 
 	public enum Type {
-		INSERT, TAKE, QUICK_MOVE
+		INSERT, TAKE, QUICK_MOVE, PICKUP
 	}
 
 	public enum Callback {
@@ -53,7 +57,14 @@ public record DrawerInteractToServer(
 					drawerItem.attemptInsert(storage, stack, player);
 				}
 			}
-		} else {
+			if (menu instanceof ChestMenu ins) {
+				ItemStack stack = drawerItem.takeItem(storage, player);
+				((VanillaQuickInsert)ins).l2backpack$quickMove(player, menu, stack, slot);
+				if (!stack.isEmpty()) {
+					drawerItem.attemptInsert(storage, stack, player);
+				}
+			}
+		} else if (type == Type.INSERT) {
 			if (limit == 0) {
 				drawerItem.attemptInsert(storage, carried, player);
 			} else {
@@ -62,6 +73,18 @@ public record DrawerInteractToServer(
 				carried.grow(split.getCount());
 			}
 			if (suppress == Callback.SUPPRESS) menu.setRemoteCarried(menu.getCarried().copy());
+		} else if (type == Type.PICKUP) {
+			var cap = storage.getCapability(InvPickupCap.TOKEN).resolve();
+			if (cap.isPresent()) {
+				if (limit == 0) {
+					cap.get().doPickup(carried, new PickupTrace(false, player));
+				} else {
+					ItemStack split = carried.split(limit);
+					cap.get().doPickup(split, new PickupTrace(false, player));
+					carried.grow(split.getCount());
+				}
+				if (suppress == Callback.SUPPRESS) menu.setRemoteCarried(menu.getCarried().copy());
+			}
 		}
 		if (wid != 0) {
 			menu.getSlot(slot).setChanged();

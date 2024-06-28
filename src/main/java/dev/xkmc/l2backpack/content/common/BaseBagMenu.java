@@ -1,12 +1,9 @@
 package dev.xkmc.l2backpack.content.common;
 
-import dev.xkmc.l2core.base.menu.base.BaseContainerMenu;
-import dev.xkmc.l2core.base.menu.base.SpriteManager;
-import dev.xkmc.l2core.util.ServerOnly;
+import dev.xkmc.l2backpack.content.click.DrawerQuickInsert;
 import dev.xkmc.l2library.base.menu.base.BaseContainerMenu;
 import dev.xkmc.l2library.base.menu.base.SpriteManager;
 import dev.xkmc.l2library.util.annotation.ServerOnly;
-import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
 import dev.xkmc.l2screentracker.screen.source.PlayerSlot;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,8 +16,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.InvWrapper;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
-import net.neoforged.neoforge.items.wrapper.InvWrapper;
 
 import java.util.UUID;
 
@@ -54,7 +49,7 @@ public abstract class BaseBagMenu<T extends BaseBagMenu<T>> extends BaseContaine
 	}
 
 	protected void addSlot(String name) {
-		this.getLayout().getSlot(name, (x, y) -> new BagSlot(handler, this.added++, x, y), this::addSlot);
+		this.sprite.get().getSlot(name, (x, y) -> new BagSlot(handler, this.added++, x, y), this::addSlot);
 	}
 
 	private ItemStack stack_cache = ItemStack.EMPTY;

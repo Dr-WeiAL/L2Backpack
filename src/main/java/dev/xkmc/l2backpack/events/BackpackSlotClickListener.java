@@ -1,6 +1,7 @@
 package dev.xkmc.l2backpack.events;
 
 import dev.xkmc.l2backpack.compat.CuriosCompat;
+import dev.xkmc.l2backpack.content.bag.AbstractBag;
 import dev.xkmc.l2backpack.content.capability.PickupBagItem;
 import dev.xkmc.l2backpack.content.common.BaseBagItem;
 import dev.xkmc.l2backpack.content.drawer.BaseDrawerItem;
@@ -37,7 +38,9 @@ public class BackpackSlotClickListener extends WritableStackClickHandler {
 
 	@Override
 	public boolean isAllowed(ItemStack itemStack) {
-		return canOpen(itemStack) || itemStack.getItem() instanceof BaseDrawerItem;
+		return canOpen(itemStack) ||
+				itemStack.getItem() instanceof BaseDrawerItem ||
+				itemStack.getItem() instanceof AbstractBag;
 	}
 
 	public void keyBind() {

@@ -1,8 +1,7 @@
-package dev.xkmc.l2backpack.content.common;
+package dev.xkmc.l2backpack.content.click;
 
+import dev.xkmc.l2backpack.content.bag.AbstractBag;
 import dev.xkmc.l2backpack.content.drawer.BaseDrawerItem;
-import dev.xkmc.l2core.base.menu.base.BaseContainerMenu;
-import dev.xkmc.l2library.base.menu.base.BaseContainerMenu;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -11,11 +10,11 @@ import net.minecraft.world.item.ItemStack;
 
 public interface DrawerQuickInsert {
 
-	static boolean moveItemStackTo(Player pl, BaseContainerMenu<?> menu, ItemStack stack, int start, int end, boolean reverse) {
+	static boolean moveItemStackTo(Player pl, AbstractContainerMenu menu, ItemStack stack, int start, int end, boolean reverse) {
 		return moveItemStackTo(pl, menu, stack, start, end, reverse, false);
 	}
 
-	static boolean moveItemStackTo(Player pl, BaseContainerMenu<?> menu, ItemStack stack, int start, int end, boolean reverse, boolean split) {
+	static boolean moveItemStackTo(Player pl, AbstractContainerMenu menu, ItemStack stack, int start, int end, boolean reverse, boolean split) {
 		boolean changed = false;
 		changed |= doMerge(pl, menu, stack, start, end, reverse, false);
 		changed |= doMerge(pl, menu, stack, start, end, reverse, true);
@@ -25,7 +24,7 @@ public interface DrawerQuickInsert {
 		return changed;
 	}
 
-	private static boolean doMerge(Player pl, BaseContainerMenu<?> menu, ItemStack stack, int start, int end, boolean reverse, boolean allowEmpty) {
+	private static boolean doMerge(Player pl, AbstractContainerMenu menu, ItemStack stack, int start, int end, boolean reverse, boolean allowEmpty) {
 		boolean changed = false;
 		int i = start;
 		if (reverse) i = end - 1;
@@ -45,7 +44,7 @@ public interface DrawerQuickInsert {
 		return changed;
 	}
 
-	private static boolean doTake(Player pl, BaseContainerMenu<?> menu, ItemStack stack, int start, int end, boolean reverse, boolean split) {
+	private static boolean doTake(Player pl, AbstractContainerMenu menu, ItemStack stack, int start, int end, boolean reverse, boolean split) {
 		boolean changed = false;
 		int i;
 		if (reverse) i = end - 1;
@@ -70,6 +69,13 @@ public interface DrawerQuickInsert {
 
 	private static boolean tryMerge(Player pl, ItemStack src, ItemStack dst, Slot slot, boolean allowEmpty) {
 		if (dst.isEmpty()) return false;
+		if (dst.getItem() instanceof AbstractBag bag) {
+			if (pl instanceof ServerPlayer sp && bag.isValidContent(src)) {
+				int count = src.getCount();
+				bag.attemptInsert(dst, src, sp);
+				return count != src.getCount();
+			}
+		}
 		if (pl instanceof ServerPlayer sp && src.getTag() == null) {
 			if (dst.getItem() instanceof BaseDrawerItem item) {
 				if (!allowEmpty && item.canSetNewItem(dst)) return false;

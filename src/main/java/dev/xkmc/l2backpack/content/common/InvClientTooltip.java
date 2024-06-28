@@ -1,5 +1,6 @@
 package dev.xkmc.l2backpack.content.common;
 
+import dev.xkmc.l2backpack.content.render.DrawerCountDeco;
 import dev.xkmc.l2library.util.Proxy;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -13,19 +14,20 @@ public record InvClientTooltip(InvTooltip inv) implements ClientTooltipComponent
 
 	@Override
 	public int getHeight() {
-		return inv.item().getInvSize(inv.stack()) / 9 * 18 + 2;
+		return inv.item().getInvSize(inv.stack()) / inv.item().getRowSize() * 18 + 2;
 	}
 
 	@Override
 	public int getWidth(Font font) {
-		return 18 * 9;
+		return 18 * inv.item().getRowSize();
 	}
 
 	@Override
 	public void renderImage(Font font, int mx, int my, GuiGraphics g) {
 		var list = inv.item().getInvItems(inv.stack(), Proxy.getClientPlayer());
 		for (int i = 0; i < list.size(); i++) {
-			renderSlot(font, mx + i % 9 * 18, my + i / 9 * 18, g, list.get(i));
+			renderSlot(font, mx + i % inv.item().getRowSize() * 18,
+					my + i / inv.item().getRowSize() * 18, g, list.get(i));
 		}
 	}
 
@@ -34,8 +36,10 @@ public record InvClientTooltip(InvTooltip inv) implements ClientTooltipComponent
 		if (stack.isEmpty()) {
 			return;
 		}
+		DrawerCountDeco.startTooltipRendering();
 		g.renderItem(stack, x + 1, y + 1, 0);
 		g.renderItemDecorations(font, stack, x + 1, y + 1);
+		DrawerCountDeco.stopTooltipRendering();
 	}
 
 	private void blit(GuiGraphics g, int x, int y) {

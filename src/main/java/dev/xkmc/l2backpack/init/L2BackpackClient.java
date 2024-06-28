@@ -1,15 +1,14 @@
 package dev.xkmc.l2backpack.init;
 
+import dev.xkmc.l2backpack.content.bag.AbstractBag;
 import dev.xkmc.l2backpack.content.common.InvClientTooltip;
 import dev.xkmc.l2backpack.content.common.InvTooltip;
 import dev.xkmc.l2backpack.content.quickswap.common.QuickSwapOverlay;
 import dev.xkmc.l2backpack.content.quickswap.quiver.Quiver;
-import dev.xkmc.l2backpack.content.render.BackpackModel;
-import dev.xkmc.l2backpack.content.render.DrawerCountDeco;
-import dev.xkmc.l2backpack.content.render.EnderPreviewOverlay;
-import dev.xkmc.l2backpack.content.render.RenderEvents;
+import dev.xkmc.l2backpack.content.render.*;
 import dev.xkmc.l2backpack.init.data.BackpackKeys;
 import dev.xkmc.l2backpack.init.registrate.BackpackItems;
+import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
@@ -27,6 +26,11 @@ public class L2BackpackClient {
 	public static void clientSetup(FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
 			ItemProperties.register(BackpackItems.QUIVER.get(), new ResourceLocation(L2Backpack.MODID, "arrow"), (stack, level, entity, i) -> Quiver.displayArrow(stack));
+
+			ClampedItemPropertyFunction func = (stack, level, entity, i) -> AbstractBag.isFilled(stack) ? 1 : 0;
+			ItemProperties.register(BackpackItems.ARMOR_BAG.get(), new ResourceLocation(L2Backpack.MODID, "fill"), func);
+			ItemProperties.register(BackpackItems.BOOK_BAG.get(), new ResourceLocation(L2Backpack.MODID, "fill"), func);
+
 		});
 	}
 
@@ -43,9 +47,16 @@ public class L2BackpackClient {
 
 	@SubscribeEvent
 	public static void registerDeco(RegisterItemDecorationsEvent event) {
-		var deco = new DrawerCountDeco();
-		event.register(BackpackItems.DRAWER.get(), deco);
-		event.register(BackpackItems.ENDER_DRAWER.get(), deco);
+		{
+			var deco = new DrawerCountDeco();
+			event.register(BackpackItems.DRAWER.get(), deco);
+			event.register(BackpackItems.ENDER_DRAWER.get(), deco);
+		}
+		{
+			var deco = new BagCountDeco();
+			event.register(BackpackItems.ARMOR_BAG.get(), deco);
+			event.register(BackpackItems.BOOK_BAG.get(), deco);
+		}
 	}
 
 	@SubscribeEvent

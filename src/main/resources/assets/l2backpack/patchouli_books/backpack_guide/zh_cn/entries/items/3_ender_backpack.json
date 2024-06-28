@@ -9,6 +9,6 @@
 	  "item": "l2backpack:ender_backpack",
 	  "text": "可穿戴的末影箱，并且支持物品自动归类，任意快捷访问。$(br2)末影背包内的快速切换袋（箭袋，工具切换袋，护甲切换袋）也会生效，等同穿戴它们。把切换袋放入末影背包可以避免死亡时丢失昂贵装备和重要物品。"
 	},
-	"物品功能：$(li)背包可以放在胸甲或者背部饰品栏位，通过绑定的按键打开（默认B）$(li)$(l:mechanics/any_access)任意快捷访问$(/l)$(li)$(l:mechanics/quick_insert)物品便捷插入$(/l)$(li)$(l:mechanics/exit)UI叠加$(/l)$(li)$(l:mechanics/pickup)物品自动归类模式$(/l)"
+	"物品功能：$(li)背包可以放在胸甲或者背部饰品栏位，通过绑定的按键打开（默认B）$(li)$(l:mechanics/any_access)任意快捷访问$(/l)$(li)$(l:mechanics/quick_insert)物品便捷插入$(/l)$(li)$(l:mechanics/exit)UI叠加$(/l)$(li)$(l:mechanics/pickup)物品自动归类模式$(/l)$(li)按ALT以归类模式插入"
   ]
 }

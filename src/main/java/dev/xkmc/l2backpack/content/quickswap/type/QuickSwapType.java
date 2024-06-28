@@ -1,5 +1,6 @@
 package dev.xkmc.l2backpack.content.quickswap.type;
 
+import dev.xkmc.l2backpack.content.quickswap.common.QuickSwapOverlay;
 import dev.xkmc.l2backpack.content.quickswap.entry.ISwapEntry;
 import dev.xkmc.l2library.base.overlay.OverlayUtil;
 import dev.xkmc.l2library.base.overlay.SelectionSideBar;
@@ -48,7 +49,7 @@ public abstract class QuickSwapType {
 
 	public void renderSelected(SelectionSideBar.Context ctx, Player player, ISwapEntry<?> token, int x, int y, boolean selected, boolean center) {
 		List<ItemStack> list = token.asList();
-		boolean shift = Minecraft.getInstance().options.keyShift.isDown();
+		boolean shift = QuickSwapOverlay.hasShiftDown();
 		boolean avail = isAvailable(player, token);
 		for (int i = 0; i < list.size(); i++)
 			renderSelection(ctx.g(), x + i * 18, y, shift ? 127 : 64, avail, (!avail || isAvailable(player, token, i)) && selected);

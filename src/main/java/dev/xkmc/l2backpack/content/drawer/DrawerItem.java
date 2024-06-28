@@ -2,6 +2,7 @@ package dev.xkmc.l2backpack.content.drawer;
 
 import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.common.ContentTransfer;
+import dev.xkmc.l2backpack.content.click.DoubleClickItem;
 import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.data.LangData;
@@ -13,6 +14,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -27,7 +29,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTransfer.Quad {
+public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTransfer.Quad, DoubleClickItem {
 
 	private static final String COUNT = "drawerCount";
 
@@ -185,6 +187,28 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 	@Override
 	public ResourceLocation backgroundLoc() {
 		return BG;
+	}
+
+	@Override
+	public int remainingSpace(ItemStack drawer) {
+		if (canSetNewItem(drawer)) return 0;
+		int count = getCount(drawer);
+		int maxStack = BaseDrawerItem.getItem(drawer).getMaxStackSize();
+		return BaseDrawerItem.getStacking(drawer) * maxStack - count;
+	}
+
+	@Override
+	public boolean canAbsorb(Slot src, ItemStack stack) {
+		if (canSetNewItem(stack)) return false;
+		return BaseDrawerItem.canAccept(stack, src.getItem());
+	}
+
+	@Override
+	public void mergeStack(ItemStack drawer, ItemStack stack) {
+		int count = getCount(drawer);
+		int allow = Math.min(BaseDrawerItem.getStacking(drawer) * stack.getMaxStackSize() - count, stack.getCount());
+		setCount(drawer, count + allow);
+		stack.shrink(allow);
 	}
 
 }

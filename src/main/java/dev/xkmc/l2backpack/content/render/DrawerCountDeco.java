@@ -3,6 +3,7 @@ package dev.xkmc.l2backpack.content.render;
 import dev.xkmc.l2backpack.content.drawer.BaseDrawerItem;
 import dev.xkmc.l2backpack.content.drawer.DrawerItem;
 import dev.xkmc.l2backpack.content.remote.drawer.EnderDrawerItem;
+import dev.xkmc.l2backpack.init.data.BackpackConfig;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -11,13 +12,30 @@ import net.minecraftforge.client.IItemDecorator;
 
 public class DrawerCountDeco implements IItemDecorator {
 
+	private static int renderTooltipContent = 0;
+
+	public static void startTooltipRendering() {
+		renderTooltipContent++;
+	}
+
+	public static void stopTooltipRendering() {
+		renderTooltipContent = 0;
+	}
+
+	public static boolean showContent() {
+		if (BackpackConfig.CLIENT.drawerAlwaysRenderFlat.get())
+			return true;
+		if (renderTooltipContent > 0) return true;
+		return Screen.hasShiftDown() || Screen.hasControlDown() || Screen.hasAltDown();
+	}
+
 	@Override
 	public boolean render(GuiGraphics g, Font font, ItemStack stack, int x, int y) {
 		if (stack.getItem() instanceof BaseDrawerItem item) {
 			String s = getCount(item, stack);
 			if (!s.isEmpty()) {
 				g.pose().pushPose();
-				if (Screen.hasShiftDown()) {
+				if (showContent()) {
 					drawBG(g, item, x, y);
 				}
 				int height = getZ();

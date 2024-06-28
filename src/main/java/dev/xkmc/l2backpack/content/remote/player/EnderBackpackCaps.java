@@ -34,7 +34,7 @@ public class EnderBackpackCaps extends InvPickupCap<InvWrapper> implements ICapa
 
 	@Override
 	public @Nullable InvWrapper getInv(PickupTrace trace) {
-		return new InvWrapper(trace.player.getEnderChestInventory());
+		return trace.player == null ? null : new InvWrapper(trace.player.getEnderChestInventory());
 	}
 
 	@Override

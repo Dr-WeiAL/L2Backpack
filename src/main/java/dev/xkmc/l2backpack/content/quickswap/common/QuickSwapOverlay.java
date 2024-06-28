@@ -12,8 +12,6 @@ import dev.xkmc.l2library.base.overlay.SelectionSideBar;
 import dev.xkmc.l2library.base.overlay.SideBar;
 import dev.xkmc.l2library.util.Proxy;
 import dev.xkmc.l2serial.util.Wrappers;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -48,16 +46,24 @@ public class QuickSwapOverlay extends SelectionSideBar<ISwapEntry<?>, QuickSwapO
 		return BackpackSel.INSTANCE.isClientActive(player);
 	}
 
+	public static boolean hasShiftDown() {
+		return L2Keys.hasShiftDown();
+	}
+
+	public static boolean hasAltDown() {
+		return L2Keys.hasAltDown();
+	}
+
 	@Override
 	protected boolean isOnHold() {
-		return super.isOnHold() || Screen.hasAltDown() || L2Keys.SWAP.map.isDown();
+		return hasShiftDown() || hasAltDown() || L2Keys.SWAP.map.isDown();
 	}
 
 	@Override
 	public Pair<List<ISwapEntry<?>>, Integer> getItems() {
 		LocalPlayer player = Proxy.getClientPlayer();
 		assert player != null;
-		IQuickSwapToken<?> token = QuickSwapManager.getToken(player, Screen.hasAltDown());
+		IQuickSwapToken<?> token = QuickSwapManager.getToken(player, hasAltDown());
 		assert token != null;
 		List<? extends ISwapEntry<?>> list = token.getList();
 		int selected = token.getSelected();
@@ -72,12 +78,12 @@ public class QuickSwapOverlay extends SelectionSideBar<ISwapEntry<?>, QuickSwapO
 	public BackpackSignature getSignature() {
 		LocalPlayer player = Proxy.getClientPlayer();
 		assert player != null;
-		IQuickSwapToken<?> token = QuickSwapManager.getToken(player, Screen.hasAltDown());
+		IQuickSwapToken<?> token = QuickSwapManager.getToken(player, hasAltDown());
 		assert token != null;
 		int selected = token.getSelected();
 		boolean ignoreOther = false;
 		QuickSwapType type = token.type();
-		if (!Minecraft.getInstance().options.keyShift.isDown()) {
+		if (!hasShiftDown()) {
 			ignoreOther = !activePopup(type);
 		}
 		int focus = player.getInventory().selected;

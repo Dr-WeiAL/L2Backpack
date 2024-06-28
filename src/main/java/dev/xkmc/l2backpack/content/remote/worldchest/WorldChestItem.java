@@ -135,6 +135,7 @@ public class WorldChestItem extends BlockItem implements BackpackModelItem, Pick
 				LangData.Info.KEYBIND,
 				LangData.Info.EXIT,
 				LangData.Info.PICKUP);
+		LangData.altInsert(list);
 	}
 
 	public String getDescriptionId() {

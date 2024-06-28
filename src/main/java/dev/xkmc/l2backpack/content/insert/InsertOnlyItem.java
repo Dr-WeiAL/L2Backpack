@@ -1,32 +1,28 @@
 package dev.xkmc.l2backpack.content.insert;
 
+import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.data.BackpackConfig;
 import dev.xkmc.l2backpack.network.DrawerInteractToServer;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
-import org.jetbrains.annotations.Nullable;
 
-public interface InsertOnlyItem extends OverlayInsertItem {
+public interface InsertOnlyItem extends CapInsertItem {
 
-	default boolean isValidContent(ItemStack carried) {
-		return true;
+	@Override
+	default boolean clientInsert(ItemStack storage, ItemStack carried, int cid, Slot slot, boolean perform, int button, DrawerInteractToServer.Callback suppress, int limit) {
+		if (!BackpackConfig.CLIENT.allowBackpackInsert(button)) return false;
+		return CapInsertItem.super.clientInsert(storage, carried, cid, slot, perform, button, suppress, limit);
 	}
 
 	@Override
-	default boolean clientInsert(ItemStack storage, ItemStack carried, int cid, Slot slot, boolean perform, int button,
-								 DrawerInteractToServer.Callback suppress, int limit) {
-		if (carried.isEmpty()) return false;
-		if (!isValidContent(carried)) return false;
-		if (!BackpackConfig.CLIENT.allowBackpackInsert(button)) return false;
-		if (perform)
-			sendInsertPacket(cid, carried, slot, suppress, limit);
-		return true;
+	default void sendInsertPacket(int cid, ItemStack carried, Slot slot, DrawerInteractToServer.Callback suppress, int limit) {
+		int index = cid == 0 ? slot.getSlotIndex() : slot.index;
+		var method = Screen.hasAltDown() ? DrawerInteractToServer.Type.PICKUP : DrawerInteractToServer.Type.INSERT;
+		L2Backpack.HANDLER.toServer(new DrawerInteractToServer(method, cid, index, carried, suppress, limit));
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -37,21 +33,6 @@ public interface InsertOnlyItem extends OverlayInsertItem {
 	@Override
 	default ItemStack takeItem(ItemStack storage, ServerPlayer player) {
 		return ItemStack.EMPTY;
-	}
-
-	@Nullable
-	default IItemHandler getInvCap(ItemStack storage, ServerPlayer player) {
-		var opt = storage.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve();
-		if (opt.isEmpty()) return null;
-		return opt.get();
-	}
-
-	@Override
-	default void attemptInsert(ItemStack storage, ItemStack carried, ServerPlayer player) {
-		var handler = getInvCap(storage, player);
-		if (handler == null) return;
-		ItemStack remain = ItemHandlerHelper.insertItem(handler, carried.copy(), false);
-		carried.setCount(remain.getCount());
 	}
 
 }

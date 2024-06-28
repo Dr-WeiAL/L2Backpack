@@ -78,6 +78,7 @@ public class BackpackItem extends BaseBagItem implements BackpackModelItem {
 				LangData.Info.EXIT,
 				LangData.Info.PICKUP
 		);
+		LangData.altInsert(list);
 	}
 
 	@Override

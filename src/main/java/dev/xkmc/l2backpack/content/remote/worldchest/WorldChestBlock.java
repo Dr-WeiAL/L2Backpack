@@ -1,6 +1,8 @@
 package dev.xkmc.l2backpack.content.remote.worldchest;
 
+import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.common.ContentTransfer;
+import dev.xkmc.l2backpack.content.tool.TweakerTool;
 import dev.xkmc.l2backpack.init.registrate.BackpackBlocks;
 import dev.xkmc.l2backpack.init.registrate.BackpackItems;
 import dev.xkmc.l2modularblock.mult.*;
@@ -62,6 +64,9 @@ public class WorldChestBlock implements CreateBlockStateBlockMethod, DefaultStat
 		BlockEntity blockentity = level.getBlockEntity(pos);
 		if (blockentity instanceof WorldChestBlockEntity chest) {
 			ItemStack stack = player.getItemInHand(hand);
+			if (stack.getItem() instanceof TweakerTool) {
+				return InteractionResult.PASS;
+			}
 			if (stack.getItem() instanceof DyeItem dye) {
 				if (!level.isClientSide()) {
 					level.setBlockAndUpdate(pos, state.setValue(COLOR, dye.getDyeColor()));
@@ -104,12 +109,13 @@ public class WorldChestBlock implements CreateBlockStateBlockMethod, DefaultStat
 		return List.of(BackpackItems.DIMENSIONAL_STORAGE[state.getValue(COLOR).getId()].asStack());
 	}
 
-	private ItemStack buildStack(BlockState state, WorldChestBlockEntity chest) {
+	public static ItemStack buildStack(BlockState state, WorldChestBlockEntity chest) {
 		ItemStack stack = BackpackItems.DIMENSIONAL_STORAGE[state.getValue(COLOR).getId()].asStack();
 		if (chest.owner_id != null) {
 			stack.getOrCreateTag().putUUID("owner_id", chest.owner_id);
 			stack.getOrCreateTag().putString("owner_name", chest.owner_name);
 			stack.getOrCreateTag().putLong("password", chest.password);
+			PickupConfig.setConfig(stack, chest.config);
 		}
 		return stack;
 	}
@@ -125,10 +131,12 @@ public class WorldChestBlock implements CreateBlockStateBlockMethod, DefaultStat
 		UUID id = stack.getOrCreateTag().getUUID("owner_id");
 		String name = stack.getOrCreateTag().getString("owner_name");
 		long pwd = stack.getOrCreateTag().getLong("password");
+		var config = PickupConfig.getPickupMode(stack);
 		if (blockentity instanceof WorldChestBlockEntity chest) {
 			chest.owner_id = id;
 			chest.owner_name = name;
 			chest.password = pwd;
+			chest.config = config;
 			chest.setColor(state.getValue(COLOR).getId());
 			chest.addToListener();
 		}

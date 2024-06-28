@@ -1,3 +1,32 @@
+TODO add more slots to dimensional storage
+TODO feeding module
+TODO experience module
+
+2.4.22
+- L2C ender reach compat
+- Keybind for holding and switching selector
+
+2.4.21
+- Drawers now show content directly when pressing alt / ctrl / shift, or when rendering backpack previews
+- Add config to make drawers always render content directly
+- Auto Pickup now supports pickup advancements, and plays item pickup sounds
+- Storage Bags now support
+  - pickup mode and auto pickup
+  - left click insert, right click take
+  - tooltip preview
+  - quick move
+  - content count (yellow)
+- Now Storage Bags only throw out 16 items at a time
+- Double Click drawer / bags to collect all similar items
+- Quick move now support chest and ender chest menu
+- Right click with wand to adjust backpack
+- Alt click to recursive insert
+- Fix drawer pickup ignoring tags
+- Grant player a backpack if they are spawned with 6 or more items (configurable)
+- Right click Patchouli Book to read
+- Items transported into dimensional storage block will follow pickup rule if configured
+- New texture for bags
+
 2.4.20
 - Drawer shift-click and MouseTweak scrolling
 

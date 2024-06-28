@@ -20,6 +20,8 @@ public class BackpackConfig {
 		public final ForgeConfigSpec.BooleanValue popupToolOnSwitch;
 		public final ForgeConfigSpec.BooleanValue popupArmorOnSwitch;
 
+		public final ForgeConfigSpec.BooleanValue drawerAlwaysRenderFlat;
+
 		public final ForgeConfigSpec.BooleanValue reverseScroll;
 		public final ForgeConfigSpec.BooleanValue backpackInsertRequiresShift;
 		public final ForgeConfigSpec.BooleanValue backpackEnableLeftClickInsert;
@@ -51,6 +53,9 @@ public class BackpackConfig {
 			backpackEnableRightClickInsert = builder.comment("Backpack inventory quick insert allows right click insert")
 					.define("backpackEnableRightClickInsert", true);
 
+			drawerAlwaysRenderFlat = builder.comment("Draws Always render content directly")
+					.define("drawerAlwaysRenderFlat", false);
+
 		}
 
 		public boolean allowBackpackInsert(int button) {
@@ -76,9 +81,13 @@ public class BackpackConfig {
 
 		public final ForgeConfigSpec.IntValue initialRows;
 
+		public final ForgeConfigSpec.IntValue startupBackpackCondition;
+
 		Common(ForgeConfigSpec.Builder builder) {
 			initialRows = builder.comment("Initial Rows (x9 slots) for backpack")
 					.defineInRange("initialRows", 2, 1, MAX_ROW);
+			startupBackpackCondition = builder.comment("How many items do players need to spawn with to have the privilege of having them in a backpack")
+					.defineInRange("startupBackpackCondition", 6, 1, 36);
 		}
 	}
 

@@ -40,6 +40,13 @@ public record PickupConfig(PickupMode pickup, DestroyMode destroy) {
 		ItemCompoundTag.of(stack).getSubTag(KEY_ROOT).setTag(config);
 	}
 
+	public static void setConfig(ItemStack stack, @Nullable PickupConfig config) {
+		if (config == null) return;
+		var root = ItemCompoundTag.of(stack).getSubTag(KEY_ROOT).getOrCreate();
+		root.putString(KEY_MODE, config.pickup.name());
+		root.putString(KEY_VOID, config.destroy.name());
+	}
+
 	public static void addText(ItemStack stack, List<Component> list) {
 		var mode = getPickupMode(stack);
 		list.add(mode.pickup().getTooltip());
@@ -56,6 +63,17 @@ public record PickupConfig(PickupMode pickup, DestroyMode destroy) {
 		PickupConfig mode = getPickupMode(stack);
 		DestroyMode next = DestroyMode.values()[(mode.destroy().ordinal() + 1) % DestroyMode.values().length];
 		getConfig(stack).putString(KEY_VOID, next.name());
+	}
+
+
+	public static PickupConfig iterateMode(PickupConfig mode) {
+		PickupMode next = PickupMode.values()[(mode.pickup().ordinal() + 1) % PickupMode.values().length];
+		return new PickupConfig(next, mode.destroy);
+	}
+
+	public static PickupConfig iterateDestroy(PickupConfig mode) {
+		DestroyMode next = DestroyMode.values()[(mode.destroy().ordinal() + 1) % DestroyMode.values().length];
+		return new PickupConfig(mode.pickup, next);
 	}
 
 }

@@ -41,7 +41,7 @@ public class WorldChestCaps extends InvPickupCap<WorldChestInvWrapper> implement
 	@Override
 	public WorldChestInvWrapper getInv(PickupTrace trace) {
 		if (stack.getItem() instanceof WorldChestItem item) {
-			var opt = item.getContainer(stack, trace.player.serverLevel());
+			var opt = item.getContainer(stack, trace.level);
 			if (opt.isPresent()) {
 				var storage = opt.get();
 				return new WorldChestInvWrapper(storage.container, storage.id);

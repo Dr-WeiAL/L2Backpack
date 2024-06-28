@@ -102,8 +102,20 @@ public class BackpackItems {
 			DESTROY_TWEAKER = REGISTRATE.item("destroy_tweaker_tool", p -> new DestroyTweakerTool(p.stacksTo(1)))
 					.defaultModel().defaultLang().register();
 
-			ARMOR_BAG = REGISTRATE.item("armor_bag", EquipmentBag::new).tag(TagGen.BAGS).defaultModel().lang("Equipment Bag").register();
-			BOOK_BAG = REGISTRATE.item("book_bag", BookBag::new).tag(TagGen.BAGS).defaultModel().defaultLang().register();
+			ARMOR_BAG = REGISTRATE.item("armor_bag", EquipmentBag::new).tag(TagGen.BAGS)
+					.model((ctx, pvd) -> pvd.generated(ctx).override()
+							.predicate(new ResourceLocation(L2Backpack.MODID, "fill"), 1)
+							.model(pvd.getBuilder(ctx.getName() + "_filled")
+									.parent(new ModelFile.UncheckedModelFile("item/generated"))
+									.texture("layer0", pvd.modLoc("item/" + ctx.getName() + "_filled"))))
+					.lang("Equipment Bag").register();
+			BOOK_BAG = REGISTRATE.item("book_bag", BookBag::new).tag(TagGen.BAGS)
+					.model((ctx, pvd) -> pvd.generated(ctx).override()
+							.predicate(new ResourceLocation(L2Backpack.MODID, "fill"), 1)
+							.model(pvd.getBuilder(ctx.getName() + "_filled")
+									.parent(new ModelFile.UncheckedModelFile("item/generated"))
+									.texture("layer0", pvd.modLoc("item/" + ctx.getName() + "_filled"))))
+					.defaultLang().register();
 			QUIVER = REGISTRATE.item("arrow_bag", Quiver::new).model(BackpackItems::createArrowBagModel)
 					.tag(curios_tag, TagGen.SWAPS).lang("Quiver").register();
 			SCABBARD = REGISTRATE.item("tool_swap", Scabbard::new).defaultModel().tag(curios_tag, TagGen.SWAPS).defaultLang().register();

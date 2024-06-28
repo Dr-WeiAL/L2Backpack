@@ -4,11 +4,11 @@
   "category": "l2backpack:items",
   "sortnum": 7,
   "pages": [
-	"Bags allows you to quickly collect unstackable items in your inventory. There are 2 kinds: Equipment bags collecting everything that has durability, and book bags collecting enchantment books.$(br2)Bags can store up to 64 items, but they don't have GUIs. To get items out of the bags, you have to dump everything out.",
+	"Bags allows you to quickly collect unstackable items in your inventory. There are 2 kinds: Equipment bags collecting everything that has durability, and book bags collecting enchantment books.$(br2)Bags can store up to 64 items, but they don't have GUIs. In inventory, left click bag with item to store. Right click bag to take item out.",
 	{
 	  "type": "patchouli:spotlight",
 	  "item": "tag:l2backpack:bags",
-	  "text": "Features:$(li)Bag Collect: Right click to store matching items in inventory, other than hotbar.$(li)Bag Extract: Shift + right click to throw out all stored items.$(li)$(l:mechanics/chest)Load / Dump with Chest$(/l)"
+	  "text": "Features:$(li)Bag Collect: Right click to store matching items in inventory, other than hotbar.$(li)Bag Extract: Shift + right click to throw out stored items. Throws up to 16 at a time.$(li)Double click to collect matching items.$(li)$(l:mechanics/chest)Load / Dump with Chest$(/l)$(li)$(l:mechanics/quick_insert)Quick Insert$(/l)$(li)$(l:mechanics/drawer_quickmove)Bag Quick Move$(/l)$(li)$(l:mechanics/pickup)Recursive Pickup$(/l)"
 	}
   ]
 }

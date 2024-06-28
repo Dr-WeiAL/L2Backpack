@@ -9,7 +9,6 @@ import dev.xkmc.l2itemselector.init.data.L2Keys;
 import dev.xkmc.l2itemselector.select.ISelectionListener;
 import dev.xkmc.l2itemselector.select.SetSelectedToServer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
@@ -31,13 +30,13 @@ public class BackpackSel implements ISelectionListener {
 	@Override
 	public boolean isClientActive(Player player) {
 		if (Minecraft.getInstance().screen != null) return false;
-		IQuickSwapToken token = QuickSwapManager.getToken(player, Screen.hasAltDown());
+		IQuickSwapToken<?> token = QuickSwapManager.getToken(player, QuickSwapOverlay.hasAltDown());
 		return token != null;
 	}
 
 	@Override
 	public void handleServerSetSelection(SetSelectedToServer packet, Player player) {
-		IQuickSwapToken token = QuickSwapManager.getToken(player, packet.isAltDown);
+		IQuickSwapToken<?> token = QuickSwapManager.getToken(player, packet.isAltDown);
 		if (token == null) return;
 		if (packet.slot == SWAP)
 			token.swap(player);
@@ -72,7 +71,7 @@ public class BackpackSel implements ISelectionListener {
 
 	@Override
 	public boolean handleClientNumericKey(int i, BooleanSupplier click) {
-		if (!Minecraft.getInstance().options.keyShift.isDown()) return false;
+		if (!QuickSwapOverlay.hasShiftDown()) return false;
 		if (click.getAsBoolean()) {
 			toServer(i);
 			return true;
