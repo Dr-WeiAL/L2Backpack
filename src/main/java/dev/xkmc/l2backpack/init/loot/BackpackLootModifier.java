@@ -7,6 +7,7 @@ import dev.xkmc.l2backpack.content.backpack.BackpackItem;
 import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestItem;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.registrate.BackpackItems;
+import dev.xkmc.l2core.util.MathHelper;
 import dev.xkmc.l2library.util.math.MathHelper;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.ChatFormatting;
@@ -51,7 +52,7 @@ public class BackpackLootModifier extends LootModifier {
 		this.chance = chance;
 		this.color = def.color;
 		this.name = def.player.id;
-		this.loot = new ResourceLocation(L2Backpack.MODID, def.id);
+		this.loot =L2Backpack.loc(def.id);
 		this.seed = seed;
 	}
 

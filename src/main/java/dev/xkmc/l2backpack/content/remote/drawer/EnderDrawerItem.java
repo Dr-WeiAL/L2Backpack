@@ -8,8 +8,8 @@ import dev.xkmc.l2backpack.content.remote.common.DrawerAccess;
 import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.events.TooltipUpdateEvents;
 import dev.xkmc.l2backpack.init.L2Backpack;
-import dev.xkmc.l2backpack.init.advancement.BackpackTriggers;
 import dev.xkmc.l2backpack.init.data.LangData;
+import dev.xkmc.l2backpack.init.registrate.BackpackTriggers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -23,7 +23,6 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.Nullable;
@@ -179,11 +178,11 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 	@Override
 	public void serverTrigger(ItemStack storage, ServerPlayer player) {
 		if (EnderDrawerItem.getOwner(storage).map(e -> !e.equals(player.getUUID())).orElse(false)) {
-			BackpackTriggers.SHARE.trigger(player);
+			BackpackTriggers.SHARE.get().trigger(player);
 		}
 	}
 
-	private static final ResourceLocation BG = new ResourceLocation(L2Backpack.MODID, "textures/block/drawer/ender_side.png");
+	private static final ResourceLocation BG = L2Backpack.loc("textures/block/drawer/ender_side.png");
 
 	@Override
 	public ResourceLocation backgroundLoc() {

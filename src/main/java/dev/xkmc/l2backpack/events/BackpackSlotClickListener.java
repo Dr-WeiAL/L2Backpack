@@ -10,19 +10,17 @@ import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestItem;
 import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestMenuPvd;
 import dev.xkmc.l2backpack.content.tool.IBagTool;
 import dev.xkmc.l2backpack.init.L2Backpack;
-import dev.xkmc.l2backpack.init.advancement.BackpackTriggers;
-import dev.xkmc.l2screentracker.click.writable.ClickedPlayerSlotResult;
-import dev.xkmc.l2screentracker.click.writable.ContainerCallback;
-import dev.xkmc.l2screentracker.click.writable.WritableStackClickHandler;
-import dev.xkmc.l2screentracker.screen.base.ScreenTracker;
-import dev.xkmc.l2screentracker.screen.source.PlayerSlot;
-import net.minecraft.resources.ResourceLocation;
+import dev.xkmc.l2backpack.init.registrate.BackpackTriggers;
+import dev.xkmc.l2menustacker.click.writable.ClickedPlayerSlotResult;
+import dev.xkmc.l2menustacker.click.writable.ContainerCallback;
+import dev.xkmc.l2menustacker.click.writable.WritableStackClickHandler;
+import dev.xkmc.l2menustacker.screen.base.ScreenTracker;
+import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.network.NetworkHooks;
 
 public class BackpackSlotClickListener extends WritableStackClickHandler {
 
@@ -33,7 +31,7 @@ public class BackpackSlotClickListener extends WritableStackClickHandler {
 	}
 
 	public BackpackSlotClickListener() {
-		super(new ResourceLocation(L2Backpack.MODID, "backpack"));
+		super(L2Backpack.loc("backpack"));
 	}
 
 	@Override
@@ -91,14 +89,14 @@ public class BackpackSlotClickListener extends WritableStackClickHandler {
 		boolean others = false;
 		ScreenTracker.onServerOpen(player);
 		if (stack.getItem() instanceof EnderBackpackItem) {
-			NetworkHooks.openScreen(player, new SimpleMenuProvider((id, inv, pl) ->
+			player.openMenu(new SimpleMenuProvider((id, inv, pl) ->
 					ChestMenu.threeRows(id, inv, pl.getEnderChestInventory()), stack.getHoverName()));
 		} else if (stack.getItem() instanceof WorldChestItem chest) {
 			others = WorldChestItem.getOwner(stack).map(e -> !e.equals(player.getUUID())).orElse(false);
 			new WorldChestMenuPvd(player, stack, chest).open();
 		}
 		if (others) {
-			BackpackTriggers.SHARE.trigger(player);
+			BackpackTriggers.SHARE.get().trigger(player);
 		}
 	}
 
@@ -123,16 +121,16 @@ public class BackpackSlotClickListener extends WritableStackClickHandler {
 			bag.open(player, result.slot(), result.stack());
 			result.container().update();
 		} else if (result.stack().getItem() instanceof EnderBackpackItem) {
-			NetworkHooks.openScreen(player, new SimpleMenuProvider((id, inv, pl) ->
+			player.openMenu(new SimpleMenuProvider((id, inv, pl) ->
 					ChestMenu.threeRows(id, inv, pl.getEnderChestInventory()), result.stack().getHoverName()));
 		} else if (result.stack().getItem() instanceof WorldChestItem chest) {
 			others = WorldChestItem.getOwner(result.stack()).map(e -> !e.equals(player.getUUID())).orElse(false);
 			new WorldChestMenuPvd(player, result.stack(), chest).open();
 			result.container().update();
 		}
-		BackpackTriggers.SLOT_CLICK.trigger(player, result.slot().type(), keybind);
+		BackpackTriggers.SLOT_CLICK.get().trigger(player, result.slot().type(), keybind);
 		if (others) {
-			BackpackTriggers.SHARE.trigger(player);
+			BackpackTriggers.SHARE.get().trigger(player);
 		}
 	}
 

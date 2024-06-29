@@ -2,6 +2,7 @@ package dev.xkmc.l2backpack.content.capability;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class InvPickupCap<T extends IItemHandlerModifiable> implements PickupModeCap {

@@ -1,11 +1,9 @@
 package dev.xkmc.l2backpack.init.advancement;
 
 import dev.xkmc.l2core.serial.advancements.BaseCriterion;
-import dev.xkmc.l2library.serial.advancements.BaseCriterion;
-import dev.xkmc.l2library.serial.advancements.BaseCriterionInstance;
-import dev.xkmc.l2serial.serialization.SerialClass;
-import net.minecraft.advancements.critereon.ContextAwarePredicate;
-import net.minecraft.resources.ResourceLocation;
+import dev.xkmc.l2core.serial.advancements.BaseCriterionInstance;
+import dev.xkmc.l2serial.serialization.marker.SerialClass;
+import dev.xkmc.l2serial.serialization.marker.SerialField;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -14,7 +12,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 public class BagInteractTrigger extends BaseCriterion<BagInteractTrigger.Ins, BagInteractTrigger> {
 
 	public static Ins fromType(Type type) {
-		Ins ans = new Ins(BackpackTriggers.INTERACT.getId(), ContextAwarePredicate.ANY);
+		Ins ans = new Ins();
 		ans.type = type;
 		return ans;
 	}
@@ -25,8 +23,8 @@ public class BagInteractTrigger extends BaseCriterion<BagInteractTrigger.Ins, Ba
 		return ans;
 	}
 
-	public BagInteractTrigger(ResourceLocation id) {
-		super(id, Ins::new, Ins.class);
+	public BagInteractTrigger() {
+		super(Ins.class);
 	}
 
 	public void trigger(ServerPlayer player, ItemStack stack, Type type, int count) {
@@ -38,15 +36,11 @@ public class BagInteractTrigger extends BaseCriterion<BagInteractTrigger.Ins, Ba
 	@SerialClass
 	public static class Ins extends BaseCriterionInstance<Ins, BagInteractTrigger> {
 
-		@SerialClass.SerialField
+		@SerialField
 		private Type type;
 
-		@SerialClass.SerialField
+		@SerialField
 		private Ingredient ingredient = Ingredient.EMPTY;
-
-		public Ins(ResourceLocation id, ContextAwarePredicate player) {
-			super(id, player);
-		}
 
 	}
 

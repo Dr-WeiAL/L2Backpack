@@ -1,12 +1,14 @@
 package dev.xkmc.l2backpack.compat;
 
 import com.mojang.datafixers.util.Pair;
+import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
 import dev.xkmc.l2screentracker.compat.CuriosTrackCompatImpl;
 import dev.xkmc.l2screentracker.screen.source.PlayerSlot;
 import dev.xkmc.l2screentracker.screen.source.SimpleSlotData;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.Optional;

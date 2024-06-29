@@ -1,7 +1,7 @@
 package dev.xkmc.l2backpack.content.remote.common;
 
-import dev.xkmc.l2serial.serialization.SerialClass;
-import dev.xkmc.l2serial.serialization.codec.TagCodec;
+import dev.xkmc.l2serial.serialization.marker.SerialClass;
+import dev.xkmc.l2serial.serialization.marker.SerialField;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -23,10 +23,10 @@ public class WorldStorage extends BaseSavedData<WorldStorage> {
 	public static final String ID = "l2backpack:dimensional";
 
 	public static WorldStorage get(ServerLevel level) {
-		return level.getDataStorage().computeIfAbsent(WorldStorage::new, WorldStorage::new, ID);
+		return level.getDataStorage().computeIfAbsent(WorldStorage::new, ID);
 	}
 
-	@SerialClass.SerialField
+	@SerialField
 	private final HashMap<String, CompoundTag> storage = new HashMap<>();
 
 	private final HashMap<UUID, StorageContainer[]> cache = new HashMap<>();
@@ -133,7 +133,7 @@ public class WorldStorage extends BaseSavedData<WorldStorage> {
 		return Optional.of(col);
 	}
 
-	@SerialClass.SerialField
+	@SerialField
 	final HashMap<String, HashMap<Item, Integer>> drawer = new HashMap<>();
 
 	private final HashMap<String, HashMap<Item, DrawerAccess>> drawer_cache = new HashMap<>();
