@@ -26,7 +26,7 @@ public record EnderDrawerItemHandler(DrawerAccess access, boolean logistics) imp
 	public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
 		if (stack.hasTag() || stack.getItem() != access.item()) return stack;
 		int count = access.getCount();
-		int max = access.item().getMaxStackSize() * BaseDrawerItem.getStacking();
+		int max = access.item().getDefaultMaxStackSize() * BaseDrawerItem.getStacking();
 		int insert = Math.min(max - count, stack.getCount());
 		if (!simulate) {
 			access.setCount(count + insert);

@@ -8,9 +8,9 @@ import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestItem;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.registrate.BackpackItems;
 import dev.xkmc.l2core.util.MathHelper;
-import dev.xkmc.l2library.util.math.MathHelper;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
@@ -43,7 +43,7 @@ public class BackpackLootModifier extends LootModifier {
 		this.chance = chance;
 		this.color = DyeColor.values()[color % DyeColor.values().length];
 		this.name = name;
-		this.loot = new ResourceLocation(loot);
+		this.loot = ResourceLocation.parse(loot);
 		this.seed = seed;
 	}
 
@@ -52,7 +52,7 @@ public class BackpackLootModifier extends LootModifier {
 		this.chance = chance;
 		this.color = def.color;
 		this.name = def.player.id;
-		this.loot =L2Backpack.loc(def.id);
+		this.loot = L2Backpack.loc(def.id);
 		this.seed = seed;
 	}
 
@@ -61,14 +61,14 @@ public class BackpackLootModifier extends LootModifier {
 	ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> list, LootContext context) {
 		if (chance > context.getRandom().nextDouble()) {
 			ItemStack stack;
-			if (name.length() > 0) {
+			if (!name.isEmpty()) {
 				stack = BackpackItems.DIMENSIONAL_STORAGE[color.ordinal()].asStack();
 				WorldChestItem.initLootGen(stack, MathHelper.getUUIDFromString(name), L2Backpack.MODID + ".loot." + name + ".name", color, loot);
 			} else {
 				stack = BackpackItems.BACKPACKS[color.ordinal()].asStack();
 				BackpackItem.initLootGen(stack, loot);
 			}
-			stack.setHoverName(Component.translatable(L2Backpack.MODID + ".loot." + name + ".item").withStyle(ChatFormatting.GOLD));
+			stack.set(DataComponents.CUSTOM_NAME, Component.translatable(L2Backpack.MODID + ".loot." + name + ".item").withStyle(ChatFormatting.GOLD));
 			list.add(stack);
 		}
 		return list;

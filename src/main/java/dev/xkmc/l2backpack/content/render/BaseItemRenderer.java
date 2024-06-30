@@ -9,9 +9,7 @@ import dev.xkmc.l2backpack.content.common.BackpackModelItem;
 import dev.xkmc.l2backpack.content.drawer.BaseDrawerItem;
 import dev.xkmc.l2backpack.content.drawer.DrawerItem;
 import dev.xkmc.l2backpack.init.registrate.BackpackBlocks;
-import dev.xkmc.l2library.util.Proxy;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -28,10 +26,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.ClientHooks;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.model.data.ModelData;
 
 import java.util.function.Supplier;
 
@@ -130,9 +127,7 @@ public class BaseItemRenderer extends BlockEntityWithoutLevelRenderer {
 								PoseStack pose, int light) {
 		ResourceLocation texture = item.getModelTexture(stack);
 		VertexConsumer vc = bufferSource.getBuffer(RenderType.armorCutoutNoCull(texture));
-		this.model.body.getChild("main_body")
-				.render(pose, vc, light, OverlayTexture.NO_OVERLAY,
-						1.0F, 1.0F, 1.0F, 1.0F);
+		this.model.body.getChild("main_body").render(pose, vc, light, OverlayTexture.NO_OVERLAY);
 	}
 
 	public static void renderDrawer(ItemStack stack, ItemDisplayContext type, PoseStack poseStack,
@@ -160,7 +155,7 @@ public class BaseItemRenderer extends BlockEntityWithoutLevelRenderer {
 
 			random.setSeed(42);
 			for (RenderType rt : model.getRenderTypes(state, random, ModelData.EMPTY)) {
-				renderer.renderModel(pose, bufferSource.getBuffer(ForgeHooksClient.getEntityRenderType(rt, false)),
+				renderer.renderModel(pose, bufferSource.getBuffer(ClientHooks.getEntityRenderType(rt, false)),
 						state, model, 1F, 1F, 1F, light, overlay, ModelData.EMPTY, rt);
 			}
 			renderItemInside(inv, item instanceof BlockItem ? 0.5D : 0.625D, poseStack, type, bufferSource, light, overlay);
@@ -181,7 +176,7 @@ public class BaseItemRenderer extends BlockEntityWithoutLevelRenderer {
 	public static void renderItemInside(ItemStack stack, double height, PoseStack matrix, ItemDisplayContext type,
 										MultiBufferSource buffer, int light, int overlay) {
 		var mc = Minecraft.getInstance();
-		float time = (mc.getPartialTick() + Proxy.getPlayer().tickCount) % 80;
+		float time = (mc.getTimer().getGameTimeDeltaTicks() + mc.level.getGameTime()) % 80;
 		if (!stack.isEmpty()) {
 			matrix.pushPose();
 			matrix.translate(0.5D, height, 0.5D);

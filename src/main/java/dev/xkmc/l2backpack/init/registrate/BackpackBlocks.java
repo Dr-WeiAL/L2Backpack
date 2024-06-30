@@ -33,7 +33,7 @@ public class BackpackBlocks {
 	public static final BlockEntityEntry<DrawerBlockEntity> TE_DRAWER;
 
 	static {
-		WORLD_CHEST = REGISTRATE.block("dimensional_storage", p -> DelegateBlock.newBaseBlock(BlockBehaviour.Properties.copy(Blocks.ENDER_CHEST),
+		WORLD_CHEST = REGISTRATE.block("dimensional_storage", p -> DelegateBlock.newBaseBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.ENDER_CHEST),
 						BlockTemplates.HORIZONTAL, WorldChestBlock.INSTANCE, EnderParticleBlock.INSTANCE,
 						WorldChestBlock.TILE_ENTITY_SUPPLIER_BUILDER))
 				.blockstate((ctx, pvd) -> pvd.horizontalBlock(ctx.getEntry(), state -> pvd.models()
@@ -47,7 +47,7 @@ public class BackpackBlocks {
 				.validBlock(WORLD_CHEST).register();
 
 		ENDER_DRAWER = REGISTRATE.block("ender_drawer", p -> DelegateBlock.newBaseBlock(
-						BlockBehaviour.Properties.copy(Blocks.GLASS).requiresCorrectToolForDrops()
+						BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).requiresCorrectToolForDrops()
 								.strength(22.5F, 600.0F).lightLevel(state -> 15),
 						BlockTemplates.HORIZONTAL, EnderDrawerBlock.INSTANCE, EnderParticleBlock.INSTANCE,
 						EnderDrawerBlock.BLOK_ENTITY))
@@ -66,7 +66,7 @@ public class BackpackBlocks {
 				.validBlock(ENDER_DRAWER).renderer(() -> DrawerRenderer::new).register();
 
 		DRAWER = REGISTRATE.block("drawer", p -> DelegateBlock.newBaseBlock(
-						BlockBehaviour.Properties.copy(Blocks.GLASS).requiresCorrectToolForDrops()
+						BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).requiresCorrectToolForDrops()
 								.lightLevel(state -> 15),
 						BlockTemplates.HORIZONTAL, DrawerBlock.INSTANCE, DrawerBlock.BLOCK_ENTITY))
 				.blockstate((ctx, pvd) -> pvd.horizontalBlock(ctx.getEntry(), state -> pvd.models().withExistingParent(ctx.getName(),

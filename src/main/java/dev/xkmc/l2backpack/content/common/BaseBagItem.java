@@ -2,7 +2,7 @@ package dev.xkmc.l2backpack.content.common;
 
 import dev.xkmc.l2backpack.content.capability.PickupBagItem;
 import dev.xkmc.l2backpack.content.insert.InsertOnlyItem;
-import dev.xkmc.l2library.util.Proxy;
+import dev.xkmc.l2core.util.Proxy;
 import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -27,10 +27,9 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -109,7 +108,7 @@ public abstract class BaseBagItem extends Item implements ContentTransfer.Quad, 
 		if (!getListTag(stack).isEmpty()) return;
 		CompoundTag ctag = stack.getOrCreateTag();
 		if (!ctag.contains(LOOT)) return;
-		ResourceLocation rl = new ResourceLocation(ctag.getString(LOOT));
+		ResourceLocation rl = ResourceLocation.parse(ctag.getString(LOOT));
 		long seed = ctag.getLong(SEED);
 		ctag.remove(LOOT);
 		ctag.remove(SEED);

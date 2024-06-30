@@ -21,6 +21,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nullable;
@@ -45,7 +46,7 @@ public class ContentTransfer {
 	}
 
 	public static int transfer(Item item, int count, IItemHandler cap) {
-		int maxSize = cap instanceof IDrawerHandler ? count : item.getMaxStackSize();
+		int maxSize = cap instanceof IDrawerHandler ? count : item.getDefaultMaxStackSize();
 		while (count > 0) {
 			int step = Math.min(maxSize, count);
 			ItemStack toInsert = new ItemStack(item, step);
@@ -183,7 +184,7 @@ public class ContentTransfer {
 	}
 
 	public static void playSound(Player player) {
-		player.playSound(SoundEvents.ARMOR_EQUIP_LEATHER, 1, 1);
+		player.playSound(SoundEvents.ARMOR_EQUIP_LEATHER.value(), 1, 1);
 	}
 
 	public static void playDrawerSound(Player player) {

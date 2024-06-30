@@ -4,15 +4,12 @@ import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateItemModelProvider;
 import com.tterrag.registrate.providers.RegistrateLangProvider;
 import com.tterrag.registrate.util.entry.ItemEntry;
-import com.tterrag.registrate.util.entry.RegistryEntry;
 import dev.xkmc.l2backpack.content.backpack.BackpackItem;
 import dev.xkmc.l2backpack.content.bag.BookBag;
 import dev.xkmc.l2backpack.content.bag.EquipmentBag;
 import dev.xkmc.l2backpack.content.drawer.DrawerItem;
 import dev.xkmc.l2backpack.content.quickswap.armorswap.ArmorSetSwap;
 import dev.xkmc.l2backpack.content.quickswap.armorswap.ArmorSwap;
-import dev.xkmc.l2backpack.content.quickswap.merged.EnderSwitch;
-import dev.xkmc.l2backpack.content.quickswap.merged.MultiSwitch;
 import dev.xkmc.l2backpack.content.quickswap.quiver.Quiver;
 import dev.xkmc.l2backpack.content.quickswap.scabbard.Scabbard;
 import dev.xkmc.l2backpack.content.remote.drawer.EnderDrawerItem;
@@ -25,17 +22,13 @@ import dev.xkmc.l2backpack.init.data.TagGen;
 import dev.xkmc.l2core.init.reg.registrate.SimpleEntry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.client.model.generators.ItemModelBuilder;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.tags.ITagManager;
+import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
-
-import java.util.Objects;
 
 import static dev.xkmc.l2backpack.init.L2Backpack.REGISTRATE;
 
@@ -67,8 +60,7 @@ public class BackpackItems {
 
 
 	static {
-		ITagManager<Item> manager = Objects.requireNonNull(ForgeRegistries.ITEMS.tags());
-		TagKey<Item> curios_tag = manager.createTagKey(new ResourceLocation("curios", "back"));
+		TagKey<Item> curios_tag = ItemTags.create(ResourceLocation.fromNamespaceAndPath("curios", "back"));
 		// Backpacks
 		{
 			BACKPACKS = new ItemEntry[16];
@@ -104,14 +96,14 @@ public class BackpackItems {
 
 			ARMOR_BAG = REGISTRATE.item("armor_bag", EquipmentBag::new).tag(TagGen.BAGS)
 					.model((ctx, pvd) -> pvd.generated(ctx).override()
-							.predicate(new ResourceLocation(L2Backpack.MODID, "fill"), 1)
+							.predicate(L2Backpack.loc("fill"), 1)
 							.model(pvd.getBuilder(ctx.getName() + "_filled")
 									.parent(new ModelFile.UncheckedModelFile("item/generated"))
 									.texture("layer0", pvd.modLoc("item/" + ctx.getName() + "_filled"))))
 					.lang("Equipment Bag").register();
 			BOOK_BAG = REGISTRATE.item("book_bag", BookBag::new).tag(TagGen.BAGS)
 					.model((ctx, pvd) -> pvd.generated(ctx).override()
-							.predicate(new ResourceLocation(L2Backpack.MODID, "fill"), 1)
+							.predicate(L2Backpack.loc("fill"), 1)
 							.model(pvd.getBuilder(ctx.getName() + "_filled")
 									.parent(new ModelFile.UncheckedModelFile("item/generated"))
 									.texture("layer0", pvd.modLoc("item/" + ctx.getName() + "_filled"))))
@@ -142,7 +134,7 @@ public class BackpackItems {
 			ItemModelBuilder ret = pvd.withExistingParent(name, "generated");
 			ret.texture("layer0", "item/" + name);
 			ItemModelBuilder.OverrideBuilder override = builder.override();
-			override.predicate(new ResourceLocation(L2Backpack.MODID, "arrow"), i);
+			override.predicate(L2Backpack.loc("arrow"), i);
 			override.model(new ModelFile.UncheckedModelFile(L2Backpack.MODID + ":item/" + name));
 		}
 	}

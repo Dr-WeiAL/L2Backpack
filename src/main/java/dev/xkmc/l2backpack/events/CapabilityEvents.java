@@ -13,20 +13,23 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 
-@Mod.EventBusSubscriber(modid = L2Backpack.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = L2Backpack.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class CapabilityEvents {
 
 	@SubscribeEvent
-	public static void onItemPickup(EntityItemPickupEvent event) {
-		if (!(event.getEntity() instanceof ServerPlayer player)) return;
-		ItemStack stack = event.getItem().getItem();
+	public static void onItemPickup(ItemEntityPickupEvent.Pre event) {
+		if (!(event.getPlayer() instanceof ServerPlayer player)) return;
+		ItemStack stack = event.getItemEntity().getItem();
 		ItemStack copy = stack.copy();
 		int count = stack.getCount();
 		tryInsertItem(player, stack);
 		if (count != stack.getCount()) {
 			copy.shrink(stack.getCount());
-			player.take(event.getItem(), copy.getCount());
+			player.take(event.getItemEntity(), copy.getCount());
 			CriteriaTriggers.INVENTORY_CHANGED.trigger(player, player.getInventory(), copy);
 
 		}

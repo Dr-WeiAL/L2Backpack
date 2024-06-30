@@ -5,6 +5,7 @@ import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.capability.PickupModeCap;
 import dev.xkmc.l2backpack.content.remote.common.WorldStorage;
 import dev.xkmc.l2backpack.content.restore.DimensionSourceData;
+import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
 import dev.xkmc.l2screentracker.screen.source.ItemSourceData;
 import dev.xkmc.l2screentracker.screen.source.PlayerSlot;
 import net.minecraft.core.Direction;

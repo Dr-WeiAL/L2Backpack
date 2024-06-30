@@ -7,6 +7,7 @@ import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.data.BackpackConfig;
 import dev.xkmc.l2backpack.init.data.LangData;
+import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
 import dev.xkmc.l2screentracker.screen.source.PlayerSlot;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -18,6 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -88,7 +90,7 @@ public class BackpackItem extends BaseBagItem implements BackpackModelItem {
 
 	@Override
 	public ResourceLocation getModelTexture(ItemStack stack) {
-		return new ResourceLocation(L2Backpack.MODID, "textures/block/backpack/" + color.getName() + ".png");
+		return L2Backpack.loc("textures/block/backpack/" + color.getName() + ".png");
 	}
 
 	@Override
