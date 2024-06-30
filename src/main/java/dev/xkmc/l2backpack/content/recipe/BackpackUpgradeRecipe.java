@@ -3,11 +3,9 @@ package dev.xkmc.l2backpack.content.recipe;
 import dev.xkmc.l2backpack.content.backpack.BackpackItem;
 import dev.xkmc.l2backpack.content.common.BaseBagItem;
 import dev.xkmc.l2backpack.init.data.BackpackConfig;
-import dev.xkmc.l2backpack.init.registrate.BackpackMisc;
+import dev.xkmc.l2backpack.init.registrate.LBMisc;
 import dev.xkmc.l2core.serial.recipe.AbstractSmithingRecipe;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SmithingRecipeInput;
@@ -39,6 +37,6 @@ public class BackpackUpgradeRecipe extends AbstractSmithingRecipe<BackpackUpgrad
 
 	@Override
 	public Serializer<BackpackUpgradeRecipe> getSerializer() {
-		return BackpackMisc.RSC_BAG_UPGRADE.get();
+		return LBMisc.RSC_BAG_UPGRADE.get();
 	}
 }

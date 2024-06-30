@@ -6,17 +6,10 @@ import dev.xkmc.l2backpack.content.capability.PickupModeCap;
 import dev.xkmc.l2backpack.content.remote.common.WorldStorage;
 import dev.xkmc.l2backpack.content.restore.DimensionSourceData;
 import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
-import dev.xkmc.l2screentracker.screen.source.ItemSourceData;
-import dev.xkmc.l2screentracker.screen.source.PlayerSlot;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -79,7 +72,7 @@ public class BaseBagInvWrapper extends MergedInvBackpackCap implements ICapabili
 
 		if (!simulate) {
 			if (existing.isEmpty()) {
-				itemStacks.set(slot, reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, limit) : stack);
+				itemStacks.set(slot, reachedLimit ? ItemHandlerHelpeh.copyStackWithSize(stack, limit) : stack);
 			} else {
 				existing.grow(reachedLimit ? limit : stack.getCount());
 			}

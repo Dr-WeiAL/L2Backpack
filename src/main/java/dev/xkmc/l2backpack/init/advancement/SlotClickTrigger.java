@@ -1,6 +1,6 @@
 package dev.xkmc.l2backpack.init.advancement;
 
-import dev.xkmc.l2backpack.init.registrate.BackpackTriggers;
+import dev.xkmc.l2backpack.init.registrate.LBTriggers;
 import dev.xkmc.l2core.serial.advancements.BaseCriterion;
 import dev.xkmc.l2core.serial.advancements.BaseCriterionInstance;
 import dev.xkmc.l2menustacker.screen.source.ItemSource;
@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
 public class SlotClickTrigger extends BaseCriterion<SlotClickTrigger.Ins, SlotClickTrigger> {
 
 	public static Ins fromGUI() {
-		return new Ins(BackpackTriggers.SLOT_CLICK.get());
+		return new Ins(LBTriggers.SLOT_CLICK.get());
 	}
 
 	public static Ins fromKeyBind() {

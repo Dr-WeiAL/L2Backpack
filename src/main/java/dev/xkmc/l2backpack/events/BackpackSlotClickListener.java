@@ -10,7 +10,7 @@ import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestItem;
 import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestMenuPvd;
 import dev.xkmc.l2backpack.content.tool.IBagTool;
 import dev.xkmc.l2backpack.init.L2Backpack;
-import dev.xkmc.l2backpack.init.registrate.BackpackTriggers;
+import dev.xkmc.l2backpack.init.registrate.LBTriggers;
 import dev.xkmc.l2menustacker.click.writable.ClickedPlayerSlotResult;
 import dev.xkmc.l2menustacker.click.writable.ContainerCallback;
 import dev.xkmc.l2menustacker.click.writable.WritableStackClickHandler;
@@ -96,7 +96,7 @@ public class BackpackSlotClickListener extends WritableStackClickHandler {
 			new WorldChestMenuPvd(player, stack, chest).open();
 		}
 		if (others) {
-			BackpackTriggers.SHARE.get().trigger(player);
+			LBTriggers.SHARE.get().trigger(player);
 		}
 	}
 
@@ -128,9 +128,9 @@ public class BackpackSlotClickListener extends WritableStackClickHandler {
 			new WorldChestMenuPvd(player, result.stack(), chest).open();
 			result.container().update();
 		}
-		BackpackTriggers.SLOT_CLICK.get().trigger(player, result.slot().type(), keybind);
+		LBTriggers.SLOT_CLICK.get().trigger(player, result.slot().type(), keybind);
 		if (others) {
-			BackpackTriggers.SHARE.get().trigger(player);
+			LBTriggers.SHARE.get().trigger(player);
 		}
 	}
 

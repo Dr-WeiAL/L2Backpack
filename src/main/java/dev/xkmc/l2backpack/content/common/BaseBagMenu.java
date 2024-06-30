@@ -4,7 +4,6 @@ import dev.xkmc.l2backpack.content.click.DrawerQuickInsert;
 import dev.xkmc.l2core.base.menu.base.BaseContainerMenu;
 import dev.xkmc.l2core.base.menu.base.SpriteManager;
 import dev.xkmc.l2core.util.ServerOnly;
-import dev.xkmc.l2library.util.annotation.ServerOnly;
 import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,7 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
 
@@ -35,7 +34,7 @@ public abstract class BaseBagMenu<T extends BaseBagMenu<T>> extends BaseContaine
 		this.player = inventory.player;
 		ItemStack stack = getStack();
 		if (stack.getItem() instanceof BaseBagItem) {
-			var inv = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve().get();
+			var inv = stack.getCapability(Capabilities.ItemHandler.ITEM);
 			if (player instanceof ServerPlayer sp && inv instanceof BaseBagInvWrapper bag) {
 				bag.attachEnv(sp, hand);
 			}
@@ -50,7 +49,7 @@ public abstract class BaseBagMenu<T extends BaseBagMenu<T>> extends BaseContaine
 	}
 
 	protected void addSlot(String name) {
-		this.sprite.get().getSlot(name, (x, y) -> new BagSlot(handler, this.added++, x, y), this::addSlot);
+		this.getLayout().getSlot(name, (x, y) -> new BagSlot(handler, this.added++, x, y), this::addSlot);
 	}
 
 	private ItemStack stack_cache = ItemStack.EMPTY;
@@ -63,7 +62,7 @@ public abstract class BaseBagMenu<T extends BaseBagMenu<T>> extends BaseContaine
 		if (getStackRaw().isEmpty() || oldStack != newStack) {
 			return false;
 		}
-		return getStack().getCapability(ForgeCapabilities.ITEM_HANDLER).resolve().get() == handler;
+		return getStack().getCapability(Capabilities.ItemHandler.ITEM) == handler;
 	}
 
 	public ItemStack getStack() {

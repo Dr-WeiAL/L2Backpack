@@ -9,7 +9,7 @@ import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.events.TooltipUpdateEvents;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.data.LangData;
-import dev.xkmc.l2backpack.init.registrate.BackpackTriggers;
+import dev.xkmc.l2backpack.init.registrate.LBTriggers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -178,7 +178,7 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 	@Override
 	public void serverTrigger(ItemStack storage, ServerPlayer player) {
 		if (EnderDrawerItem.getOwner(storage).map(e -> !e.equals(player.getUUID())).orElse(false)) {
-			BackpackTriggers.SHARE.get().trigger(player);
+			LBTriggers.SHARE.get().trigger(player);
 		}
 	}
 

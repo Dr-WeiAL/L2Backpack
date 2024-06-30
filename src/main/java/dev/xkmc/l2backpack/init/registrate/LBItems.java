@@ -21,6 +21,7 @@ import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.data.TagGen;
 import dev.xkmc.l2core.init.reg.registrate.SimpleEntry;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -34,11 +35,11 @@ import static dev.xkmc.l2backpack.init.L2Backpack.REGISTRATE;
 
 @SuppressWarnings({"unchecked", "unsafe"})
 @MethodsReturnNonnullByDefault
-public class BackpackItems {
+public class LBItems {
 
 	public static final SimpleEntry<CreativeModeTab> TAB = REGISTRATE
 			.buildL2CreativeTab("backpack", "L2 Backpack",
-					e -> e.icon(BackpackItems.ENDER_BACKPACK::asStack));
+					e -> e.icon(LBItems.ENDER_BACKPACK::asStack));
 
 	// -------- common --------
 	public static final ItemEntry<BackpackItem>[] BACKPACKS;
@@ -57,6 +58,8 @@ public class BackpackItems {
 
 	public static final ItemEntry<DrawerItem> DRAWER;
 	public static final ItemEntry<EnderDrawerItem> ENDER_DRAWER;
+
+	// components
 
 
 	static {
@@ -108,18 +111,18 @@ public class BackpackItems {
 									.parent(new ModelFile.UncheckedModelFile("item/generated"))
 									.texture("layer0", pvd.modLoc("item/" + ctx.getName() + "_filled"))))
 					.defaultLang().register();
-			QUIVER = REGISTRATE.item("arrow_bag", Quiver::new).model(BackpackItems::createArrowBagModel)
+			QUIVER = REGISTRATE.item("arrow_bag", Quiver::new).model(LBItems::createArrowBagModel)
 					.tag(curios_tag, TagGen.SWAPS).lang("Quiver").register();
 			SCABBARD = REGISTRATE.item("tool_swap", Scabbard::new).defaultModel().tag(curios_tag, TagGen.SWAPS).defaultLang().register();
 			ARMOR_SWAP = REGISTRATE.item("armor_swap", ArmorSwap::new).defaultModel().tag(curios_tag, TagGen.SWAPS).defaultLang().register();
 			SUIT_SWAP = REGISTRATE.item("suit_swap", ArmorSetSwap::new).defaultModel().tag(curios_tag, TagGen.SWAPS).defaultLang().register();
 
-			DRAWER = REGISTRATE.item("drawer", p -> new DrawerItem(BackpackBlocks.DRAWER.get(), p))
+			DRAWER = REGISTRATE.item("drawer", p -> new DrawerItem(LBBlocks.DRAWER.get(), p))
 					.model((ctx, pvd) -> pvd.getBuilder(ctx.getName()).parent(
 							new ModelFile.UncheckedModelFile("builtin/entity")))
 					.tag(TagGen.DRAWERS).defaultLang().register();
 
-			ENDER_DRAWER = REGISTRATE.item("ender_drawer", p -> new EnderDrawerItem(BackpackBlocks.ENDER_DRAWER.get(), p))
+			ENDER_DRAWER = REGISTRATE.item("ender_drawer", p -> new EnderDrawerItem(LBBlocks.ENDER_DRAWER.get(), p))
 					.model((ctx, pvd) -> pvd.getBuilder(ctx.getName()).parent(
 							new ModelFile.UncheckedModelFile("builtin/entity")))
 					.tag(TagGen.DRAWERS).defaultLang().register();

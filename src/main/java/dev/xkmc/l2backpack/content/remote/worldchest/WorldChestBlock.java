@@ -3,8 +3,8 @@ package dev.xkmc.l2backpack.content.remote.worldchest;
 import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.common.ContentTransfer;
 import dev.xkmc.l2backpack.content.tool.TweakerTool;
-import dev.xkmc.l2backpack.init.registrate.BackpackBlocks;
-import dev.xkmc.l2backpack.init.registrate.BackpackItems;
+import dev.xkmc.l2backpack.init.registrate.LBBlocks;
+import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2modularblock.mult.*;
 import dev.xkmc.l2modularblock.one.BlockEntityBlockMethod;
 import dev.xkmc.l2modularblock.one.GetBlockItemBlockMethod;
@@ -45,7 +45,7 @@ public class WorldChestBlock implements CreateBlockStateBlockMethod, DefaultStat
 	protected static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
 
 	public static final BlockEntityBlockMethod<WorldChestBlockEntity> TILE_ENTITY_SUPPLIER_BUILDER =
-			new WorldChestAnalogBlockEntity<>(BackpackBlocks.TE_WORLD_CHEST, WorldChestBlockEntity.class);
+			new WorldChestAnalogBlockEntity<>(LBBlocks.TE_WORLD_CHEST, WorldChestBlockEntity.class);
 
 	public static final EnumProperty<DyeColor> COLOR = EnumProperty.create("color", DyeColor.class);
 
@@ -98,7 +98,7 @@ public class WorldChestBlock implements CreateBlockStateBlockMethod, DefaultStat
 		if (be instanceof WorldChestBlockEntity chest) {
 			return buildStack(state, chest);
 		}
-		return BackpackItems.DIMENSIONAL_STORAGE[state.getValue(COLOR).getId()].asStack();
+		return LBItems.DIMENSIONAL_STORAGE[state.getValue(COLOR).getId()].asStack();
 	}
 
 	public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
@@ -106,11 +106,11 @@ public class WorldChestBlock implements CreateBlockStateBlockMethod, DefaultStat
 		if (blockentity instanceof WorldChestBlockEntity chest) {
 			return List.of(buildStack(state, chest));
 		}
-		return List.of(BackpackItems.DIMENSIONAL_STORAGE[state.getValue(COLOR).getId()].asStack());
+		return List.of(LBItems.DIMENSIONAL_STORAGE[state.getValue(COLOR).getId()].asStack());
 	}
 
 	public static ItemStack buildStack(BlockState state, WorldChestBlockEntity chest) {
-		ItemStack stack = BackpackItems.DIMENSIONAL_STORAGE[state.getValue(COLOR).getId()].asStack();
+		ItemStack stack = LBItems.DIMENSIONAL_STORAGE[state.getValue(COLOR).getId()].asStack();
 		if (chest.owner_id != null) {
 			stack.getOrCreateTag().putUUID("owner_id", chest.owner_id);
 			stack.getOrCreateTag().putString("owner_name", chest.owner_name);

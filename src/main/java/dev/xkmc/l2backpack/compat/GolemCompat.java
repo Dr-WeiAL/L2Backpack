@@ -9,7 +9,7 @@ import dev.xkmc.l2backpack.content.quickswap.type.QuickSwapTypes;
 import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestInvWrapper;
 import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestItem;
 import dev.xkmc.l2backpack.events.ArrowBagEvents;
-import dev.xkmc.l2backpack.init.registrate.BackpackBlocks;
+import dev.xkmc.l2backpack.init.registrate.LBBlocks;
 import dev.xkmc.l2library.util.code.GenericItemStack;
 import dev.xkmc.modulargolems.content.entity.common.AbstractGolemEntity;
 import dev.xkmc.modulargolems.events.event.GolemEquipEvent;
@@ -118,7 +118,7 @@ public class GolemCompat {
 	}
 
 	public static void genBlockTag(RegistrateTagsProvider.IntrinsicImpl<Block> pvd) {
-		pvd.addTag(MGTagGen.POTENTIAL_DST).add(BackpackBlocks.WORLD_CHEST.get());
+		pvd.addTag(MGTagGen.POTENTIAL_DST).add(LBBlocks.WORLD_CHEST.get());
 	}
 
 }

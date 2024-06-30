@@ -2,8 +2,8 @@ package dev.xkmc.l2backpack.content.drawer;
 
 import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.common.ContentTransfer;
-import dev.xkmc.l2backpack.init.registrate.BackpackBlocks;
-import dev.xkmc.l2backpack.init.registrate.BackpackItems;
+import dev.xkmc.l2backpack.init.registrate.LBBlocks;
+import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2modularblock.impl.BlockEntityBlockMethodImpl;
 import dev.xkmc.l2modularblock.mult.OnClickBlockMethod;
 import dev.xkmc.l2modularblock.mult.SetPlacedByBlockMethod;
@@ -35,7 +35,7 @@ public class DrawerBlock implements OnClickBlockMethod, GetBlockItemBlockMethod,
 	public static final DrawerBlock INSTANCE = new DrawerBlock();
 
 	public static final BlockEntityBlockMethod<DrawerBlockEntity> BLOCK_ENTITY =
-			new BlockEntityBlockMethodImpl<>(BackpackBlocks.TE_DRAWER, DrawerBlockEntity.class);
+			new BlockEntityBlockMethodImpl<>(LBBlocks.TE_DRAWER, DrawerBlockEntity.class);
 
 	@Override
 	public InteractionResult onClick(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
@@ -80,7 +80,7 @@ public class DrawerBlock implements OnClickBlockMethod, GetBlockItemBlockMethod,
 		if (be instanceof DrawerBlockEntity chest) {
 			return buildStack(chest);
 		}
-		return BackpackItems.DRAWER.asStack();
+		return LBItems.DRAWER.asStack();
 	}
 
 	@Override
@@ -89,11 +89,11 @@ public class DrawerBlock implements OnClickBlockMethod, GetBlockItemBlockMethod,
 		if (blockentity instanceof DrawerBlockEntity chest) {
 			return List.of(buildStack(chest));
 		}
-		return List.of(BackpackItems.DRAWER.asStack());
+		return List.of(LBItems.DRAWER.asStack());
 	}
 
 	private ItemStack buildStack(DrawerBlockEntity chest) {
-		ItemStack stack = BackpackItems.DRAWER.asStack();
+		ItemStack stack = LBItems.DRAWER.asStack();
 		ResourceLocation rl = ForgeRegistries.ITEMS.getKey(chest.getItem());
 		assert rl != null;
 		stack.getOrCreateTag().putString(BaseDrawerItem.KEY, rl.toString());

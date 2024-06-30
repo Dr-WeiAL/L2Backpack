@@ -3,7 +3,7 @@ package dev.xkmc.l2backpack.content.remote.worldchest;
 import dev.xkmc.l2backpack.content.backpack.BackpackMenu;
 import dev.xkmc.l2backpack.content.click.DrawerQuickInsert;
 import dev.xkmc.l2backpack.content.remote.common.StorageContainer;
-import dev.xkmc.l2backpack.init.registrate.BackpackMenus;
+import dev.xkmc.l2backpack.init.registrate.LBMenu;
 import dev.xkmc.l2core.base.menu.base.BaseContainerMenu;
 import dev.xkmc.l2core.util.ServerOnly;
 import net.minecraft.world.SimpleContainer;
@@ -34,7 +34,7 @@ public class WorldChestContainer extends BaseContainerMenu<WorldChestContainer> 
 	public WorldChestContainer(int windowId, Inventory inventory, SimpleContainer cont,
 							   @Nullable StorageContainer storage,
 							   @Nullable WorldChestBlockEntity entity) {
-		super(BackpackMenus.MT_WORLD_CHEST.get(), windowId, inventory, BackpackMenu.MANAGERS[2], menu -> cont, false);
+		super(LBMenu.MT_WORLD_CHEST.get(), windowId, inventory, BackpackMenu.MANAGERS[2], menu -> cont, false);
 		this.player = inventory.player;
 		this.addSlot("grid", stack -> true);
 		this.storage = storage;

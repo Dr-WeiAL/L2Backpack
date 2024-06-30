@@ -2,7 +2,7 @@ package dev.xkmc.l2backpack.content.quickswap.scabbard;
 
 import dev.xkmc.l2backpack.content.common.BaseBagMenu;
 import dev.xkmc.l2backpack.init.L2Backpack;
-import dev.xkmc.l2backpack.init.registrate.BackpackMenus;
+import dev.xkmc.l2backpack.init.registrate.LBMenu;
 import dev.xkmc.l2core.base.menu.base.SpriteManager;
 import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -24,7 +24,7 @@ public class ScabbardMenu extends BaseBagMenu<ScabbardMenu> {
 	}
 
 	public ScabbardMenu(int windowId, Inventory inventory, PlayerSlot<?> hand, UUID uuid, @Nullable Component title) {
-		super(BackpackMenus.MT_TOOL.get(), windowId, inventory, MANAGERS, hand, uuid, 1);
+		super(LBMenu.MT_TOOL.get(), windowId, inventory, MANAGERS, hand, uuid, 1);
 	}
 
 }

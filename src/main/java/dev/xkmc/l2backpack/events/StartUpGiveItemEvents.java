@@ -3,7 +3,7 @@ package dev.xkmc.l2backpack.events;
 import dev.xkmc.l2backpack.content.backpack.BackpackItem;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.data.BackpackConfig;
-import dev.xkmc.l2backpack.init.registrate.BackpackItems;
+import dev.xkmc.l2backpack.init.registrate.LBItems;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -37,7 +37,7 @@ public class StartUpGiveItemEvents {
 		}
 		if (count < target) return;
 		int initialRow = Math.max(BackpackConfig.SERVER.initialRows.get(), (count - 1) / 9 + 1);
-		ItemStack stack = BackpackItem.setRow(BackpackItems.BACKPACKS[DyeColor.WHITE.ordinal()].asStack(), initialRow);
+		ItemStack stack = BackpackItem.setRow(LBItems.BACKPACKS[DyeColor.WHITE.ordinal()].asStack(), initialRow);
 		var ans = NonNullList.withSize(initialRow * 9, ItemStack.EMPTY);
 		int index = 0;
 		for (int i = 0; i < list.size(); i++) {

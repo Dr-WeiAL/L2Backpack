@@ -10,7 +10,7 @@ import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.advancements.critereon.PlayerTrigger;
 import net.minecraft.core.registries.BuiltInRegistries;
 
-public class BackpackTriggers {
+public class LBTriggers {
 
 	public static final SR<CriterionTrigger<?>> TRIGGERS = SR.of(L2Backpack.REG, BuiltInRegistries.TRIGGER_TYPES);
 

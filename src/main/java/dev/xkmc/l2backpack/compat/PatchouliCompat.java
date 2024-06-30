@@ -1,6 +1,6 @@
 package dev.xkmc.l2backpack.compat;
 
-import dev.xkmc.l2backpack.init.registrate.BackpackItems;
+import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2library.compat.patchouli.PatchouliHelper;
 import net.minecraft.world.item.Items;
 
@@ -15,7 +15,7 @@ public class PatchouliCompat {
 						() -> Items.BOOK)
 				.buildBook("L2Backpack Guide",
 						"Welcome to L2Backpack, a recursive storage mod",
-						1, BackpackItems.TAB.getKey());
+						1, LBItems.TAB.getKey());
 	}
 
 }

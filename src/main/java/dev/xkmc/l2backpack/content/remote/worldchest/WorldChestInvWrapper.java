@@ -1,6 +1,6 @@
 package dev.xkmc.l2backpack.content.remote.worldchest;
 
-import dev.xkmc.l2backpack.init.registrate.BackpackTriggers;
+import dev.xkmc.l2backpack.init.registrate.LBTriggers;
 import dev.xkmc.l2core.util.Proxy;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -22,7 +22,7 @@ public class WorldChestInvWrapper extends InvWrapper {
 	public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
 		ItemStack ans = super.insertItem(slot, stack, simulate);
 		if (stack.getCount() != ans.getCount() && !simulate) {
-			Proxy.getServer().map(e -> e.getPlayerList().getPlayer(id)).ifPresent(BackpackTriggers.REMOTE.get()::trigger);
+			Proxy.getServer().map(e -> e.getPlayerList().getPlayer(id)).ifPresent(LBTriggers.REMOTE.get()::trigger);
 		}
 		return ans;
 	}
@@ -31,7 +31,7 @@ public class WorldChestInvWrapper extends InvWrapper {
 	public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
 		ItemStack ans = super.extractItem(slot, amount, simulate);
 		if (!ans.isEmpty() && !simulate) {
-			Proxy.getServer().map(e -> e.getPlayerList().getPlayer(id)).ifPresent(BackpackTriggers.REMOTE.get()::trigger);
+			Proxy.getServer().map(e -> e.getPlayerList().getPlayer(id)).ifPresent(LBTriggers.REMOTE.get()::trigger);
 		}
 		return ans;
 	}

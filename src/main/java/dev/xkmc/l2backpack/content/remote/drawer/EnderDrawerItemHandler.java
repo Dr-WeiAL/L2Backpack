@@ -3,7 +3,7 @@ package dev.xkmc.l2backpack.content.remote.drawer;
 import dev.xkmc.l2backpack.content.drawer.BaseDrawerItem;
 import dev.xkmc.l2backpack.content.drawer.IDrawerHandler;
 import dev.xkmc.l2backpack.content.remote.common.DrawerAccess;
-import dev.xkmc.l2backpack.init.registrate.BackpackTriggers;
+import dev.xkmc.l2backpack.init.registrate.LBTriggers;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,7 +31,7 @@ public record EnderDrawerItemHandler(DrawerAccess access, boolean logistics) imp
 		if (!simulate) {
 			access.setCount(count + insert);
 			if (logistics && insert > 0) {
-				access.getOwner().ifPresent(BackpackTriggers.REMOTE.get()::trigger);
+				access.getOwner().ifPresent(LBTriggers.REMOTE.get()::trigger);
 			}
 		}
 		return insert == stack.getCount() ? ItemStack.EMPTY : new ItemStack(access.item(), stack.getCount() - insert);
@@ -44,7 +44,7 @@ public record EnderDrawerItemHandler(DrawerAccess access, boolean logistics) imp
 		if (!simulate) {
 			access.setCount(count - take);
 			if (logistics && take > 0) {
-				access.getOwner().ifPresent(BackpackTriggers.REMOTE.get()::trigger);
+				access.getOwner().ifPresent(LBTriggers.REMOTE.get()::trigger);
 			}
 		}
 		return new ItemStack(access.item(), take);

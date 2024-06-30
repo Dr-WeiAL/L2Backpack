@@ -2,7 +2,7 @@ package dev.xkmc.l2backpack.content.backpack;
 
 import dev.xkmc.l2backpack.content.common.BaseBagMenu;
 import dev.xkmc.l2backpack.init.L2Backpack;
-import dev.xkmc.l2backpack.init.registrate.BackpackMenus;
+import dev.xkmc.l2backpack.init.registrate.LBMenu;
 import dev.xkmc.l2core.base.menu.base.SpriteManager;
 import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -31,7 +31,7 @@ public class BackpackMenu extends BaseBagMenu<BackpackMenu> {
 	}
 
 	public BackpackMenu(int windowId, Inventory inventory, PlayerSlot<?> hand, UUID uuid, int row, @Nullable Component title) {
-		super(BackpackMenus.MT_BACKPACK.get(), windowId, inventory, MANAGERS[row - 1], hand, uuid, row);
+		super(LBMenu.MT_BACKPACK.get(), windowId, inventory, MANAGERS[row - 1], hand, uuid, row);
 	}
 
 }

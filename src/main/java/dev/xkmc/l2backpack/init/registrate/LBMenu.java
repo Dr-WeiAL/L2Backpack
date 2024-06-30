@@ -19,37 +19,37 @@ import static dev.xkmc.l2backpack.init.L2Backpack.REGISTRATE;
 /**
  * handles container menu
  */
-public class BackpackMenus {
+public class LBMenu {
 
 	public static final MenuEntry<BackpackMenu> MT_BACKPACK = REGISTRATE.menu("backpack",
 					BackpackMenu::fromNetwork,
 					() -> BackpackScreen::new)
-			.lang(BackpackMenus::getLangKey).register();
+			.lang(LBMenu::getLangKey).register();
 
 	public static final MenuEntry<WorldChestContainer> MT_WORLD_CHEST = REGISTRATE.menu("dimensional_storage",
 					WorldChestContainer::fromNetwork,
 					() -> WorldChestScreen::new)
-			.lang(BackpackMenus::getLangKey).register();
+			.lang(LBMenu::getLangKey).register();
 
 	public static final MenuEntry<QuiverMenu> MT_ARROW = REGISTRATE.menu("arrow_bag",
 					QuiverMenu::fromNetwork,
 					() -> BaseOpenableScreen<QuiverMenu>::new)
-			.lang(BackpackMenus::getLangKey).register();
+			.lang(LBMenu::getLangKey).register();
 
 	public static final MenuEntry<ScabbardMenu> MT_TOOL = REGISTRATE.menu("tool_bag",
 					ScabbardMenu::fromNetwork,
 					() -> BaseOpenableScreen<ScabbardMenu>::new)
-			.lang(BackpackMenus::getLangKey).register();
+			.lang(LBMenu::getLangKey).register();
 
 	public static final MenuEntry<ArmorBagMenu> MT_ARMOR = REGISTRATE.menu("armor_bag",
 					ArmorBagMenu::fromNetwork,
 					() -> BaseOpenableScreen<ArmorBagMenu>::new)
-			.lang(BackpackMenus::getLangKey).register();
+			.lang(LBMenu::getLangKey).register();
 
 	public static final MenuEntry<ArmorSetBagMenu> MT_ARMOR_SET = REGISTRATE.menu("armor_set",
 					ArmorSetBagMenu::fromNetwork,
 					() -> BaseOpenableScreen<ArmorSetBagMenu>::new)
-			.lang(BackpackMenus::getLangKey).register();
+			.lang(LBMenu::getLangKey).register();
 
 	public static void register() {
 

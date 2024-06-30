@@ -4,10 +4,10 @@ import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.common.ContentTransfer;
 import dev.xkmc.l2backpack.content.drawer.BaseDrawerItem;
 import dev.xkmc.l2backpack.content.remote.common.DrawerAccess;
-import dev.xkmc.l2backpack.init.registrate.BackpackBlocks;
-import dev.xkmc.l2backpack.init.registrate.BackpackItems;
-import dev.xkmc.l2modularblock.mult.OnClickBlockMethod;
+import dev.xkmc.l2backpack.init.registrate.LBBlocks;
+import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2modularblock.mult.SetPlacedByBlockMethod;
+import dev.xkmc.l2modularblock.mult.UseItemOnBlockMethod;
 import dev.xkmc.l2modularblock.one.BlockEntityBlockMethod;
 import dev.xkmc.l2modularblock.one.GetBlockItemBlockMethod;
 import dev.xkmc.l2modularblock.one.SpecialDropBlockMethod;
@@ -15,6 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -31,17 +32,16 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-public class EnderDrawerBlock implements OnClickBlockMethod, GetBlockItemBlockMethod, SpecialDropBlockMethod, SetPlacedByBlockMethod {
+public class EnderDrawerBlock implements UseItemOnBlockMethod, GetBlockItemBlockMethod, SpecialDropBlockMethod, SetPlacedByBlockMethod {
 
 	public static final EnderDrawerBlock INSTANCE = new EnderDrawerBlock();
 
 	public static final BlockEntityBlockMethod<EnderDrawerBlockEntity> BLOK_ENTITY =
-			new EnderDrawerAnalogBlockEntity<>(BackpackBlocks.TE_ENDER_DRAWER, EnderDrawerBlockEntity.class);
+			new EnderDrawerAnalogBlockEntity<>(LBBlocks.TE_ENDER_DRAWER, EnderDrawerBlockEntity.class);
 
 	@Override
-	public InteractionResult onClick(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+	public ItemInteractionResult useItemOn(ItemStack stack, BlockState blockState, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
 		BlockEntity blockentity = level.getBlockEntity(pos);
-		ItemStack stack = player.getItemInHand(hand);
 		if (blockentity instanceof EnderDrawerBlockEntity chest) {
 			if (!stack.isEmpty() && !stack.hasTag() && stack.getItem() == chest.item) {
 				if (!level.isClientSide()) {
@@ -86,7 +86,7 @@ public class EnderDrawerBlock implements OnClickBlockMethod, GetBlockItemBlockMe
 		if (be instanceof EnderDrawerBlockEntity chest) {
 			return buildStack(chest);
 		}
-		return BackpackItems.ENDER_DRAWER.asStack();
+		return LBItems.ENDER_DRAWER.asStack();
 	}
 
 	@Override
@@ -95,11 +95,11 @@ public class EnderDrawerBlock implements OnClickBlockMethod, GetBlockItemBlockMe
 		if (blockentity instanceof EnderDrawerBlockEntity chest) {
 			return List.of(buildStack(chest));
 		}
-		return List.of(BackpackItems.ENDER_DRAWER.asStack());
+		return List.of(LBItems.ENDER_DRAWER.asStack());
 	}
 
 	private ItemStack buildStack(EnderDrawerBlockEntity chest) {
-		ItemStack stack = BackpackItems.ENDER_DRAWER.asStack();
+		ItemStack stack = LBItems.ENDER_DRAWER.asStack();
 		if (chest.owner_id != null) {
 			stack.getOrCreateTag().putUUID(EnderDrawerItem.KEY_OWNER_ID, chest.owner_id);
 			stack.getOrCreateTag().putString(EnderDrawerItem.KEY_OWNER_NAME, chest.owner_name);

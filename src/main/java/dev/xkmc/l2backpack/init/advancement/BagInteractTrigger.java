@@ -1,6 +1,6 @@
 package dev.xkmc.l2backpack.init.advancement;
 
-import dev.xkmc.l2backpack.init.registrate.BackpackTriggers;
+import dev.xkmc.l2backpack.init.registrate.LBTriggers;
 import dev.xkmc.l2core.serial.advancements.BaseCriterion;
 import dev.xkmc.l2core.serial.advancements.BaseCriterionInstance;
 import dev.xkmc.l2serial.serialization.marker.SerialClass;
@@ -13,7 +13,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 public class BagInteractTrigger extends BaseCriterion<BagInteractTrigger.Ins, BagInteractTrigger> {
 
 	public static Ins fromType(Type type) {
-		Ins ans = new Ins(BackpackTriggers.INTERACT.get());
+		Ins ans = new Ins(LBTriggers.INTERACT.get());
 		ans.type = type;
 		return ans;
 	}

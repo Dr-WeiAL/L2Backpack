@@ -7,7 +7,7 @@ import dev.xkmc.l2backpack.content.quickswap.common.QuickSwapOverlay;
 import dev.xkmc.l2backpack.content.quickswap.quiver.Quiver;
 import dev.xkmc.l2backpack.content.render.*;
 import dev.xkmc.l2backpack.init.data.BackpackKeys;
-import dev.xkmc.l2backpack.init.registrate.BackpackItems;
+import dev.xkmc.l2backpack.init.registrate.LBItems;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
@@ -25,11 +25,11 @@ public class L2BackpackClient {
 	@SubscribeEvent
 	public static void clientSetup(FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
-			ItemProperties.register(BackpackItems.QUIVER.get(), new ResourceLocation(L2Backpack.MODID, "arrow"), (stack, level, entity, i) -> Quiver.displayArrow(stack));
+			ItemProperties.register(LBItems.QUIVER.get(), new ResourceLocation(L2Backpack.MODID, "arrow"), (stack, level, entity, i) -> Quiver.displayArrow(stack));
 
 			ClampedItemPropertyFunction func = (stack, level, entity, i) -> AbstractBag.isFilled(stack) ? 1 : 0;
-			ItemProperties.register(BackpackItems.ARMOR_BAG.get(), new ResourceLocation(L2Backpack.MODID, "fill"), func);
-			ItemProperties.register(BackpackItems.BOOK_BAG.get(), new ResourceLocation(L2Backpack.MODID, "fill"), func);
+			ItemProperties.register(LBItems.ARMOR_BAG.get(), new ResourceLocation(L2Backpack.MODID, "fill"), func);
+			ItemProperties.register(LBItems.BOOK_BAG.get(), new ResourceLocation(L2Backpack.MODID, "fill"), func);
 
 		});
 	}
@@ -49,13 +49,13 @@ public class L2BackpackClient {
 	public static void registerDeco(RegisterItemDecorationsEvent event) {
 		{
 			var deco = new DrawerCountDeco();
-			event.register(BackpackItems.DRAWER.get(), deco);
-			event.register(BackpackItems.ENDER_DRAWER.get(), deco);
+			event.register(LBItems.DRAWER.get(), deco);
+			event.register(LBItems.ENDER_DRAWER.get(), deco);
 		}
 		{
 			var deco = new BagCountDeco();
-			event.register(BackpackItems.ARMOR_BAG.get(), deco);
-			event.register(BackpackItems.BOOK_BAG.get(), deco);
+			event.register(LBItems.ARMOR_BAG.get(), deco);
+			event.register(LBItems.BOOK_BAG.get(), deco);
 		}
 	}
 

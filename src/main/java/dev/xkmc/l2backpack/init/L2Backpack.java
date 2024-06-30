@@ -10,13 +10,13 @@ import dev.xkmc.l2backpack.content.remote.player.EnderSyncPacket;
 import dev.xkmc.l2backpack.events.BackpackSel;
 import dev.xkmc.l2backpack.events.BackpackSlotClickListener;
 import dev.xkmc.l2backpack.events.PatchouliClickListener;
-import dev.xkmc.l2backpack.init.registrate.BackpackTriggers;
+import dev.xkmc.l2backpack.init.registrate.LBTriggers;
 import dev.xkmc.l2backpack.init.data.*;
 import dev.xkmc.l2backpack.init.loot.LootGen;
-import dev.xkmc.l2backpack.init.registrate.BackpackBlocks;
-import dev.xkmc.l2backpack.init.registrate.BackpackItems;
-import dev.xkmc.l2backpack.init.registrate.BackpackMenus;
-import dev.xkmc.l2backpack.init.registrate.BackpackMisc;
+import dev.xkmc.l2backpack.init.registrate.LBBlocks;
+import dev.xkmc.l2backpack.init.registrate.LBItems;
+import dev.xkmc.l2backpack.init.registrate.LBMenu;
+import dev.xkmc.l2backpack.init.registrate.LBMisc;
 import dev.xkmc.l2backpack.network.*;
 import dev.xkmc.l2complements.init.L2Complements;
 import dev.xkmc.l2core.init.reg.registrate.L2Registrate;
@@ -62,12 +62,12 @@ public class L2Backpack {
 	);
 
 	public L2Backpack() {
-		BackpackBlocks.register();
-		BackpackItems.register();
-		BackpackMenus.register();
-		BackpackMisc.register();
+		LBBlocks.register();
+		LBItems.register();
+		LBMenu.register();
+		LBMisc.register();
 		Handlers.register();
-		BackpackTriggers.register();
+		LBTriggers.register();
 		BackpackConfig.init();
 		PickupModeCap.register();
 		EnderSyncCap.register();
@@ -88,7 +88,7 @@ public class L2Backpack {
 
 	@SubscribeEvent
 	public static void commonSetup(FMLCommonSetupEvent event) {
-		event.enqueueWork(BackpackMisc::commonSetup);
+		event.enqueueWork(LBMisc::commonSetup);
 	}
 
 	@SubscribeEvent

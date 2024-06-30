@@ -3,7 +3,7 @@ package dev.xkmc.l2backpack.content.drawer;
 import dev.xkmc.l2backpack.content.capability.PickupBagItem;
 import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.insert.OverlayInsertItem;
-import dev.xkmc.l2backpack.init.registrate.BackpackTriggers;
+import dev.xkmc.l2backpack.init.registrate.LBTriggers;
 import dev.xkmc.l2backpack.network.DrawerInteractToServer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -87,7 +87,7 @@ public interface BaseDrawerItem extends PickupBagItem, OverlayInsertItem {
 	default ItemStack takeItem(ItemStack drawer, ServerPlayer player) {
 		ItemStack stack = takeItem(drawer, Integer.MAX_VALUE, player, false);
 		if (!stack.isEmpty()) {
-			BackpackTriggers.DRAWER.get().trigger(player, DrawerInteractToServer.Type.TAKE);
+			LBTriggers.DRAWER.get().trigger(player, DrawerInteractToServer.Type.TAKE);
 		}
 		return stack;
 	}
@@ -126,7 +126,7 @@ public interface BaseDrawerItem extends PickupBagItem, OverlayInsertItem {
 		}
 		if (BaseDrawerItem.canAccept(storage, carried)) {
 			insert(storage, carried, player);
-			BackpackTriggers.DRAWER.get().trigger(player, DrawerInteractToServer.Type.INSERT);
+			LBTriggers.DRAWER.get().trigger(player, DrawerInteractToServer.Type.INSERT);
 		}
 	}
 

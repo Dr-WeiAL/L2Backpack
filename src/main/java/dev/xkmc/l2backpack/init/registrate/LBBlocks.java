@@ -21,7 +21,7 @@ import static dev.xkmc.l2backpack.init.L2Backpack.REGISTRATE;
 /**
  * handles blocks and block entities
  */
-public class BackpackBlocks {
+public class LBBlocks {
 
 	public static final BlockEntry<DelegateBlock> WORLD_CHEST;
 	public static final BlockEntityEntry<WorldChestBlockEntity> TE_WORLD_CHEST;

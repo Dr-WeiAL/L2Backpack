@@ -8,7 +8,7 @@ import com.mojang.math.Axis;
 import dev.xkmc.l2backpack.content.common.BackpackModelItem;
 import dev.xkmc.l2backpack.content.drawer.BaseDrawerItem;
 import dev.xkmc.l2backpack.content.drawer.DrawerItem;
-import dev.xkmc.l2backpack.init.registrate.BackpackBlocks;
+import dev.xkmc.l2backpack.init.registrate.LBBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -142,9 +142,9 @@ public class BaseItemRenderer extends BlockEntityWithoutLevelRenderer {
 		ItemStack inv = new ItemStack(item, count);
 
 		if (inv.isEmpty() || !DrawerCountDeco.showContent() || type != ItemDisplayContext.GUI) {
-			BlockState state = BackpackBlocks.ENDER_DRAWER.getDefaultState();
+			BlockState state = LBBlocks.ENDER_DRAWER.getDefaultState();
 			if (stack.getItem() instanceof DrawerItem) {
-				state = BackpackBlocks.DRAWER.getDefaultState();
+				state = LBBlocks.DRAWER.getDefaultState();
 			}
 			BakedModel model = Minecraft.getInstance().getModelManager().getBlockModelShaper().getBlockModel(state);
 			model = model.applyTransform(type, poseStack, false);

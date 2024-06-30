@@ -1,7 +1,7 @@
 package dev.xkmc.l2backpack.content.recipe;
 
 import dev.xkmc.l2backpack.content.drawer.BaseDrawerItem;
-import dev.xkmc.l2backpack.init.registrate.BackpackMisc;
+import dev.xkmc.l2backpack.init.registrate.LBMisc;
 import dev.xkmc.l2core.serial.recipe.AbstractSmithingRecipe;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
@@ -33,6 +33,6 @@ public class DrawerUpgradeRecipe extends AbstractSmithingRecipe<DrawerUpgradeRec
 
 	@Override
 	public Serializer<DrawerUpgradeRecipe> getSerializer() {
-		return BackpackMisc.RSC_DRAWER_UPGRADE.get();
+		return LBMisc.RSC_DRAWER_UPGRADE.get();
 	}
 }

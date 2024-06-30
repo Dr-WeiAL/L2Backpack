@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.xkmc.l2backpack.content.backpack.BackpackItem;
 import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestItem;
 import dev.xkmc.l2backpack.init.L2Backpack;
-import dev.xkmc.l2backpack.init.registrate.BackpackItems;
+import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2core.util.MathHelper;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.ChatFormatting;
@@ -62,10 +62,10 @@ public class BackpackLootModifier extends LootModifier {
 		if (chance > context.getRandom().nextDouble()) {
 			ItemStack stack;
 			if (!name.isEmpty()) {
-				stack = BackpackItems.DIMENSIONAL_STORAGE[color.ordinal()].asStack();
+				stack = LBItems.DIMENSIONAL_STORAGE[color.ordinal()].asStack();
 				WorldChestItem.initLootGen(stack, MathHelper.getUUIDFromString(name), L2Backpack.MODID + ".loot." + name + ".name", color, loot);
 			} else {
-				stack = BackpackItems.BACKPACKS[color.ordinal()].asStack();
+				stack = LBItems.BACKPACKS[color.ordinal()].asStack();
 				BackpackItem.initLootGen(stack, loot);
 			}
 			stack.set(DataComponents.CUSTOM_NAME, Component.translatable(L2Backpack.MODID + ".loot." + name + ".item").withStyle(ChatFormatting.GOLD));

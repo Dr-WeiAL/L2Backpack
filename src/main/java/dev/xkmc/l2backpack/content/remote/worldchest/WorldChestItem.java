@@ -10,7 +10,7 @@ import dev.xkmc.l2backpack.content.remote.common.WorldStorage;
 import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.data.LangData;
-import dev.xkmc.l2backpack.init.registrate.BackpackBlocks;
+import dev.xkmc.l2backpack.init.registrate.LBBlocks;
 import dev.xkmc.l2library.util.annotation.ServerOnly;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -71,7 +71,7 @@ public class WorldChestItem extends BlockItem implements BackpackModelItem, Pick
 	public final DyeColor color;
 
 	public WorldChestItem(DyeColor color, Properties props) {
-		super(BackpackBlocks.WORLD_CHEST.get(), props.stacksTo(1).fireResistant());
+		super(LBBlocks.WORLD_CHEST.get(), props.stacksTo(1).fireResistant());
 		this.color = color;
 	}
 
