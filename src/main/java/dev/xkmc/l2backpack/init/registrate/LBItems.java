@@ -7,6 +7,7 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 import dev.xkmc.l2backpack.content.backpack.BackpackItem;
 import dev.xkmc.l2backpack.content.bag.BookBag;
 import dev.xkmc.l2backpack.content.bag.EquipmentBag;
+import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.drawer.DrawerItem;
 import dev.xkmc.l2backpack.content.quickswap.armorswap.ArmorSetSwap;
 import dev.xkmc.l2backpack.content.quickswap.armorswap.ArmorSwap;
@@ -20,8 +21,10 @@ import dev.xkmc.l2backpack.content.tool.PickupTweakerTool;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.data.TagGen;
 import dev.xkmc.l2core.init.reg.registrate.SimpleEntry;
+import dev.xkmc.l2core.init.reg.simple.DCReg;
+import dev.xkmc.l2core.init.reg.simple.DCVal;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.component.DataComponentType;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -30,6 +33,8 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
+
+import java.util.UUID;
 
 import static dev.xkmc.l2backpack.init.L2Backpack.REGISTRATE;
 
@@ -60,7 +65,16 @@ public class LBItems {
 	public static final ItemEntry<EnderDrawerItem> ENDER_DRAWER;
 
 	// components
-
+	private static final DCReg DC = DCReg.of(L2Backpack.REG);
+	public static final DCVal<Integer> DC_ROW = DC.intVal("row");
+	public static final DCVal<Integer> DC_SEL = DC.intVal("selected");
+	public static final DCVal<UUID> DC_CONT_ID = DC.uuid("container_id");
+	public static final DCVal<UUID> DC_OWNER_ID = DC.uuid("owner_id");
+	public static final DCVal<Component> DC_OWNER_NAME = DC.component("owner_name");
+	public static final DCVal<Long> DC_PASSWORD = DC.longVal("password");
+	public static final DCVal<String> DC_LOOT_ID = DC.str("loot_table");
+	public static final DCVal<Long> DC_LOOT_SEED = DC.longVal("loot_seed");
+	public static final DCVal<PickupConfig> DC_PICKUP = DC.reg("pickup", PickupConfig.class);
 
 	static {
 		TagKey<Item> curios_tag = ItemTags.create(ResourceLocation.fromNamespaceAndPath("curios", "back"));

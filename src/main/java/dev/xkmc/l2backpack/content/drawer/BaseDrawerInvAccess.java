@@ -5,8 +5,7 @@ import dev.xkmc.l2backpack.content.capability.PickupMode;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 
 public interface BaseDrawerInvAccess extends IItemHandlerModifiable {
@@ -90,7 +89,7 @@ public interface BaseDrawerInvAccess extends IItemHandlerModifiable {
 		if (input == allow) {
 			return ItemStack.EMPTY;
 		}
-		return ItemHandlerHelper.copyStackWithSize(stack, input - allow);
+		return stack.copyWithCount(input - allow);
 	}
 
 	@Override

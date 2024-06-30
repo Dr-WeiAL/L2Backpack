@@ -1,13 +1,13 @@
 package dev.xkmc.l2backpack.content.quickswap.type;
 
 import dev.xkmc.l2backpack.content.common.BaseBagItem;
+import dev.xkmc.l2backpack.content.quickswap.common.SingleSwapItem;
 import dev.xkmc.l2backpack.content.quickswap.entry.*;
 import dev.xkmc.l2backpack.init.data.BackpackConfig;
-import dev.xkmc.l2library.base.overlay.OverlayUtil;
-import dev.xkmc.l2library.base.overlay.SelectionSideBar;
+import dev.xkmc.l2itemselector.overlay.OverlayUtil;
+import dev.xkmc.l2itemselector.overlay.SelectionSideBar;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -41,7 +41,7 @@ public class ArmorSwapType extends QuickSwapType
 	public void swapSingle(Player player, ISingleSwapHandler handler) {
 		ItemStack stack = handler.getStack();
 		if (stack.isEmpty()) return;
-		EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(stack);
+		EquipmentSlot slot = SingleSwapItem.getEquipmentSlotForItem(stack);
 		if (!maySwapOut(player.getItemBySlot(slot))) return;
 		handler.replace(player.getItemBySlot(slot));
 		player.setItemSlot(slot, stack);
@@ -64,7 +64,7 @@ public class ArmorSwapType extends QuickSwapType
 		if (token instanceof SingleSwapEntry single) {
 			ItemStack stack = single.stack();
 			if (stack.isEmpty()) return false;
-			EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(stack);
+			EquipmentSlot slot = SingleSwapItem.getEquipmentSlotForItem(stack);
 			return maySwapOut(player.getItemBySlot(slot));
 		}
 		if (token instanceof SetSwapEntry) {
@@ -88,7 +88,7 @@ public class ArmorSwapType extends QuickSwapType
 	public void renderSide(SelectionSideBar.Context ctx, int x, int y, Player player, ISwapEntry<?> token) {
 		if (token instanceof SingleSwapEntry single) {
 			ItemStack hover = single.stack();
-			EquipmentSlot target = LivingEntity.getEquipmentSlotForItem(hover);
+			EquipmentSlot target = SingleSwapItem.getEquipmentSlotForItem(hover);
 			for (int i = 0; i < 4; i++) {
 				EquipmentSlot slot = getSlot(i);
 				ItemStack stack = player.getItemBySlot(slot);

@@ -5,8 +5,8 @@ import dev.xkmc.l2backpack.content.common.ContentTransfer;
 import dev.xkmc.l2backpack.init.registrate.LBBlocks;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2modularblock.impl.BlockEntityBlockMethodImpl;
-import dev.xkmc.l2modularblock.mult.OnClickBlockMethod;
 import dev.xkmc.l2modularblock.mult.SetPlacedByBlockMethod;
+import dev.xkmc.l2modularblock.mult.UseItemOnBlockMethod;
 import dev.xkmc.l2modularblock.one.BlockEntityBlockMethod;
 import dev.xkmc.l2modularblock.one.GetBlockItemBlockMethod;
 import dev.xkmc.l2modularblock.one.SpecialDropBlockMethod;
@@ -14,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -30,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class DrawerBlock implements OnClickBlockMethod, GetBlockItemBlockMethod, SpecialDropBlockMethod, SetPlacedByBlockMethod {
+public class DrawerBlock implements UseItemOnBlockMethod, GetBlockItemBlockMethod, SpecialDropBlockMethod, SetPlacedByBlockMethod {
 
 	public static final DrawerBlock INSTANCE = new DrawerBlock();
 
@@ -38,9 +39,8 @@ public class DrawerBlock implements OnClickBlockMethod, GetBlockItemBlockMethod,
 			new BlockEntityBlockMethodImpl<>(LBBlocks.TE_DRAWER, DrawerBlockEntity.class);
 
 	@Override
-	public InteractionResult onClick(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+	public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
 		BlockEntity blockentity = level.getBlockEntity(pos);
-		ItemStack stack = player.getItemInHand(hand);
 		if (blockentity instanceof DrawerBlockEntity chest) {
 			if (!stack.isEmpty() && !stack.hasTag() && stack.getItem() == chest.getItem() || chest.getItem() == Items.AIR) {
 				if (!level.isClientSide()) {
@@ -49,7 +49,7 @@ public class DrawerBlock implements OnClickBlockMethod, GetBlockItemBlockMethod,
 				} else {
 					ContentTransfer.playDrawerSound(player);
 				}
-				return InteractionResult.SUCCESS;
+				return ItemInteractionResult.SUCCESS;
 			} else if (stack.isEmpty()) {
 				if (!level.isClientSide()) {
 					stack = chest.handler.extractItem(0, chest.getItem().getMaxStackSize(), false);
@@ -57,11 +57,11 @@ public class DrawerBlock implements OnClickBlockMethod, GetBlockItemBlockMethod,
 				} else {
 					ContentTransfer.playDrawerSound(player);
 				}
-				return InteractionResult.SUCCESS;
+				return ItemInteractionResult.SUCCESS;
 			}
-			return InteractionResult.FAIL;
+			return ItemInteractionResult.FAIL;
 		}
-		return InteractionResult.PASS;
+		return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class DrawerBlock implements OnClickBlockMethod, GetBlockItemBlockMethod,
 		if (blockentity instanceof DrawerBlockEntity chest) {
 			chest.handler.count = DrawerItem.getCount(stack);
 			chest.handler.item = chest.handler.count == 0 ? Items.AIR : BaseDrawerItem.getItem(stack);
-			chest.handler.config = PickupConfig.getConfig(stack);
+			chest.handler.config = PickupConfig.get(stack);
 		}
 	}
 

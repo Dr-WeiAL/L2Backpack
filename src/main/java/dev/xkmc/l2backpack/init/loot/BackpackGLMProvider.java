@@ -1,16 +1,18 @@
 package dev.xkmc.l2backpack.init.loot;
 
 import dev.xkmc.l2backpack.init.L2Backpack;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.GlobalLootModifierProvider;
-import net.minecraftforge.common.loot.LootTableIdCondition;
+import net.neoforged.neoforge.common.data.GlobalLootModifierProvider;
+import net.neoforged.neoforge.common.loot.LootTableIdCondition;
 
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 public class BackpackGLMProvider extends GlobalLootModifierProvider {
 
-	public BackpackGLMProvider(PackOutput gen) {
-		super(gen, L2Backpack.MODID);
+	public BackpackGLMProvider(PackOutput gen, CompletableFuture<HolderLookup.Provider> pvd) {
+		super(gen, pvd, L2Backpack.MODID);
 	}
 
 	@Override
@@ -20,4 +22,5 @@ public class BackpackGLMProvider extends GlobalLootModifierProvider {
 			this.add(def.id, new BackpackLootModifier(def.chance, def, r.nextLong(), LootTableIdCondition.builder(def.target).build()));
 		}
 	}
+
 }

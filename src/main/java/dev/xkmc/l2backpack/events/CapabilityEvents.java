@@ -1,18 +1,13 @@
 package dev.xkmc.l2backpack.events;
 
 import dev.xkmc.l2backpack.compat.CuriosCompat;
-import dev.xkmc.l2backpack.content.capability.PickupModeCap;
 import dev.xkmc.l2backpack.content.capability.PickupTrace;
 import dev.xkmc.l2backpack.init.L2Backpack;
+import dev.xkmc.l2backpack.init.registrate.LBMisc;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
@@ -40,13 +35,13 @@ public class CapabilityEvents {
 	 */
 	public static void tryInsertItem(ServerPlayer player, ItemStack stack) {
 		ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
-		chest.getCapability(PickupModeCap.TOKEN).resolve().ifPresent(
-				cap -> cap.doPickup(stack, new PickupTrace(false, player)));
+		var cap = stack.getCapability(LBMisc.PICKUP);
+		if (cap != null) cap.doPickup(stack, new PickupTrace(false, player));
 		if (stack.isEmpty()) return;
 		CuriosCompat.getSlot(player, e -> {
 			if (stack.isEmpty()) return false;
-			e.getCapability(PickupModeCap.TOKEN).resolve().ifPresent(
-					cap -> cap.doPickup(stack, new PickupTrace(false, player)));
+			var ecap = e.getCapability(LBMisc.PICKUP);
+			if (ecap != null) ecap.doPickup(e, new PickupTrace(false, player));
 			return false;
 		});
 	}

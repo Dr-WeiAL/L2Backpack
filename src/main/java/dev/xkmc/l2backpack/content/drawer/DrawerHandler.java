@@ -1,6 +1,7 @@
 package dev.xkmc.l2backpack.content.drawer;
 
-import dev.xkmc.l2serial.serialization.SerialClass;
+import dev.xkmc.l2serial.serialization.marker.SerialClass;
+import dev.xkmc.l2serial.serialization.marker.SerialField;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -10,13 +11,13 @@ import org.jetbrains.annotations.NotNull;
 @SerialClass
 public class DrawerHandler implements IDrawerHandler {
 
-	@SerialClass.SerialField(toClient = true)
+	@SerialField
 	public Item item = Items.AIR;
 
-	@SerialClass.SerialField(toClient = true)
+	@SerialField
 	public int count = 0;
 
-	@SerialClass.SerialField(toClient = true)
+	@SerialField
 	public CompoundTag config = new CompoundTag();
 
 	private final DrawerBlockEntity parent;

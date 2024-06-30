@@ -10,26 +10,25 @@ import dev.xkmc.l2backpack.init.data.BackpackKeys;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.*;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = L2Backpack.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(value = Dist.CLIENT, modid = L2Backpack.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class L2BackpackClient {
 
 	@SubscribeEvent
 	public static void clientSetup(FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
-			ItemProperties.register(LBItems.QUIVER.get(), new ResourceLocation(L2Backpack.MODID, "arrow"), (stack, level, entity, i) -> Quiver.displayArrow(stack));
+			ItemProperties.register(LBItems.QUIVER.get(), L2Backpack.loc("arrow"), (stack, level, entity, i) -> Quiver.displayArrow(stack));
 
 			ClampedItemPropertyFunction func = (stack, level, entity, i) -> AbstractBag.isFilled(stack) ? 1 : 0;
-			ItemProperties.register(LBItems.ARMOR_BAG.get(), new ResourceLocation(L2Backpack.MODID, "fill"), func);
-			ItemProperties.register(LBItems.BOOK_BAG.get(), new ResourceLocation(L2Backpack.MODID, "fill"), func);
+			ItemProperties.register(LBItems.ARMOR_BAG.get(), L2Backpack.loc("fill"), func);
+			ItemProperties.register(LBItems.BOOK_BAG.get(), L2Backpack.loc("fill"), func);
 
 		});
 	}
@@ -40,9 +39,9 @@ public class L2BackpackClient {
 	}
 
 	@SubscribeEvent
-	public static void registerOverlay(RegisterGuiOverlaysEvent event) {
-		event.registerAbove(VanillaGuiOverlay.CROSSHAIR.id(), "arrow_bag", new QuickSwapOverlay());
-		event.registerAbove(VanillaGuiOverlay.CROSSHAIR.id(), "ender_drawer", new EnderPreviewOverlay());
+	public static void registerOverlay(RegisterGuiLayersEvent event) {
+		event.registerAbove(VanillaGuiLayers.CROSSHAIR, L2Backpack.loc("arrow_bag"), new QuickSwapOverlay());
+		event.registerAbove(VanillaGuiLayers.CROSSHAIR, L2Backpack.loc("ender_drawer"), new EnderPreviewOverlay());
 	}
 
 	@SubscribeEvent

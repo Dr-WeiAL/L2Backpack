@@ -1,10 +1,21 @@
 package dev.xkmc.l2backpack.content.quickswap.common;
 
 import dev.xkmc.l2backpack.content.common.BaseBagItem;
+import dev.xkmc.l2backpack.init.registrate.LBItems;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.ItemStack;
 
 public abstract class SingleSwapItem extends BaseBagItem implements IQuickSwapItem {
+
+	public static EquipmentSlot getEquipmentSlotForItem(ItemStack stack) {
+		final EquipmentSlot slot = stack.getEquipmentSlot();
+		if (slot != null) return slot;
+		Equipable equipable = Equipable.get(stack);
+		if (equipable != null) return equipable.getEquipmentSlot();
+		return EquipmentSlot.MAINHAND;
+	}
 
 	public static void setSelected(ItemStack stack, int i) {
 		int slot = i;
@@ -14,11 +25,11 @@ public abstract class SingleSwapItem extends BaseBagItem implements IQuickSwapIt
 			else slot++;
 			slot = (slot + 9) % 9;
 		}
-		stack.getOrCreateTag().putInt("selected", slot);
+		LBItems.DC_SEL.set(stack, slot);
 	}
 
 	public static int getSelected(ItemStack stack) {
-		return Mth.clamp(stack.getOrCreateTag().getInt("selected"), 0, 8);
+		return Mth.clamp(LBItems.DC_SEL.getOrDefault(stack, 0), 0, 8);
 	}
 
 	public SingleSwapItem(Properties props) {

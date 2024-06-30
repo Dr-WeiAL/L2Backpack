@@ -8,7 +8,7 @@ import dev.xkmc.l2backpack.content.quickswap.type.QuickSwapType;
 import dev.xkmc.l2backpack.content.quickswap.type.QuickSwapTypes;
 import dev.xkmc.l2backpack.content.render.ItemOnBackItem;
 import dev.xkmc.l2backpack.init.data.LangData;
-import dev.xkmc.l2screentracker.screen.source.PlayerSlot;
+import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -24,7 +24,7 @@ public class Scabbard extends SingleSwapItem implements ItemOnBackItem {
 
 	public static boolean isValidItem(ItemStack stack) {
 		return stack.getItem().canFitInsideContainerItems() && !stack.isStackable() &&
-				LivingEntity.getEquipmentSlotForItem(stack).getType() != EquipmentSlot.Type.ARMOR;
+				getEquipmentSlotForItem(stack).getType() == EquipmentSlot.Type.HAND;
 	}
 
 	public Scabbard(Properties props) {
@@ -33,11 +33,11 @@ public class Scabbard extends SingleSwapItem implements ItemOnBackItem {
 
 	@Override
 	public void open(ServerPlayer player, PlayerSlot<?> slot, ItemStack stack) {
-		new SimpleMenuPvd(player, slot,this,  stack, ScabbardMenu::new).open();
+		new SimpleMenuPvd(player, slot, this, stack, ScabbardMenu::new).open();
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag flag) {
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		LangData.addInfo(list,
 				LangData.Info.SCABBARD_INFO,
 				LangData.Info.INHERIT);

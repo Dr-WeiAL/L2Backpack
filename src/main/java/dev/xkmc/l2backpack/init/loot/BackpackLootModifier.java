@@ -66,7 +66,7 @@ public class BackpackLootModifier extends LootModifier {
 				WorldChestItem.initLootGen(stack, MathHelper.getUUIDFromString(name), L2Backpack.MODID + ".loot." + name + ".name", color, loot);
 			} else {
 				stack = LBItems.BACKPACKS[color.ordinal()].asStack();
-				BackpackItem.initLootGen(stack, loot);
+				stack.set(LBItems.DC_LOOT_ID, loot.toString());
 			}
 			stack.set(DataComponents.CUSTOM_NAME, Component.translatable(L2Backpack.MODID + ".loot." + name + ".item").withStyle(ChatFormatting.GOLD));
 			list.add(stack);

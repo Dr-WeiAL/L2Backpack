@@ -1,25 +1,28 @@
 package dev.xkmc.l2backpack.events;
 
 import dev.xkmc.l2backpack.init.L2Backpack;
-import dev.xkmc.l2screentracker.click.ReadOnlyStackClickHandler;
+import dev.xkmc.l2menustacker.click.ReadOnlyStackClickHandler;
+import dev.xkmc.l2menustacker.init.L2MSLangData;
 import dev.xkmc.l2screentracker.init.L2STLangData;
 import net.minecraft.ChatFormatting;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import vazkii.patchouli.api.PatchouliAPI;
 import vazkii.patchouli.common.base.PatchouliSounds;
-import vazkii.patchouli.common.book.Book;
 import vazkii.patchouli.common.item.ItemModBook;
 import vazkii.patchouli.common.item.PatchouliItems;
+
+import java.awt.print.Book;
 
 public class PatchouliClickListener extends ReadOnlyStackClickHandler {
 
 	public PatchouliClickListener() {
-		super(new ResourceLocation(L2Backpack.MODID, "patchouli"));
+		super(L2Backpack.loc("patchouli"));
 	}
 
 	@Override
@@ -40,7 +43,7 @@ public class PatchouliClickListener extends ReadOnlyStackClickHandler {
 	@SubscribeEvent
 	public static void tooltipEvent(ItemTooltipEvent event) {
 		if (event.getItemStack().is(PatchouliItems.BOOK)) {
-			event.getToolTip().add(L2STLangData.QUICK_ACCESS.get().withStyle(ChatFormatting.GRAY));
+			event.getToolTip().add(L2MSLangData.QUICK_ACCESS.get().withStyle(ChatFormatting.GRAY));
 		}
 	}
 

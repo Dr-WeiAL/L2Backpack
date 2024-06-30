@@ -3,11 +3,11 @@ package dev.xkmc.l2backpack.events;
 import dev.xkmc.l2backpack.content.drawer.BaseDrawerItem;
 import dev.xkmc.l2backpack.content.remote.drawer.EnderDrawerBlockEntity;
 import dev.xkmc.l2backpack.content.remote.drawer.EnderDrawerItem;
-import dev.xkmc.l2backpack.content.remote.player.EnderSyncCap;
 import dev.xkmc.l2backpack.init.L2Backpack;
+import dev.xkmc.l2backpack.init.registrate.LBItems;
+import dev.xkmc.l2backpack.init.registrate.LBMisc;
 import dev.xkmc.l2backpack.network.RequestTooltipUpdateEvent;
-import dev.xkmc.l2library.util.Proxy;
-import dev.xkmc.l2library.util.raytrace.RayTraceUtil;
+import dev.xkmc.l2core.util.Proxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -18,27 +18,26 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 
 import java.util.UUID;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = L2Backpack.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(value = Dist.CLIENT, modid = L2Backpack.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class TooltipUpdateEvents {
 
 	@OnlyIn(Dist.CLIENT)
 	public static void onEnderSync(int slot, ItemStack stack) {
-		EnderSyncCap.HOLDER.get(Proxy.getClientPlayer()).setItem(slot, stack);
+		LBMisc.ENDER_SYNC.type().getOrCreate(Proxy.getClientPlayer()).setItem(slot, stack);
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
-	public static void onClientTick(TickEvent.ClientTickEvent event) {
-		if (event.phase != TickEvent.Phase.END) return;
+	public static void onClientTick(ClientTickEvent.Post event) {
 		if (!continueSession()) {
 			endSession();
 		}
@@ -61,16 +60,18 @@ public class TooltipUpdateEvents {
 		ItemStack stack = slot.getItem();
 		if (!(stack.getItem() instanceof EnderDrawerItem)) return false;
 		if (BaseDrawerItem.getItem(stack) == Items.AIR) return false;
-		startSession(BaseDrawerItem.getItem(stack), stack.getOrCreateTag().getUUID(EnderDrawerItem.KEY_OWNER_ID));
+		var id = LBItems.DC_OWNER_ID.get(stack);
+		if (id == null) return false;
+		startSession(BaseDrawerItem.getItem(stack), id);
 		return true;
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	private static boolean blockSession() {
 		LocalPlayer player = Proxy.getClientPlayer();
-		var ray = RayTraceUtil.rayTraceBlock(player.level(), player, player.getBlockReach());
-		if (ray.getType() == HitResult.Type.BLOCK) {
-			BlockPos pos = ray.getBlockPos();
+		var ray = Minecraft.getInstance().hitResult;
+		if (ray instanceof BlockHitResult bray) {
+			BlockPos pos = bray.getBlockPos();
 			BlockEntity entity = player.level().getBlockEntity(pos);
 			if (entity instanceof EnderDrawerBlockEntity drawer) {
 				startSession(drawer.item, drawer.owner_id);

@@ -1,9 +1,7 @@
 package dev.xkmc.l2backpack.init.data;
 
 import dev.xkmc.l2backpack.init.L2Backpack;
-import dev.xkmc.l2library.compat.curios.CurioEntityBuilder;
-import dev.xkmc.l2library.compat.curios.SlotCondition;
-import dev.xkmc.l2library.serial.config.RecordDataProvider;
+import dev.xkmc.l2core.serial.config.RecordDataProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 

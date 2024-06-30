@@ -1,8 +1,8 @@
 package dev.xkmc.l2backpack.content.recipe;
 
-import dev.xkmc.l2backpack.content.backpack.BackpackItem;
 import dev.xkmc.l2backpack.content.common.BaseBagItem;
 import dev.xkmc.l2backpack.init.data.BackpackConfig;
+import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2backpack.init.registrate.LBMisc;
 import dev.xkmc.l2core.serial.recipe.AbstractSmithingRecipe;
 import net.minecraft.core.HolderLookup;
@@ -16,7 +16,7 @@ import static dev.xkmc.l2backpack.content.backpack.BackpackItem.MAX_ROW;
 public class BackpackUpgradeRecipe extends AbstractSmithingRecipe<BackpackUpgradeRecipe> {
 
 	public BackpackUpgradeRecipe(Ingredient template, Ingredient base, Ingredient addition, ItemStack result) {
-		super(template, base, addition, BackpackItem.setRow(result, BackpackConfig.SERVER.initialRows.get() + 1));
+		super(template, base, addition, LBItems.DC_ROW.set(result, BackpackConfig.SERVER.initialRows.get() + 1));
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class BackpackUpgradeRecipe extends AbstractSmithingRecipe<BackpackUpgrad
 	public ItemStack assemble(SmithingRecipeInput container, HolderLookup.Provider access) {
 		ItemStack stack = super.assemble(container, access);
 		BaseBagItem bag = (BaseBagItem) stack.getItem();
-		BackpackItem.setRow(stack, bag.getRows(stack) + 1);
+		stack.set(LBItems.DC_ROW, bag.getRows(stack) + 1);
 		return stack;
 	}
 

@@ -10,19 +10,15 @@ import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestInvWrapper;
 import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestItem;
 import dev.xkmc.l2backpack.events.ArrowBagEvents;
 import dev.xkmc.l2backpack.init.registrate.LBBlocks;
-import dev.xkmc.l2library.util.code.GenericItemStack;
-import dev.xkmc.modulargolems.content.entity.common.AbstractGolemEntity;
-import dev.xkmc.modulargolems.events.event.GolemEquipEvent;
-import dev.xkmc.modulargolems.events.event.GolemHandleItemEvent;
-import dev.xkmc.modulargolems.init.data.MGTagGen;
+import dev.xkmc.l2library.util.GenericItemStack;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -30,7 +26,7 @@ import java.util.List;
 public class GolemCompat {
 
 	public static void register() {
-		MinecraftForge.EVENT_BUS.register(GolemCompat.class);
+		NeoForge.EVENT_BUS.register(GolemCompat.class);
 	}
 
 	private static boolean canEquip(ItemStack stack) {

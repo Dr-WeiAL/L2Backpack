@@ -9,16 +9,16 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ProjectileWeaponItem;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingGetProjectileEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.Event;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingGetProjectileEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.IntConsumer;
 
-@Mod.EventBusSubscriber(modid = L2Backpack.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = L2Backpack.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ArrowBagEvents {
 
 	public static final ThreadLocal<Pair<ItemStack, IntConsumer>> TEMP = new ThreadLocal<>();
@@ -27,7 +27,7 @@ public class ArrowBagEvents {
 	public static void onProjectileSearch(LivingGetProjectileEvent event) {
 		if (!(event.getProjectileWeaponItemStack().getItem() instanceof ProjectileWeaponItem weapon)) return;
 		ArrowFindEvent finder = new ArrowFindEvent(event.getProjectileWeaponItemStack(), weapon, event.getEntity());
-		MinecraftForge.EVENT_BUS.post(finder);
+		NeoForge.EVENT_BUS.post(finder);
 		var arrow = finder.arrow;
 		if (arrow != null) {
 			TEMP.set(arrow);

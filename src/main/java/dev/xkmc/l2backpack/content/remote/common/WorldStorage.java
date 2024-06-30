@@ -1,8 +1,11 @@
 package dev.xkmc.l2backpack.content.remote.common;
 
+import dev.xkmc.l2core.capability.level.BaseSavedData;
 import dev.xkmc.l2serial.serialization.marker.SerialClass;
 import dev.xkmc.l2serial.serialization.marker.SerialField;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,7 +21,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @SerialClass
-public class WorldStorage extends BaseSavedData<WorldStorage> {
+public class WorldStorage extends BaseSavedData {
 
 	public static final String ID = "l2backpack:dimensional";
 
@@ -56,7 +59,9 @@ public class WorldStorage extends BaseSavedData<WorldStorage> {
 			return Optional.empty();
 		StorageContainer storage = new StorageContainer(id, color, col);
 		if (loot != null) {
-			LootTable loottable = level.getServer().getLootData().getLootTable(loot);
+			LootTable loottable = level.getServer().registryAccess()
+					.registryOrThrow(Registries.LOOT_TABLE)
+					.getOrThrow(ResourceKey.create(Registries.LOOT_TABLE, loot));
 			LootParams.Builder builder = new LootParams.Builder(level);
 			if (player != null) {
 				builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);

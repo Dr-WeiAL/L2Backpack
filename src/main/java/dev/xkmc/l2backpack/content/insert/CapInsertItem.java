@@ -1,15 +1,12 @@
 package dev.xkmc.l2backpack.content.insert;
 
-import dev.xkmc.l2backpack.init.data.BackpackConfig;
 import dev.xkmc.l2backpack.network.DrawerInteractToServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.Nullable;
 
 public interface CapInsertItem extends OverlayInsertItem {
@@ -30,9 +27,7 @@ public interface CapInsertItem extends OverlayInsertItem {
 
 	@Nullable
 	default IItemHandler getInvCap(ItemStack storage, ServerPlayer player) {
-		var opt = storage.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve();
-		if (opt.isEmpty()) return null;
-		return opt.get();
+		return storage.getCapability(Capabilities.ItemHandler.ITEM);
 	}
 
 	@Override

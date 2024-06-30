@@ -1,10 +1,11 @@
 package dev.xkmc.l2backpack.content.common;
 
 import dev.xkmc.l2backpack.content.drawer.IDrawerHandler;
-import dev.xkmc.l2backpack.init.registrate.LBTriggers;
 import dev.xkmc.l2backpack.init.advancement.BagInteractTrigger;
 import dev.xkmc.l2backpack.init.data.LangData;
+import dev.xkmc.l2backpack.init.registrate.LBTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionResult;
@@ -15,11 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.wrapper.InvWrapper;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
@@ -129,30 +126,19 @@ public class ContentTransfer {
 		Player player = context.getPlayer();
 		if (player != null) {
 			BlockPos pos = context.getClickedPos();
-			BlockEntity target = context.getLevel().getBlockEntity(pos);
-			if (target != null) {
-				var capLazy = target.getCapability(ForgeCapabilities.ITEM_HANDLER);
-				if (capLazy.resolve().isPresent()) {
-					var cap = capLazy.resolve().get();
-					item.click(player, context.getItemInHand(), context.getLevel().isClientSide(), player.isShiftKeyDown(), true, cap);
-					return InteractionResult.SUCCESS;
-				}
+			var cap = context.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, pos, context.getClickedFace());
+			if (cap != null) {
+				item.click(player, context.getItemInHand(), context.getLevel().isClientSide(), player.isShiftKeyDown(), true, cap);
+				return InteractionResult.SUCCESS;
 			}
 		}
 		return InteractionResult.PASS;
 	}
 
-	public static void leftClick(Quad load, Level level, BlockPos pos, ItemStack stack, @Nullable Player player) {
-		if (player != null) {
-			BlockEntity target = level.getBlockEntity(pos);
-			if (target != null) {
-				var capLazy = target.getCapability(ForgeCapabilities.ITEM_HANDLER);
-				if (capLazy.resolve().isPresent()) {
-					var cap = capLazy.resolve().get();
-					load.click(player, stack, level.isClientSide(), player.isShiftKeyDown(), false, cap);
-				}
-			}
-		}
+	public static void leftClick(Quad load, Level level, BlockPos pos, ItemStack stack, Player player, @Nullable Direction dir) {
+		if (dir == null) dir = Direction.UP;
+		var cap = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, dir);
+		load.click(player, stack, level.isClientSide(), player.isShiftKeyDown(), false, cap);
 	}
 
 	public static void onDump(Player player, int count, ItemStack stack) {

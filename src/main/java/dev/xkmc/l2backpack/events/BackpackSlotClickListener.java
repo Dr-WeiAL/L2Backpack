@@ -10,6 +10,7 @@ import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestItem;
 import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestMenuPvd;
 import dev.xkmc.l2backpack.content.tool.IBagTool;
 import dev.xkmc.l2backpack.init.L2Backpack;
+import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2backpack.init.registrate.LBTriggers;
 import dev.xkmc.l2menustacker.click.writable.ClickedPlayerSlotResult;
 import dev.xkmc.l2menustacker.click.writable.ContainerCallback;
@@ -92,7 +93,8 @@ public class BackpackSlotClickListener extends WritableStackClickHandler {
 			player.openMenu(new SimpleMenuProvider((id, inv, pl) ->
 					ChestMenu.threeRows(id, inv, pl.getEnderChestInventory()), stack.getHoverName()));
 		} else if (stack.getItem() instanceof WorldChestItem chest) {
-			others = WorldChestItem.getOwner(stack).map(e -> !e.equals(player.getUUID())).orElse(false);
+			var id = LBItems.DC_OWNER_ID.get(stack);
+			others = id != null && !id.equals(player.getUUID());
 			new WorldChestMenuPvd(player, stack, chest).open();
 		}
 		if (others) {
@@ -117,16 +119,21 @@ public class BackpackSlotClickListener extends WritableStackClickHandler {
 		if (!keybind) {
 			ScreenTracker.onServerOpen(player);
 		}
-		if (result.stack().getItem() instanceof BaseBagItem bag) {
-			bag.open(player, result.slot(), result.stack());
-			result.container().update();
-		} else if (result.stack().getItem() instanceof EnderBackpackItem) {
-			player.openMenu(new SimpleMenuProvider((id, inv, pl) ->
+		switch (result.stack().getItem()) {
+			case BaseBagItem bag -> {
+				bag.open(player, result.slot(), result.stack());
+				result.container().update();
+			}
+			case EnderBackpackItem ender -> player.openMenu(new SimpleMenuProvider((id, inv, pl) ->
 					ChestMenu.threeRows(id, inv, pl.getEnderChestInventory()), result.stack().getHoverName()));
-		} else if (result.stack().getItem() instanceof WorldChestItem chest) {
-			others = WorldChestItem.getOwner(result.stack()).map(e -> !e.equals(player.getUUID())).orElse(false);
-			new WorldChestMenuPvd(player, result.stack(), chest).open();
-			result.container().update();
+			case WorldChestItem chest -> {
+				var id = LBItems.DC_OWNER_ID.get(result.stack());
+				others = id != null && !id.equals(player.getUUID());
+				new WorldChestMenuPvd(player, result.stack(), chest).open();
+				result.container().update();
+			}
+			default -> {
+			}
 		}
 		LBTriggers.SLOT_CLICK.get().trigger(player, result.slot().type(), keybind);
 		if (others) {

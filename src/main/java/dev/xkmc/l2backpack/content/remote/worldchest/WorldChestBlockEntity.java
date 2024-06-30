@@ -1,15 +1,10 @@
 package dev.xkmc.l2backpack.content.remote.worldchest;
 
-import dev.xkmc.l2backpack.content.capability.DestroyMode;
 import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.capability.PickupMode;
 import dev.xkmc.l2backpack.content.remote.common.StorageContainer;
 import dev.xkmc.l2backpack.content.remote.common.WorldStorage;
-import dev.xkmc.l2backpack.init.data.LangData;
 import dev.xkmc.l2core.base.tile.BaseBlockEntity;
-import dev.xkmc.l2library.base.tile.BaseBlockEntity;
-import dev.xkmc.l2modularblock.tile_api.NameSetable;
-import dev.xkmc.l2serial.serialization.SerialClass;
 import dev.xkmc.l2serial.serialization.marker.SerialClass;
 import dev.xkmc.l2serial.serialization.marker.SerialField;
 import net.minecraft.core.BlockPos;
@@ -25,11 +20,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
 import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,15 +31,15 @@ import java.util.UUID;
 public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvider, NameSetable, ContainerListener {
 
 	@SerialField
-	public UUID owner_id;
-	@SerialField(toClient = true)
-	public String owner_name;
+	public UUID ownerId;
+	@SerialField
+	public Component ownerName;
 	@SerialField
 	long password;
-	@SerialField(toClient = true)
+	@SerialField
 	public int color;
-	@SerialField(toClient = true)
-	public PickupConfig config = new PickupConfig(PickupMode.NONE, DestroyMode.NONE);
+	@SerialField
+	public PickupConfig config = PickupConfig.DEF;
 
 	private Component name;
 
@@ -68,16 +58,16 @@ public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvid
 				return LazyOptional.of(() -> new InvWrapper(new SimpleContainer(27))).cast();
 			}
 			if (handler == null && level instanceof ServerLevel sl) {
-				Optional<StorageContainer> storage = WorldStorage.get(sl).getOrCreateStorage(sl, owner_id, color, password, null, null, 0);
+				Optional<StorageContainer> storage = WorldStorage.get(sl).getOrCreateStorage(sl, ownerId, color, password, null, null, 0);
 
 				if (storage.isEmpty()) handler = LazyOptional.empty();
 				else if (config == null || config.pickup() == PickupMode.NONE) {
-					handler = LazyOptional.of(() -> new WorldChestInvWrapper(storage.get().container, owner_id));
+					handler = LazyOptional.of(() -> new WorldChestInvWrapper(storage.get().container, ownerId));
 				} else {
 					handler = LazyOptional.of(() -> new BlockPickupInvWrapper(sl, this, storage.get(), config));
 				}
 
-				handler = storage.isEmpty() ? LazyOptional.empty() : LazyOptional.of(() -> new WorldChestInvWrapper(storage.get().container, owner_id));
+				handler = storage.isEmpty() ? LazyOptional.empty() : LazyOptional.of(() -> new WorldChestInvWrapper(storage.get().container, ownerId));
 			}
 
 			return this.handler.cast();
@@ -96,7 +86,8 @@ public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvid
 
 	@Override
 	public Component getName() {
-		return name == null ? LangData.IDS.STORAGE_OWNER.get(WorldChestItem.getName(owner_name)) : name;
+		if (name != null) return name;
+		return ownerName;
 	}
 
 	@Override
@@ -107,7 +98,7 @@ public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvid
 	@Nullable
 	@Override
 	public AbstractContainerMenu createMenu(int wid, Inventory inventory, Player player) {
-		if (level == null || owner_id == null) return null;
+		if (level == null || ownerId == null) return null;
 		Optional<StorageContainer> storage = getAccess();
 		if (storage.isEmpty()) return null;
 		return new WorldChestContainer(wid, inventory, storage.get().container, storage.get(), this);
@@ -129,7 +120,7 @@ public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvid
 
 	private Optional<StorageContainer> getAccess() {
 		assert level != null;
-		return WorldStorage.get((ServerLevel) level).getOrCreateStorage((ServerLevel) level, owner_id, color, password, null, null, 0);
+		return WorldStorage.get((ServerLevel) level).getOrCreateStorage((ServerLevel) level, ownerId, color, password, null, null, 0);
 	}
 
 	private boolean added = false;
@@ -153,14 +144,14 @@ public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvid
 	}
 
 	public void addToListener() {
-		if (!added && level != null && !level.isClientSide() && owner_id != null) {
+		if (!added && level != null && !level.isClientSide() && ownerId != null) {
 			added = true;
 			getAccess().ifPresent(e -> e.container.addListener(this));
 		}
 	}
 
 	public void removeFromListener() {
-		if (added && level != null && !level.isClientSide() && owner_id != null) {
+		if (added && level != null && !level.isClientSide() && ownerId != null) {
 			added = false;
 			getAccess().ifPresent(e -> e.container.removeListener(this));
 		}

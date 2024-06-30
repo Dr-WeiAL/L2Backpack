@@ -13,6 +13,7 @@ import dev.xkmc.l2backpack.content.quickswap.type.QuickSwapType;
 import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.data.LangData;
+import dev.xkmc.l2backpack.init.registrate.LBMisc;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -30,10 +31,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -75,7 +76,7 @@ public class EnderBackpackItem extends Item implements
 
 	@Override
 	public ResourceLocation getModelTexture(ItemStack stack) {
-		return new ResourceLocation(L2Backpack.MODID, "textures/block/ender_backpack.png");
+		return L2Backpack.loc("textures/block/ender_backpack.png");
 	}
 
 	@Override
@@ -105,12 +106,13 @@ public class EnderBackpackItem extends Item implements
 
 	@Override
 	public List<ItemStack> getInvItems(ItemStack stack, Player player) {
-		return EnderSyncCap.HOLDER.get(player).getItems();
+		return LBMisc.ENDER_SYNC.type().getOrCreate(player).getItems(player);
 	}
 
 	@Nullable
 	@Override
 	public IQuickSwapToken<?> getTokenOfType(ItemStack stack, LivingEntity entity, QuickSwapType type) {
-		return entity instanceof Player player ? EnderSyncCap.HOLDER.get(player).getToken(type) : null;
+		return entity instanceof Player player ? LBMisc.ENDER_SYNC.type().getExisting(player)
+				.map(e -> e.getToken(player, type)).orElse(null) : null;
 	}
 }

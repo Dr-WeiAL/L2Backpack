@@ -1,7 +1,7 @@
 package dev.xkmc.l2backpack.content.quickswap.type;
 
 import dev.xkmc.l2backpack.content.quickswap.entry.ISwapEntry;
-import dev.xkmc.l2library.base.overlay.SelectionSideBar;
+import dev.xkmc.l2itemselector.overlay.SelectionSideBar;
 import net.minecraft.world.entity.player.Player;
 
 public interface ISideInfoRenderer {

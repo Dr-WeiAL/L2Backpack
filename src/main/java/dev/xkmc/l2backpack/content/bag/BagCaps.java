@@ -17,15 +17,12 @@ public class BagCaps extends InvPickupCap<FastBagItemHandler> implements ICapabi
 
 	private final AbstractBag bag;
 	private final ItemStack stack;
-	private final LazyOptional<BagCaps> holder = LazyOptional.of(() -> this);
 	private final BagItemHandler itemHandler;
-	private final LazyOptional<BagItemHandler> handler;
 
 	public BagCaps(AbstractBag bag, ItemStack stack) {
 		this.bag = bag;
 		this.stack = stack;
 		itemHandler = new BagItemHandler(bag, stack);
-		handler = LazyOptional.of(() -> itemHandler);
 	}
 
 	@Override
@@ -45,7 +42,7 @@ public class BagCaps extends InvPickupCap<FastBagItemHandler> implements ICapabi
 
 	@Override
 	public PickupConfig getPickupMode() {
-		return PickupConfig.getPickupMode(stack);
+		return PickupConfig.get(stack);
 	}
 
 	@Override

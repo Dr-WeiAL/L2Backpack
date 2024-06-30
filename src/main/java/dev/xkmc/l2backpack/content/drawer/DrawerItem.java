@@ -1,8 +1,8 @@
 package dev.xkmc.l2backpack.content.drawer;
 
 import dev.xkmc.l2backpack.content.capability.PickupConfig;
-import dev.xkmc.l2backpack.content.common.ContentTransfer;
 import dev.xkmc.l2backpack.content.click.DoubleClickItem;
+import dev.xkmc.l2backpack.content.common.ContentTransfer;
 import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.data.LangData;
@@ -19,10 +19,9 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -60,14 +59,14 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 		if (!player.isShiftKeyDown()) {
 			Item item = BaseDrawerItem.getItem(stack);
 			int count = getCount(stack);
-			int max = Math.min(item.getMaxStackSize(), count);
+			int max = Math.min(item.getDefaultMaxStackSize(), count);
 			player.getInventory().placeItemBackInInventory(new ItemStack(item, max));
 			setCount(stack, count - max);
 			ContentTransfer.onExtract(player, max, stack);
 		} else {
 			Item item = BaseDrawerItem.getItem(stack);
 			int count = getCount(stack);
-			int max = item.getMaxStackSize() * BaseDrawerItem.getStacking(stack);
+			int max = item.getDefaultMaxStackSize() * BaseDrawerItem.getStacking(stack);
 			boolean perform = !canSetNewItem(stack);
 			if (!perform) {
 				item = ContentTransfer.filterMaxItem(new InvWrapper(player.getInventory()));
@@ -182,7 +181,7 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 		return new DrawerInvWrapper(stack, trace -> access);
 	}
 
-	private static final ResourceLocation BG = new ResourceLocation(L2Backpack.MODID, "textures/block/drawer/drawer_side.png");
+	private static final ResourceLocation BG = L2Backpack.loc("textures/block/drawer/drawer_side.png");
 
 	@Override
 	public ResourceLocation backgroundLoc() {

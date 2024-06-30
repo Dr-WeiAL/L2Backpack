@@ -2,10 +2,9 @@ package dev.xkmc.l2backpack.content.quickswap.type;
 
 import dev.xkmc.l2backpack.content.quickswap.common.QuickSwapOverlay;
 import dev.xkmc.l2backpack.content.quickswap.entry.ISwapEntry;
-import dev.xkmc.l2library.base.overlay.OverlayUtil;
-import dev.xkmc.l2library.base.overlay.SelectionSideBar;
-import dev.xkmc.l2library.base.overlay.TextBox;
-import net.minecraft.client.Minecraft;
+import dev.xkmc.l2itemselector.overlay.OverlayUtil;
+import dev.xkmc.l2itemselector.overlay.SelectionSideBar;
+import dev.xkmc.l2itemselector.overlay.TextBox;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

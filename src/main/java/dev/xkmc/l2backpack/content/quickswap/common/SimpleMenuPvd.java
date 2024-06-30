@@ -1,9 +1,10 @@
 package dev.xkmc.l2backpack.content.quickswap.common;
 
 import dev.xkmc.l2backpack.content.common.BaseBagItem;
-import dev.xkmc.l2screentracker.screen.source.PlayerSlot;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
+import dev.xkmc.l2backpack.init.registrate.LBItems;
+import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
+import net.minecraft.Util;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
@@ -11,7 +12,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.network.NetworkHooks;
 
 import java.util.UUID;
 
@@ -44,21 +44,17 @@ public final class SimpleMenuPvd implements MenuProvider {
 
 	@Override
 	public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-		CompoundTag tag = stack.getOrCreateTag();
-		UUID uuid = tag.getUUID("container_id");
-		return factory.create(id, inventory, slot, uuid, getDisplayName());
+		return factory.create(id, inventory, slot, LBItems.DC_CONT_ID.getOrDefault(stack, Util.NIL_UUID), getDisplayName());
 	}
 
-	public void writeBuffer(FriendlyByteBuf buf) {
-		CompoundTag tag = stack.getOrCreateTag();
-		UUID id = tag.getUUID("container_id");
+	public void writeBuffer(RegistryFriendlyByteBuf buf) {
 		slot.write(buf);
-		buf.writeUUID(id);
+		buf.writeUUID(LBItems.DC_CONT_ID.getOrDefault(stack, Util.NIL_UUID));
 	}
 
 	public void open() {
 		bag.checkInit(stack);
-		NetworkHooks.openScreen(player, this, this::writeBuffer);
+		player.openMenu(this, this::writeBuffer);
 	}
 
 }

@@ -23,7 +23,7 @@ public class DestroyTweakerTool extends TweakerTool {
 
 	@Override
 	public PickupConfig click(PickupConfig config) {
-		return PickupConfig.iterateDestroy(config);
+		return config.iterateDestroy();
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class DestroyTweakerTool extends TweakerTool {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag flag) {
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		LangData.addInfo(list, LangData.Info.DESTROY_TWEAKER, LangData.Info.TWEAKER_BACK, LangData.Info.TWEAKER_BLOCK);
 	}
 

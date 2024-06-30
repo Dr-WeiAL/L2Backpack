@@ -11,7 +11,8 @@ import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.data.LangData;
 import dev.xkmc.l2backpack.init.registrate.LBBlocks;
-import dev.xkmc.l2library.util.annotation.ServerOnly;
+import dev.xkmc.l2backpack.init.registrate.LBItems;
+import dev.xkmc.l2core.util.ServerOnly;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -21,8 +22,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
@@ -30,9 +31,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -41,23 +42,6 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class WorldChestItem extends BlockItem implements BackpackModelItem, PickupBagItem, InsertOnlyItem {
-
-	public static Optional<UUID> getOwner(ItemStack stack) {
-		CompoundTag tag = stack.getTag();
-		if (tag != null) {
-			if (tag.contains("owner_id")) {
-				return Optional.of(tag.getUUID("owner_id"));
-			}
-		}
-		return Optional.empty();
-	}
-
-	public static Component getName(String name) {
-		if (name.startsWith(L2Backpack.MODID + ".names.")) {
-			return Component.translatable(name).withStyle(ChatFormatting.GOLD);
-		}
-		return Component.literal(name);
-	}
 
 	public static ItemStack initLootGen(ItemStack stack, UUID uuid, String name, DyeColor color, ResourceLocation loot) {
 		var ctag = stack.getOrCreateTag();
@@ -125,10 +109,10 @@ public class WorldChestItem extends BlockItem implements BackpackModelItem, Pick
 				list.add(LangData.IDS.STORAGE_OWNER.get(getName(name)));
 				PickupConfig.addText(stack, list);
 			}
-			if (tag.contains("loot")) {
-				list.add(LangData.IDS.LOOT.get().withStyle(ChatFormatting.AQUA));
-			}
 		}
+
+		if (LBItems.DC_LOOT_ID.get(stack) != null)
+			list.add(LangData.IDS.LOOT.get().withStyle(ChatFormatting.AQUA));
 		LangData.addInfo(list, LangData.Info.QUICK_ANY_ACCESS,
 				LangData.Info.PLACE,
 				LangData.Info.DIMENSIONAL,
@@ -143,17 +127,18 @@ public class WorldChestItem extends BlockItem implements BackpackModelItem, Pick
 	}
 
 	@Override
-	public boolean canEquip(ItemStack stack, EquipmentSlot armorType, Entity entity) {
+	public boolean canEquip(ItemStack stack, EquipmentSlot armorType, LivingEntity entity) {
 		return armorType == EquipmentSlot.CHEST;
 	}
 
 	@Override
 	public ResourceLocation getModelTexture(ItemStack stack) {
-		return new ResourceLocation(L2Backpack.MODID, "textures/block/dimensional_storage/" + color.getName() + ".png");
+		return L2Backpack.loc("textures/block/dimensional_storage/" + color.getName() + ".png");
 	}
 
 	@ServerOnly
 	public Optional<StorageContainer> getContainer(ItemStack stack, ServerLevel level) {
+
 		if (!stack.hasTag()) return Optional.empty();
 		CompoundTag tag = stack.getOrCreateTag();
 		if (!tag.contains("owner_id")) return Optional.empty();

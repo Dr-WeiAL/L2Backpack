@@ -1,14 +1,8 @@
 package dev.xkmc.l2backpack.init.data;
 
-import dev.xkmc.l2screentracker.init.L2ScreenTracker;
 import net.minecraft.client.KeyMapping;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = L2ScreenTracker.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public enum BackpackKeys {
 	OPEN("key.l2backpack.open", GLFW.GLFW_KEY_B);
 
@@ -20,12 +14,6 @@ public enum BackpackKeys {
 		this.id = id;
 		this.key = key;
 		map = new KeyMapping(id, key, "key.categories.l2mods");
-	}
-
-	@SubscribeEvent
-	public static void registerKeys(RegisterKeyMappingsEvent event) {
-		for (BackpackKeys k : BackpackKeys.values())
-			event.register(k.map);
 	}
 
 }

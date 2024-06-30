@@ -76,7 +76,7 @@ public interface DrawerQuickInsert {
 				return count != src.getCount();
 			}
 		}
-		if (pl instanceof ServerPlayer sp && src.getTag() == null) {
+		if (pl instanceof ServerPlayer sp) {
 			if (dst.getItem() instanceof BaseDrawerItem item) {
 				if (!allowEmpty && item.canSetNewItem(dst)) return false;
 				int count = src.getCount();
@@ -84,7 +84,7 @@ public interface DrawerQuickInsert {
 				return count != src.getCount();
 			}
 		}
-		if (src.isStackable() && ItemStack.isSameItemSameTags(src, dst)) {
+		if (src.isStackable() && ItemStack.isSameItemSameComponents(src, dst)) {
 			int j = dst.getCount() + src.getCount();
 			int maxSize = Math.min(slot.getMaxStackSize(), src.getMaxStackSize());
 			if (j <= maxSize) {

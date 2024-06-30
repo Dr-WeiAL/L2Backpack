@@ -6,17 +6,13 @@ import dev.xkmc.l2backpack.content.capability.PickupModeCap;
 import dev.xkmc.l2backpack.content.capability.PickupTrace;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.wrapper.InvWrapper;
+import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class EnderBackpackCaps extends InvPickupCap<InvWrapper> implements ICapabilityProvider {
 
 	private final ItemStack stack;
-	private final LazyOptional<EnderBackpackCaps> holder = LazyOptional.of(() -> this);
 
 	public EnderBackpackCaps(ItemStack stack) {
 		this.stack = stack;
@@ -24,7 +20,7 @@ public class EnderBackpackCaps extends InvPickupCap<InvWrapper> implements ICapa
 
 	@Override
 	public PickupConfig getPickupMode() {
-		return PickupConfig.getPickupMode(stack);
+		return PickupConfig.get(stack);
 	}
 
 	@Override

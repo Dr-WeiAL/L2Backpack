@@ -6,13 +6,12 @@ import dev.xkmc.l2backpack.content.common.BaseBagMenu;
 import dev.xkmc.l2backpack.content.recipe.BackpackDyeRecipe;
 import dev.xkmc.l2backpack.content.recipe.BackpackUpgradeRecipe;
 import dev.xkmc.l2backpack.content.recipe.DrawerUpgradeRecipe;
+import dev.xkmc.l2backpack.content.remote.player.EnderSyncCap;
 import dev.xkmc.l2backpack.content.restore.*;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.loot.BackpackLootModifier;
-import dev.xkmc.l2core.init.reg.simple.CdcReg;
-import dev.xkmc.l2core.init.reg.simple.CdcVal;
-import dev.xkmc.l2core.init.reg.simple.SR;
-import dev.xkmc.l2core.init.reg.simple.Val;
+import dev.xkmc.l2core.capability.player.PlayerCapabilityNetworkHandler;
+import dev.xkmc.l2core.init.reg.simple.*;
 import dev.xkmc.l2core.serial.recipe.AbstractShapelessRecipe;
 import dev.xkmc.l2core.serial.recipe.AbstractSmithingRecipe;
 import dev.xkmc.l2menustacker.screen.base.L2MSReg;
@@ -49,6 +48,10 @@ public class LBMisc {
 	private static final SR<TrackedEntryType<?>> TRACKED = SR.of(L2Backpack.REG, L2MSReg.TRACKED_ENTRY_TYPE.key());
 	public static final Val<DimensionTrace> TE_DIM = TRACKED.reg("dimension", DimensionTrace::new);
 	public static final Val<BackpackTrace> TE_BAG = TRACKED.reg("backpack", BackpackTrace::new);
+
+	public static final AttReg ATT = AttReg.of(L2Backpack.REG);
+	public static final AttVal.PlayerVal<EnderSyncCap> ENDER_SYNC = ATT.player("player_ender",
+			EnderSyncCap.class, EnderSyncCap::new, PlayerCapabilityNetworkHandler::new);
 
 	public static final ItemCapability<PickupModeCap, Void> PICKUP = ItemCapability.createVoid(L2Backpack.loc("pickup"), PickupModeCap.class);
 

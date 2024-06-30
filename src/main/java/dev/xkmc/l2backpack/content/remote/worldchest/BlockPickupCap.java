@@ -25,7 +25,7 @@ public class BlockPickupCap extends InvPickupCap<WorldChestInvWrapper> {
 	@Override
 	public int getSignature() {
 		int color = be.color;
-		var opt = be.owner_id;
+		var opt = be.ownerId;
 		return opt == null ? 0 : opt.hashCode() ^ color ^ 0x55AA;
 	}
 

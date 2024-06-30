@@ -2,8 +2,10 @@ package dev.xkmc.l2backpack.init.loot;
 
 import com.tterrag.registrate.providers.loot.RegistrateLootTableProvider;
 import dev.xkmc.l2backpack.init.L2Backpack;
-import dev.xkmc.l2library.util.data.LootTableTemplate;
-import dev.xkmc.l2library.util.math.MathHelper;
+import dev.xkmc.l2core.util.LootTableTemplate;
+import dev.xkmc.l2core.util.MathHelper;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Items;
@@ -82,19 +84,19 @@ public class LootGen {
 		public final Supplier<LootTable.Builder> loot;
 
 
-		LootDefinition(double chance, HiddenPlayer player, DyeColor color, ResourceLocation target, Supplier<LootTable.Builder> loot) {
+		LootDefinition(double chance, HiddenPlayer player, DyeColor color, ResourceKey<LootTable> target, Supplier<LootTable.Builder> loot) {
 			this.chance = chance;
 			this.id = name().toLowerCase(Locale.ROOT);
 			this.player = player;
 			this.color = color;
-			this.target = target;
+			this.target = target.location();
 			this.loot = loot;
 		}
 	}
 
-	private static void genBagLoot(BiConsumer<ResourceLocation, LootTable.Builder> map) {
+	private static void genBagLoot(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> map) {
 		for (LootDefinition def : LootDefinition.values()) {
-			map.accept(new ResourceLocation(L2Backpack.MODID, def.id), def.loot.get());
+			map.accept(ResourceKey.create(Registries.LOOT_TABLE, L2Backpack.loc(def.id)), def.loot.get());
 		}
 	}
 

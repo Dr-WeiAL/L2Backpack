@@ -22,7 +22,7 @@ public class WorldChestAnalogBlockEntity<T extends BlockEntity> extends BlockEnt
 	public int getAnalogOutputSignal(BlockState blockState, Level worldIn, BlockPos pos) {
 		BlockEntity e = worldIn.getBlockEntity(pos);
 		if (e instanceof WorldChestBlockEntity be) {
-			AnalogTrigger.trigger(worldIn, be.owner_id);
+			AnalogTrigger.trigger(worldIn, be.ownerId);
 		}
 		return super.getAnalogOutputSignal(blockState, worldIn, pos);
 	}

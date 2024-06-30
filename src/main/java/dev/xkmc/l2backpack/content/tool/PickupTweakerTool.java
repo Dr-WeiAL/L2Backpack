@@ -5,8 +5,6 @@ import dev.xkmc.l2backpack.init.data.LangData;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -23,7 +21,7 @@ public class PickupTweakerTool extends TweakerTool {
 
 	@Override
 	public PickupConfig click(PickupConfig config) {
-		return PickupConfig.iterateMode(config);
+		return config.iterateMode();
 	}
 
 	@Override
@@ -32,7 +30,7 @@ public class PickupTweakerTool extends TweakerTool {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag flag) {
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		LangData.addInfo(list, LangData.Info.PICKUP_TWEAKER, LangData.Info.TWEAKER_BACK, LangData.Info.TWEAKER_BLOCK);
 	}
 

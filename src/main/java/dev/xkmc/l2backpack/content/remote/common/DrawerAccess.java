@@ -2,8 +2,9 @@ package dev.xkmc.l2backpack.content.remote.common;
 
 import dev.xkmc.l2backpack.content.drawer.BaseDrawerItem;
 import dev.xkmc.l2backpack.content.remote.drawer.EnderDrawerBlockEntity;
-import dev.xkmc.l2backpack.content.remote.drawer.EnderDrawerItem;
-import dev.xkmc.l2library.util.Proxy;
+import dev.xkmc.l2backpack.init.registrate.LBItems;
+import dev.xkmc.l2core.util.Proxy;
+import net.minecraft.Util;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
@@ -16,7 +17,7 @@ import java.util.*;
 public final class DrawerAccess {
 
 	public static DrawerAccess of(Level level, ItemStack drawer) {
-		UUID id = drawer.getOrCreateTag().getUUID(EnderDrawerItem.KEY_OWNER_ID);
+		UUID id = LBItems.DC_OWNER_ID.getOrDefault(drawer, Util.NIL_UUID);
 		Item item = BaseDrawerItem.getItem(drawer);
 		return of(level, id, item);
 	}

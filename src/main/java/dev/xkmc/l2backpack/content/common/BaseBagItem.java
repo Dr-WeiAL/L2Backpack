@@ -2,6 +2,7 @@ package dev.xkmc.l2backpack.content.common;
 
 import dev.xkmc.l2backpack.content.capability.PickupBagItem;
 import dev.xkmc.l2backpack.content.insert.InsertOnlyItem;
+import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2core.util.Proxy;
 import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
 import net.minecraft.client.Minecraft;
@@ -39,26 +40,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public abstract class BaseBagItem extends Item implements ContentTransfer.Quad, PickupBagItem, InsertOnlyItem, TooltipInvItem {
-
-	protected static final String LOOT = "loot";
-	protected static final String SEED = "seed";
-
-	public static ListTag getListTag(ItemStack stack) {
-		var tag = stack.getOrCreateTag();
-		if (tag.contains("Items")) {
-			return stack.getOrCreateTag().getList("Items", Tag.TAG_COMPOUND);
-		} else {
-			return new ListTag();
-		}
-	}
-
-	public static void setListTag(ItemStack stack, ListTag list) {
-		stack.getOrCreateTag().put("Items", list);
-	}
-
-	public static long getTimeStamp(ItemStack stack) {
-		return stack.getOrCreateTag().getLong("TimeStamp");
-	}
 
 	@OnlyIn(Dist.CLIENT)
 	public static float isOpened(ItemStack stack, ClientLevel level, LivingEntity entity, int i) {
@@ -214,6 +195,10 @@ public abstract class BaseBagItem extends Item implements ContentTransfer.Quad, 
 	}
 
 	public void checkInit(ItemStack stack) {
+		if (LBItems.DC_CONT_ID.get(stack) == null) {
+			stack.set(LBItems.DC_CONT_ID, UUID.randomUUID());
+		}
+
 		CompoundTag tag = stack.getOrCreateTag();
 		if (!tag.getBoolean("init")) {
 			tag.putBoolean("init", true);

@@ -2,7 +2,7 @@ package dev.xkmc.l2backpack.content.bag;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 
 public record FastBagItemHandler(AbstractBag bag, ItemStack bagStack,

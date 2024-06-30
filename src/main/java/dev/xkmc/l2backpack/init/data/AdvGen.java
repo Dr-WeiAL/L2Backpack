@@ -1,7 +1,6 @@
 package dev.xkmc.l2backpack.init.data;
 
 import com.tterrag.registrate.providers.RegistrateAdvancementProvider;
-import dev.xkmc.l2backpack.content.backpack.BackpackItem;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.advancement.BagInteractTrigger;
 import dev.xkmc.l2backpack.init.advancement.DrawerInteractTrigger;
@@ -21,6 +20,7 @@ import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemUsedOnLocationTrigger;
 import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.advancements.critereon.PlayerTrigger;
+import net.minecraft.core.component.DataComponentPredicate;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
@@ -87,13 +87,11 @@ public class AdvGen {
 						"4D Pocket", "Obtain an Ender Pocket")
 				.create("upgrade", backpack(DyeColor.LIGHT_GRAY),
 						CriterionBuilder.item(TagGen.BACKPACKS,
-								BackpackItem.setRow(backpack(DyeColor.WHITE)
-										.getDefaultInstance(), 3).getOrCreateTag()),
+								DataComponentPredicate.builder().expect(LBItems.DC_ROW.get(), 3).build()),
 						"Expand the Space", "Upgrade a Backpack")
 				.create("upgrade_max", backpack(DyeColor.GRAY),
 						CriterionBuilder.item(TagGen.BACKPACKS,
-								BackpackItem.setRow(backpack(DyeColor.WHITE)
-										.getDefaultInstance(), MAX_ROW).getOrCreateTag()),
+								DataComponentPredicate.builder().expect(LBItems.DC_ROW.get(), MAX_ROW).build()),
 						"Maximize the Space", "Upgrade a Backpack to max level").type(AdvancementType.CHALLENGE)
 
 				// dimensional backpack

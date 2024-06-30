@@ -10,9 +10,11 @@ import dev.xkmc.l2modularblock.one.BlockEntityBlockMethod;
 import dev.xkmc.l2modularblock.one.GetBlockItemBlockMethod;
 import dev.xkmc.l2modularblock.one.ShapeBlockMethod;
 import dev.xkmc.l2modularblock.one.SpecialDropBlockMethod;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
@@ -35,10 +37,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.UUID;
 
 public class WorldChestBlock implements CreateBlockStateBlockMethod, DefaultStateBlockMethod, PlacementBlockMethod,
-		OnClickBlockMethod, GetBlockItemBlockMethod, SpecialDropBlockMethod, SetPlacedByBlockMethod, ShapeBlockMethod {
+		UseItemOnBlockMethod, GetBlockItemBlockMethod, SpecialDropBlockMethod, SetPlacedByBlockMethod, ShapeBlockMethod {
 
 	public static final WorldChestBlock INSTANCE = new WorldChestBlock();
 
@@ -60,12 +61,11 @@ public class WorldChestBlock implements CreateBlockStateBlockMethod, DefaultStat
 	}
 
 	@Override
-	public InteractionResult onClick(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+	public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
 		BlockEntity blockentity = level.getBlockEntity(pos);
 		if (blockentity instanceof WorldChestBlockEntity chest) {
-			ItemStack stack = player.getItemInHand(hand);
 			if (stack.getItem() instanceof TweakerTool) {
-				return InteractionResult.PASS;
+				return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 			}
 			if (stack.getItem() instanceof DyeItem dye) {
 				if (!level.isClientSide()) {
@@ -74,21 +74,21 @@ public class WorldChestBlock implements CreateBlockStateBlockMethod, DefaultStat
 				} else {
 					ContentTransfer.playSound(player);
 				}
-				return InteractionResult.SUCCESS;
+				return ItemInteractionResult.SUCCESS;
 			}
 			BlockPos blockpos = pos.above();
 			if (level.getBlockState(blockpos).isRedstoneConductor(level, blockpos)) {
-				return InteractionResult.sidedSuccess(level.isClientSide);
+				return ItemInteractionResult.sidedSuccess(level.isClientSide);
 			} else if (level.isClientSide) {
 				ContentTransfer.playSound(player);
-				return InteractionResult.SUCCESS;
+				return ItemInteractionResult.SUCCESS;
 			} else {
 				player.openMenu(chest);
 				PiglinAi.angerNearbyPiglins(player, true);
-				return InteractionResult.CONSUME;
+				return ItemInteractionResult.CONSUME;
 			}
 		} else {
-			return InteractionResult.sidedSuccess(level.isClientSide);
+			return ItemInteractionResult.sidedSuccess(level.isClientSide);
 		}
 	}
 
@@ -111,11 +111,11 @@ public class WorldChestBlock implements CreateBlockStateBlockMethod, DefaultStat
 
 	public static ItemStack buildStack(BlockState state, WorldChestBlockEntity chest) {
 		ItemStack stack = LBItems.DIMENSIONAL_STORAGE[state.getValue(COLOR).getId()].asStack();
-		if (chest.owner_id != null) {
-			stack.getOrCreateTag().putUUID("owner_id", chest.owner_id);
-			stack.getOrCreateTag().putString("owner_name", chest.owner_name);
-			stack.getOrCreateTag().putLong("password", chest.password);
-			PickupConfig.setConfig(stack, chest.config);
+		if (chest.ownerId != null) {
+			stack.set(LBItems.DC_OWNER_ID, chest.ownerId);
+			stack.set(LBItems.DC_OWNER_NAME, chest.ownerName);
+			stack.set(LBItems.DC_PASSWORD, chest.password);
+			stack.set(LBItems.DC_PICKUP, chest.config);
 		}
 		return stack;
 	}
@@ -128,14 +128,11 @@ public class WorldChestBlock implements CreateBlockStateBlockMethod, DefaultStat
 	@Override
 	public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
 		BlockEntity blockentity = level.getBlockEntity(pos);
-		UUID id = stack.getOrCreateTag().getUUID("owner_id");
-		String name = stack.getOrCreateTag().getString("owner_name");
-		long pwd = stack.getOrCreateTag().getLong("password");
-		var config = PickupConfig.getPickupMode(stack);
+		var config = PickupConfig.get(stack);
 		if (blockentity instanceof WorldChestBlockEntity chest) {
-			chest.owner_id = id;
-			chest.owner_name = name;
-			chest.password = pwd;
+			chest.ownerId = LBItems.DC_OWNER_ID.getOrDefault(stack, Util.NIL_UUID);
+			chest.ownerName = LBItems.DC_OWNER_NAME.getOrDefault(stack, Component.empty());
+			chest.password = LBItems.DC_PASSWORD.getOrDefault(stack, 0L);
 			chest.config = config;
 			chest.setColor(state.getValue(COLOR).getId());
 			chest.addToListener();
