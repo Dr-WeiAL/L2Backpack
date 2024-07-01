@@ -2,8 +2,7 @@ package dev.xkmc.l2backpack.content.remote.drawer;
 
 import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.common.ContentTransfer;
-import dev.xkmc.l2backpack.content.drawer.BaseDrawerItem;
-import dev.xkmc.l2backpack.content.remote.common.DrawerAccess;
+import dev.xkmc.l2backpack.content.remote.common.EnderDrawerAccess;
 import dev.xkmc.l2backpack.init.registrate.LBBlocks;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2modularblock.mult.SetPlacedByBlockMethod;
@@ -12,9 +11,8 @@ import dev.xkmc.l2modularblock.one.BlockEntityBlockMethod;
 import dev.xkmc.l2modularblock.one.GetBlockItemBlockMethod;
 import dev.xkmc.l2modularblock.one.SpecialDropBlockMethod;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -26,7 +24,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -43,39 +40,39 @@ public class EnderDrawerBlock implements UseItemOnBlockMethod, GetBlockItemBlock
 	public ItemInteractionResult useItemOn(ItemStack stack, BlockState blockState, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
 		BlockEntity blockentity = level.getBlockEntity(pos);
 		if (blockentity instanceof EnderDrawerBlockEntity chest) {
-			if (!stack.isEmpty() && !stack.hasTag() && stack.getItem() == chest.item) {
+			if (!stack.isEmpty() && stack.isComponentsPatchEmpty() && stack.getItem() == chest.item) {
 				if (!level.isClientSide()) {
 					stack = new EnderDrawerItemHandler(chest.getAccess(), false).insertItem(0, stack, false);
 					player.setItemInHand(hand, stack);
 				} else {
 					ContentTransfer.playDrawerSound(player);
 				}
-				return InteractionResult.SUCCESS;
+				return ItemInteractionResult.SUCCESS;
 			} else if (stack.isEmpty()) {
 				if (!level.isClientSide()) {
-					DrawerAccess access = chest.getAccess();
-					stack = new EnderDrawerItemHandler(access, false).extractItem(0, access.item().getMaxStackSize(), false);
+					EnderDrawerAccess access = chest.getAccess();
+					stack = new EnderDrawerItemHandler(access, false).extractItem(0, access.item().getDefaultMaxStackSize(), false);
 					player.setItemInHand(hand, stack);
 				} else {
 					ContentTransfer.playDrawerSound(player);
 				}
-				return InteractionResult.SUCCESS;
+				return ItemInteractionResult.SUCCESS;
 			}
-			return InteractionResult.FAIL;
+			return ItemInteractionResult.FAIL;
 		}
-		return InteractionResult.PASS;
+		return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 	}
 
 	@Override
 	public void setPlacedBy(Level level, BlockPos pos, BlockState blockState, @Nullable LivingEntity livingEntity, ItemStack stack) {
 		BlockEntity blockentity = level.getBlockEntity(pos);
-		UUID id = stack.getOrCreateTag().getUUID(EnderDrawerItem.KEY_OWNER_ID);
-		String name = stack.getOrCreateTag().getString(EnderDrawerItem.KEY_OWNER_NAME);
+		UUID id = LBItems.DC_OWNER_ID.get(stack);
+		Component name = LBItems.DC_OWNER_NAME.get(stack);
 		if (blockentity instanceof EnderDrawerBlockEntity chest) {
-			chest.owner_id = id;
-			chest.owner_name = name;
-			chest.item = BaseDrawerItem.getItem(stack);
-			chest.config = PickupConfig.getConfig(stack);
+			chest.ownerId = id;
+			chest.ownerName = name;
+			chest.item = EnderDrawerItem.getItem(stack);
+			chest.config = PickupConfig.get(stack);
 			chest.addToListener();
 		}
 	}
@@ -100,13 +97,11 @@ public class EnderDrawerBlock implements UseItemOnBlockMethod, GetBlockItemBlock
 
 	private ItemStack buildStack(EnderDrawerBlockEntity chest) {
 		ItemStack stack = LBItems.ENDER_DRAWER.asStack();
-		if (chest.owner_id != null) {
-			stack.getOrCreateTag().putUUID(EnderDrawerItem.KEY_OWNER_ID, chest.owner_id);
-			stack.getOrCreateTag().putString(EnderDrawerItem.KEY_OWNER_NAME, chest.owner_name);
-			ResourceLocation rl = ForgeRegistries.ITEMS.getKey(chest.item);
-			assert rl != null;
-			stack.getOrCreateTag().putString(BaseDrawerItem.KEY, rl.toString());
-			PickupConfig.setConfig(stack, chest.config);
+		if (chest.ownerId != null) {
+			stack.set(LBItems.DC_OWNER_ID, chest.ownerId);
+			stack.set(LBItems.DC_OWNER_NAME, chest.ownerName);
+			stack.set(LBItems.DC_PICKUP, chest.config);
+			stack.set(LBItems.DC_ENDER_DRAWER_ITEM, chest.item);
 		}
 		return stack;
 	}

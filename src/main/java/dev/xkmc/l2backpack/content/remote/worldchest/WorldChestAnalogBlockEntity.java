@@ -28,7 +28,7 @@ public class WorldChestAnalogBlockEntity<T extends BlockEntity> extends BlockEnt
 	}
 
 	@Override
-	public InteractionResult onClick(BlockState state, Level level, BlockPos pos, Player pl, InteractionHand hand, BlockHitResult result) {
+	public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player pl, BlockHitResult result) {
 		return InteractionResult.PASS;
 	}
 

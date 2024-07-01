@@ -10,6 +10,7 @@ import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestInvWrapper;
 import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestItem;
 import dev.xkmc.l2backpack.events.ArrowBagEvents;
 import dev.xkmc.l2backpack.init.registrate.LBBlocks;
+import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2library.util.GenericItemStack;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -34,11 +35,12 @@ public class GolemCompat {
 			return true;
 		}
 		if (stack.getItem() instanceof WorldChestItem) {
-			return stack.hasTag() && stack.getOrCreateTag().contains("owner_id");
+			return LBItems.DC_OWNER_ID.get(stack) != null;
 		}
 		return false;
 	}
 
+	/* TODO
 	@Nullable
 	private static GenericItemStack<WorldChestItem> getBackpack(AbstractGolemEntity<?, ?> golem) {
 		for (var e : List.of(EquipmentSlot.CHEST, EquipmentSlot.OFFHAND)) {
@@ -113,8 +115,10 @@ public class GolemCompat {
 		}
 	}
 
+	 */
+
 	public static void genBlockTag(RegistrateTagsProvider.IntrinsicImpl<Block> pvd) {
-		pvd.addTag(MGTagGen.POTENTIAL_DST).add(LBBlocks.WORLD_CHEST.get());
+		// TODO pvd.addTag(MGTagGen.POTENTIAL_DST).add(LBBlocks.WORLD_CHEST.get());
 	}
 
 }

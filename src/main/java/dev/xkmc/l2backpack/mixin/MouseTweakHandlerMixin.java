@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import yalter.mousetweaks.MouseButton;
 
 @Pseudo
 @Mixin(targets = "yalter.mousetweaks.handlers.GuiContainerHandler", remap = false)
@@ -21,7 +20,7 @@ public class MouseTweakHandlerMixin {
 	@Shadow
 	@Final
 	private AbstractContainerScreen<?> screen;
-
+/* TODO
 	@Inject(at = @At("HEAD"), method = "clickSlot", cancellable = true)
 	private void l2backpack$clickSlot$clickDrawer(Slot slot, MouseButton btn, boolean shift, CallbackInfo ci,
 												  @Local(argsOnly = true) LocalRef<MouseButton> btnRef) {
@@ -29,5 +28,7 @@ public class MouseTweakHandlerMixin {
 			ci.cancel();
 		}
 	}
+
+ */
 
 }

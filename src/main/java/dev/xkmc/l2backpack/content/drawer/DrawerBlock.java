@@ -11,14 +11,11 @@ import dev.xkmc.l2modularblock.one.BlockEntityBlockMethod;
 import dev.xkmc.l2modularblock.one.GetBlockItemBlockMethod;
 import dev.xkmc.l2modularblock.one.SpecialDropBlockMethod;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -26,7 +23,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -42,7 +38,7 @@ public class DrawerBlock implements UseItemOnBlockMethod, GetBlockItemBlockMetho
 	public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
 		BlockEntity blockentity = level.getBlockEntity(pos);
 		if (blockentity instanceof DrawerBlockEntity chest) {
-			if (!stack.isEmpty() && !stack.hasTag() && stack.getItem() == chest.getItem() || chest.getItem() == Items.AIR) {
+			if (!stack.isEmpty() && chest.handler.isItemValid(0, stack)) {
 				if (!level.isClientSide()) {
 					stack = chest.handler.insertItem(0, stack, false);
 					player.setItemInHand(hand, stack);
@@ -69,7 +65,7 @@ public class DrawerBlock implements UseItemOnBlockMethod, GetBlockItemBlockMetho
 		BlockEntity blockentity = level.getBlockEntity(pos);
 		if (blockentity instanceof DrawerBlockEntity chest) {
 			chest.handler.count = DrawerItem.getCount(stack);
-			chest.handler.item = chest.handler.count == 0 ? Items.AIR : BaseDrawerItem.getItem(stack);
+			chest.handler.item = LBItems.DRAWER.get().getDrawerContent(stack);
 			chest.handler.config = PickupConfig.get(stack);
 		}
 	}
@@ -94,11 +90,10 @@ public class DrawerBlock implements UseItemOnBlockMethod, GetBlockItemBlockMetho
 
 	private ItemStack buildStack(DrawerBlockEntity chest) {
 		ItemStack stack = LBItems.DRAWER.asStack();
-		ResourceLocation rl = ForgeRegistries.ITEMS.getKey(chest.getItem());
-		assert rl != null;
-		stack.getOrCreateTag().putString(BaseDrawerItem.KEY, rl.toString());
-		DrawerItem.setCount(stack, chest.handler.count);
-		PickupConfig.setConfig(stack, chest.handler.config);
+		LBItems.DC_DRAWER_STACK.set(stack, chest.handler.item);
+		LBItems.DC_DRAWER_COUNT.set(stack, chest.handler.count);
+		LBItems.DC_DRAWER_STACKING.set(stack, chest.handler.stacking);
+		LBItems.DC_PICKUP.set(stack, chest.handler.config);
 		return stack;
 	}
 

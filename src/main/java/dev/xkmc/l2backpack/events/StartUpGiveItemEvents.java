@@ -1,6 +1,6 @@
 package dev.xkmc.l2backpack.events;
 
-import dev.xkmc.l2backpack.content.backpack.BackpackItem;
+import dev.xkmc.l2backpack.content.common.BaseBagItem;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.data.BackpackConfig;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
@@ -45,7 +45,7 @@ public class StartUpGiveItemEvents {
 				list.set(i, ItemStack.EMPTY);
 			}
 		}
-		BackpackItem.setItems(stack, ans);
+		BaseBagItem.setItems(stack, ans);
 		sp.getInventory().placeItemBackInInventory(stack);
 	}
 

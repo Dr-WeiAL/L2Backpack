@@ -2,32 +2,36 @@ package dev.xkmc.l2backpack.init;
 
 import com.tterrag.registrate.providers.ProviderType;
 import dev.xkmc.l2backpack.compat.GolemCompat;
-import dev.xkmc.l2backpack.compat.LCCompat;
 import dev.xkmc.l2backpack.compat.PatchouliCompat;
+import dev.xkmc.l2backpack.content.bag.BagCaps;
+import dev.xkmc.l2backpack.content.bag.BagItemHandler;
 import dev.xkmc.l2backpack.content.capability.PickupModeCap;
+import dev.xkmc.l2backpack.content.common.BaseBagInvWrapper;
+import dev.xkmc.l2backpack.content.common.BaseBagItemHandler;
+import dev.xkmc.l2backpack.content.remote.player.EnderBackpackCaps;
 import dev.xkmc.l2backpack.content.remote.player.EnderSyncCap;
 import dev.xkmc.l2backpack.content.remote.player.EnderSyncPacket;
+import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestCaps;
 import dev.xkmc.l2backpack.events.BackpackSel;
 import dev.xkmc.l2backpack.events.BackpackSlotClickListener;
-import dev.xkmc.l2backpack.events.PatchouliClickListener;
 import dev.xkmc.l2backpack.init.data.*;
 import dev.xkmc.l2backpack.init.loot.LootGen;
 import dev.xkmc.l2backpack.init.registrate.*;
 import dev.xkmc.l2backpack.network.*;
-import dev.xkmc.l2complements.init.L2Complements;
 import dev.xkmc.l2core.init.reg.registrate.L2Registrate;
 import dev.xkmc.l2core.init.reg.simple.Reg;
+import dev.xkmc.l2core.util.MathHelper;
 import dev.xkmc.l2itemselector.select.SelectionRegistry;
 import dev.xkmc.l2serial.network.PacketHandler;
 import dev.xkmc.l2serial.serialization.custom_handler.Handlers;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -66,7 +70,7 @@ public class L2Backpack {
 		PickupModeCap.register();
 		EnderSyncCap.register();
 		if (ModList.get().isLoaded("modulargolems")) GolemCompat.register();
-		if (ModList.get().isLoaded(L2Complements.MODID)) NeoForge.EVENT_BUS.register(LCCompat.class);
+		//TODO if (ModList.get().isLoaded(L2Complements.MODID)) NeoForge.EVENT_BUS.register(LCCompat.class);
 		REGISTRATE.addDataGenerator(ProviderType.RECIPE, RecipeGen::genRecipe);
 		REGISTRATE.addDataGenerator(ProviderType.ADVANCEMENT, AdvGen::genAdvancements);
 		REGISTRATE.addDataGenerator(ProviderType.LOOT, LootGen::genLoot);
@@ -74,10 +78,35 @@ public class L2Backpack {
 		REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, TagGen::onItemTagGen);
 		if (ModList.get().isLoaded("patchouli")) {
 			PatchouliCompat.gen();
-			new PatchouliClickListener();
-			NeoForge.EVENT_BUS.register(PatchouliClickListener.class);
+			// TODO new PatchouliClickListener();
+			// TODO NeoForge.EVENT_BUS.register(PatchouliClickListener.class);
 		}
 		SelectionRegistry.register(1000, BackpackSel.INSTANCE);
+	}
+
+	@SubscribeEvent
+	public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+		// items
+		{
+			var backpacks = MathHelper.merge(LBItems.BACKPACKS,
+					LBItems.QUIVER, LBItems.SCABBARD, LBItems.ARMOR_SWAP, LBItems.SUIT_SWAP);
+
+			event.registerItem(LBMisc.PICKUP, (stack, c) -> new BaseBagInvWrapper(stack), backpacks);
+			event.registerItem(LBMisc.PICKUP, (stack, c) -> new EnderBackpackCaps(stack), LBItems.ENDER_BACKPACK);
+			event.registerItem(LBMisc.PICKUP, (stack, c) -> new WorldChestCaps(stack), LBItems.DIMENSIONAL_STORAGE);
+			event.registerItem(LBMisc.PICKUP, LBItems.DRAWER.get()::getCaps, LBItems.DRAWER);
+			event.registerItem(LBMisc.PICKUP, LBItems.ENDER_DRAWER.get()::getCaps, LBItems.ENDER_DRAWER);
+			event.registerItem(LBMisc.PICKUP, (stack, c) -> new BagCaps(stack), LBItems.ARMOR_BAG, LBItems.BOOK_BAG);
+
+			event.registerItem(Capabilities.ItemHandler.ITEM, (stack, c) -> new BaseBagItemHandler(stack), backpacks);
+			event.registerItem(Capabilities.ItemHandler.ITEM, (stack, c) -> new BagItemHandler(stack), LBItems.ARMOR_BAG, LBItems.BOOK_BAG);
+		}
+		// blocks
+		{
+			event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, LBBlocks.TE_DRAWER.get(), (be, dir) -> be.handler);
+			event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, LBBlocks.TE_ENDER_DRAWER.get(), (be, dir) -> be.getItemHandler());
+			event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, LBBlocks.TE_WORLD_CHEST.get(), (be, dir) -> be.getItemHandler());
+		}
 	}
 
 	@SubscribeEvent

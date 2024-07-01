@@ -1,6 +1,6 @@
 package dev.xkmc.l2backpack.network;
 
-import dev.xkmc.l2backpack.content.remote.common.DrawerAccess;
+import dev.xkmc.l2backpack.content.remote.common.EnderDrawerAccess;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2serial.network.SerialPacketBase;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,7 +16,7 @@ public record RequestTooltipUpdateEvent(
 	@Override
 	public void handle(Player pl) {
 		if (!(pl instanceof ServerPlayer player)) return;
-		int count = DrawerAccess.of(player.level(), id, item).getCount();
+		int count = EnderDrawerAccess.of(player.level(), id, item).getCount();
 		L2Backpack.HANDLER.toClientPlayer(new RespondTooltipUpdateEvent(item, count, id), player);
 	}
 

@@ -6,6 +6,10 @@ import org.jetbrains.annotations.NotNull;
 
 public record BagItemHandler(AbstractBag bag, ItemStack bagStack) implements IItemHandlerModifiable {
 
+	public BagItemHandler(ItemStack stack) {
+		this((AbstractBag) stack.getItem(), stack);
+	}
+
 	@Override
 	public void setStackInSlot(int slot, @NotNull ItemStack stack) {
 		var list = bag.getContent(bagStack);

@@ -1,6 +1,5 @@
 package dev.xkmc.l2backpack.events;
 
-import dev.xkmc.l2backpack.content.drawer.BaseDrawerItem;
 import dev.xkmc.l2backpack.content.remote.drawer.EnderDrawerBlockEntity;
 import dev.xkmc.l2backpack.content.remote.drawer.EnderDrawerItem;
 import dev.xkmc.l2backpack.init.L2Backpack;
@@ -59,10 +58,10 @@ public class TooltipUpdateEvents {
 		if (slot == null) return false;
 		ItemStack stack = slot.getItem();
 		if (!(stack.getItem() instanceof EnderDrawerItem)) return false;
-		if (BaseDrawerItem.getItem(stack) == Items.AIR) return false;
+		if (EnderDrawerItem.getItem(stack) == Items.AIR) return false;
 		var id = LBItems.DC_OWNER_ID.get(stack);
 		if (id == null) return false;
-		startSession(BaseDrawerItem.getItem(stack), id);
+		startSession(EnderDrawerItem.getItem(stack), id);
 		return true;
 	}
 
@@ -74,7 +73,7 @@ public class TooltipUpdateEvents {
 			BlockPos pos = bray.getBlockPos();
 			BlockEntity entity = player.level().getBlockEntity(pos);
 			if (entity instanceof EnderDrawerBlockEntity drawer) {
-				startSession(drawer.item, drawer.owner_id);
+				startSession(drawer.item, drawer.ownerId);
 				return true;
 			}
 		}

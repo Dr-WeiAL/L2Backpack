@@ -6,8 +6,8 @@ import dev.xkmc.l2backpack.content.common.ContentTransfer;
 import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.data.LangData;
+import dev.xkmc.l2backpack.init.registrate.LBItems;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
@@ -15,7 +15,10 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -25,23 +28,48 @@ import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTransfer.Quad, DoubleClickItem {
 
-	private static final String COUNT = "drawerCount";
-
 	public static int getCount(ItemStack drawer) {
-		return Optional.ofNullable(drawer.getTag()).map(e -> e.getInt(COUNT)).orElse(0);
+		return LBItems.DC_DRAWER_COUNT.getOrDefault(drawer, 0);
 	}
 
 	public static void setCount(ItemStack drawer, int count) {
-		drawer.getOrCreateTag().putInt(COUNT, count);
+		LBItems.DC_DRAWER_COUNT.set(drawer, count);
 	}
 
 	public DrawerItem(Block block, Properties properties) {
 		super(block, properties.stacksTo(1).fireResistant());
+	}
+
+	@Override
+	public ItemStack getDrawerContent(ItemStack drawer) {
+		ItemStack stack = LBItems.DC_DRAWER_STACK.getOrDefault(drawer, ItemStack.EMPTY);
+		int count = getCount(drawer);
+		return count == 0 ? ItemStack.EMPTY : stack;
+	}
+
+	@Override
+	public void setItem(ItemStack drawer, ItemStack item, Player player) {
+		if (item.isEmpty()) {
+			drawer.remove(LBItems.DC_DRAWER_STACK);
+			drawer.remove(LBItems.DC_DRAWER_COUNT);
+		} else {
+			LBItems.DC_DRAWER_STACK.set(drawer, item.copyWithCount(1));
+		}
+	}
+
+	@Override
+	public boolean canAccept(ItemStack drawer, ItemStack stack) {
+		ItemStack content = getDrawerContent(drawer);
+		return content.isEmpty() || ItemStack.isSameItemSameComponents(content, stack);
+	}
+
+	@Override
+	public int getStacking(ItemStack drawer) {
+		return BaseDrawerItem.super.getStacking(drawer) * LBItems.DC_DRAWER_STACKING.getOrDefault(drawer, 1);
 	}
 
 	@Override
@@ -51,38 +79,38 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-		ItemStack stack = player.getItemInHand(hand);
+		ItemStack drawer = player.getItemInHand(hand);
 		if (world.isClientSide()) {
 			ContentTransfer.playDrawerSound(player);
-			return InteractionResultHolder.success(stack);
+			return InteractionResultHolder.success(drawer);
 		}
 		if (!player.isShiftKeyDown()) {
-			Item item = BaseDrawerItem.getItem(stack);
-			int count = getCount(stack);
-			int max = Math.min(item.getDefaultMaxStackSize(), count);
-			player.getInventory().placeItemBackInInventory(new ItemStack(item, max));
-			setCount(stack, count - max);
-			ContentTransfer.onExtract(player, max, stack);
+			ItemStack item = getDrawerContent(drawer);
+			int count = getCount(drawer);
+			int max = Math.min(item.getMaxStackSize(), count);
+			player.getInventory().placeItemBackInInventory(item.copyWithCount(max));
+			setCount(drawer, count - max);
+			ContentTransfer.onExtract(player, max, drawer);
 		} else {
-			Item item = BaseDrawerItem.getItem(stack);
-			int count = getCount(stack);
-			int max = item.getDefaultMaxStackSize() * BaseDrawerItem.getStacking(stack);
-			boolean perform = !canSetNewItem(stack);
+			ItemStack item = getDrawerContent(drawer);
+			int count = getCount(drawer);
+			int max = item.getMaxStackSize() * getStacking(drawer);
+			boolean perform = !canSetNewItem(drawer);
 			if (!perform) {
 				item = ContentTransfer.filterMaxItem(new InvWrapper(player.getInventory()));
 				if (item != Items.AIR) {
 					perform = true;
-					setItem(stack, item, player);
+					setItem(drawer, item, player);
 				}
 			}
 			if (perform) {
 				int ext = BaseDrawerItem.loadFromInventory(max, count, item, player);
 				count += ext;
-				setCount(stack, count);
-				ContentTransfer.onCollect(player, ext, stack);
+				setCount(drawer, count);
+				ContentTransfer.onCollect(player, ext, drawer);
 			}
 		}
-		return InteractionResultHolder.success(stack);
+		return InteractionResultHolder.success(drawer);
 	}
 
 	@Override
@@ -100,7 +128,7 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 	@Override
 	public void click(Player player, ItemStack stack, boolean client, boolean shift, boolean right, @Nullable IItemHandler target) {
 		if (!client && shift && right && target != null) {
-			Item item = BaseDrawerItem.getItem(stack);
+			ItemStack item = getDrawerContent(stack);
 			int count = getCount(stack);
 			int remain = ContentTransfer.transfer(item, count, target);
 			ContentTransfer.onDump(player, count - remain, stack);
@@ -108,7 +136,7 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 		} else if (client && shift && right && target != null)
 			ContentTransfer.playDrawerSound(player);
 		if (!client && shift && !right && target != null) {
-			Item item = BaseDrawerItem.getItem(stack);
+			ItemStack item = getDrawerContent(stack);
 			boolean perform = !canSetNewItem(stack);
 			if (!perform) {
 				item = ContentTransfer.filterMaxItem(target);
@@ -119,7 +147,7 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 			}
 			if (perform) {
 				int count = getCount(stack);
-				int max = BaseDrawerItem.getStacking(stack) * item.getMaxStackSize();
+				int max = getStacking(stack) * item.getMaxStackSize();
 				int remain = ContentTransfer.loadFrom(item, max - count, target);
 				ContentTransfer.onLoad(player, remain, stack);
 				setCount(stack, count + remain);
@@ -131,7 +159,7 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 	@Override
 	public void insert(ItemStack drawer, ItemStack stack, @Nullable Player player) {
 		int count = getCount(drawer);
-		int allow = Math.min(BaseDrawerItem.getStacking(drawer) * stack.getMaxStackSize() - count, stack.getCount());
+		int allow = Math.min(getStacking(drawer) * stack.getMaxStackSize() - count, stack.getCount());
 		setCount(drawer, count + allow);
 		stack.shrink(allow);
 	}
@@ -139,29 +167,29 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 	@Override
 	public ItemStack takeItem(ItemStack drawer, int max, @Nullable Player player, boolean simulate) {
 		if (canSetNewItem(drawer)) return ItemStack.EMPTY;
-		Item item = BaseDrawerItem.getItem(drawer);
+		ItemStack item = getDrawerContent(drawer);
 		int count = getCount(drawer);
 		int take = Math.min(count, Math.min(max, item.getMaxStackSize()));
 		if (!simulate)
 			setCount(drawer, count - take);
-		return new ItemStack(item, take);
+		return item.copyWithCount(take);
 	}
 
 	@Override
 	public boolean canSetNewItem(ItemStack drawer) {
-		return BaseDrawerItem.getItem(drawer) == Items.AIR || getCount(drawer) == 0;
+		return getDrawerContent(drawer).isEmpty();
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag flag) {
-		Item item = BaseDrawerItem.getItem(stack);
-		int count = getCount(stack);
-		if (!canSetNewItem(stack)) {
-			list.add(LangData.IDS.DRAWER_CONTENT.get(item.getDescription(), count));
+	public void appendHoverText(ItemStack drawer, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		ItemStack content = getDrawerContent(drawer);
+		int count = getCount(drawer);
+		if (!canSetNewItem(drawer)) {
+			list.add(LangData.IDS.DRAWER_CONTENT.get(content.getHoverName(), count));
 		}
-		list.add(LangData.IDS.BACKPACK_SLOT.get(BaseDrawerItem.getStackingFactor(stack), MAX_FACTOR)
+		list.add(LangData.IDS.BACKPACK_SLOT.get(LBItems.DC_DRAWER_STACKING.getOrDefault(drawer, 1), MAX_FACTOR)
 				.withStyle(ChatFormatting.GRAY));
-		PickupConfig.addText(stack, list);
+		PickupConfig.addText(drawer, list);
 		LangData.addInfo(list,
 				LangData.Info.DRAWER_USE,
 				LangData.Info.LOAD,
@@ -175,8 +203,7 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 		return this.getOrCreateDescriptionId();
 	}
 
-	@Override
-	public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
+	public @Nullable DrawerInvWrapper getCaps(ItemStack stack, Void ignored) {
 		var access = new DrawerInvAccess(stack, this);
 		return new DrawerInvWrapper(stack, trace -> access);
 	}
@@ -192,20 +219,20 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 	public int remainingSpace(ItemStack drawer) {
 		if (canSetNewItem(drawer)) return 0;
 		int count = getCount(drawer);
-		int maxStack = BaseDrawerItem.getItem(drawer).getMaxStackSize();
-		return BaseDrawerItem.getStacking(drawer) * maxStack - count;
+		int maxStack = getDrawerContent(drawer).getMaxStackSize();
+		return getStacking(drawer) * maxStack - count;
 	}
 
 	@Override
 	public boolean canAbsorb(Slot src, ItemStack stack) {
 		if (canSetNewItem(stack)) return false;
-		return BaseDrawerItem.canAccept(stack, src.getItem());
+		return canAccept(stack, src.getItem());
 	}
 
 	@Override
 	public void mergeStack(ItemStack drawer, ItemStack stack) {
 		int count = getCount(drawer);
-		int allow = Math.min(BaseDrawerItem.getStacking(drawer) * stack.getMaxStackSize() - count, stack.getCount());
+		int allow = Math.min(getStacking(drawer) * stack.getMaxStackSize() - count, stack.getCount());
 		setCount(drawer, count + allow);
 		stack.shrink(allow);
 	}

@@ -32,11 +32,11 @@ public class EnderPreviewOverlay implements LayeredDraw.Layer {
 		int count = 0;
 		Item item = Items.AIR;
 		if (entity instanceof EnderDrawerBlockEntity drawer) {
-			count = TooltipUpdateEvents.getCount(drawer.owner_id, drawer.item);
-			item = drawer.getItem();
+			count = TooltipUpdateEvents.getCount(drawer.ownerId, drawer.item);
+			item = drawer.getItem().getItem();
 		} else if (entity instanceof DrawerBlockEntity drawer) {
 			count = drawer.handler.count;
-			item = drawer.getItem();
+			item = drawer.getItem().getItem();
 		}
 		Font font = Minecraft.getInstance().font;
 		if (item != Items.AIR) {

@@ -3,22 +3,15 @@ package dev.xkmc.l2backpack.events;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2menustacker.click.ReadOnlyStackClickHandler;
 import dev.xkmc.l2menustacker.init.L2MSLangData;
-import dev.xkmc.l2screentracker.init.L2STLangData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
-import vazkii.patchouli.api.PatchouliAPI;
-import vazkii.patchouli.common.base.PatchouliSounds;
-import vazkii.patchouli.common.item.ItemModBook;
-import vazkii.patchouli.common.item.PatchouliItems;
 
 import java.awt.print.Book;
-
+/*
 public class PatchouliClickListener extends ReadOnlyStackClickHandler {
 
 	public PatchouliClickListener() {
@@ -48,3 +41,4 @@ public class PatchouliClickListener extends ReadOnlyStackClickHandler {
 	}
 
 }
+*/

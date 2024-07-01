@@ -3,7 +3,6 @@ package dev.xkmc.l2backpack.content.drawer;
 import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.capability.PickupMode;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
@@ -20,26 +19,23 @@ public interface BaseDrawerInvAccess extends IItemHandlerModifiable {
 
 	boolean isEmpty();
 
-	default Item getStoredItem() {
-		return BaseDrawerItem.getItem(drawerStack());
+	default ItemStack getStoredItem() {
+		return drawerItem().getDrawerContent(drawerStack());
 	}
 
 	default ItemStack getStoredStack() {
 		if (isEmpty() || getStoredCount() == 0) return ItemStack.EMPTY;
-		return new ItemStack(getStoredItem(), getStoredCount());
+		return getStoredItem().copyWithCount(getStoredCount());
 	}
 
-	default void setStoredItem(Item item) {
+	default void setStoredItem(ItemStack item) {
 		drawerItem().setItem(drawerStack(), item, player());
 	}
 
 	void setStoredCount(int count);
 
 	default boolean isItemValid(ItemStack stack) {
-		if (stack.isEmpty()) return true;
-		if (stack.hasTag()) return false;
-		if (isEmpty()) return true;
-		return getStoredItem() == stack.getItem();
+		return drawerItem().canAccept(drawerStack(), stack);
 	}
 
 	@Override
@@ -49,12 +45,12 @@ public interface BaseDrawerInvAccess extends IItemHandlerModifiable {
 
 	@Override
 	default int getSlotLimit(int slot) {
-		Item item = getStoredItem();
-		return BaseDrawerItem.getStacking(drawerStack()) * item.getMaxStackSize();
+		ItemStack item = getStoredItem();
+		return drawerItem().getStacking(drawerStack()) * item.getMaxStackSize();
 	}
 
 	default int getMax(ItemStack stack) {
-		return BaseDrawerItem.getStacking(drawerStack()) * stack.getMaxStackSize();
+		return drawerItem().getStacking(drawerStack()) * stack.getMaxStackSize();
 	}
 
 	@Override
@@ -64,7 +60,7 @@ public interface BaseDrawerInvAccess extends IItemHandlerModifiable {
 
 	@Override
 	default void setStackInSlot(int slot, @NotNull ItemStack stack) {
-		setStoredItem(stack.getItem());
+		setStoredItem(stack);
 		setStoredCount(stack.getCount());
 	}
 
@@ -83,7 +79,7 @@ public interface BaseDrawerInvAccess extends IItemHandlerModifiable {
 		int allow = Math.min(getMax(stack) - current, input);
 		if (!simulate) {
 			if (empty)
-				setStoredItem(stack.getItem());
+				setStoredItem(stack);
 			setStoredCount(current + allow);
 		}
 		if (input == allow) {
@@ -98,10 +94,7 @@ public interface BaseDrawerInvAccess extends IItemHandlerModifiable {
 	}
 
 	default boolean mayStack(BaseDrawerInvAccess inv, int slot, ItemStack stack, PickupConfig config) {
-		if (config.pickup() == PickupMode.ALL && isEmpty()) {
-			return !stack.hasTag();
-		}
-		return !isEmpty() && isItemValid(stack);
+		return (config.pickup() == PickupMode.ALL || !isEmpty()) && isItemValid(stack);
 	}
 
 }

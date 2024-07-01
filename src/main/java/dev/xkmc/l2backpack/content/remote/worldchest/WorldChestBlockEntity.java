@@ -8,27 +8,23 @@ import dev.xkmc.l2core.base.tile.BaseBlockEntity;
 import dev.xkmc.l2serial.serialization.marker.SerialClass;
 import dev.xkmc.l2serial.serialization.marker.SerialField;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.Container;
-import net.minecraft.world.ContainerListener;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
-import org.jetbrains.annotations.NotNull;
+import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @SerialClass
-public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvider, NameSetable, ContainerListener {
+public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvider, Nameable, ContainerListener {
 
 	@SerialField
 	public UUID ownerId;
@@ -43,42 +39,29 @@ public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvid
 
 	private Component name;
 
-	private LazyOptional<IItemHandler> handler;
-
 	public WorldChestBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 	}
 
-	@NotNull
-	@Override
-	public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-		if (level != null && !this.remove &&
-				cap == ForgeCapabilities.ITEM_HANDLER) {
-			if (!(level instanceof ServerLevel sl)) {
-				return LazyOptional.of(() -> new InvWrapper(new SimpleContainer(27))).cast();
-			}
-			if (handler == null && level instanceof ServerLevel sl) {
-				Optional<StorageContainer> storage = WorldStorage.get(sl).getOrCreateStorage(sl, ownerId, color, password, null, null, 0);
-
-				if (storage.isEmpty()) handler = LazyOptional.empty();
-				else if (config == null || config.pickup() == PickupMode.NONE) {
-					handler = LazyOptional.of(() -> new WorldChestInvWrapper(storage.get().container, ownerId));
-				} else {
-					handler = LazyOptional.of(() -> new BlockPickupInvWrapper(sl, this, storage.get(), config));
-				}
-
-				handler = storage.isEmpty() ? LazyOptional.empty() : LazyOptional.of(() -> new WorldChestInvWrapper(storage.get().container, ownerId));
-			}
-
-			return this.handler.cast();
+	@Nullable
+	public IItemHandler getItemHandler() {
+		if (level == null || remove) return null;
+		if (!(level instanceof ServerLevel sl)) {
+			return new InvWrapper(new SimpleContainer(27));
 		}
-		return super.getCapability(cap, side);
+		Optional<StorageContainer> storage = WorldStorage.get(sl).getOrCreateStorage(sl, ownerId, color, password, null, null, 0);
+		if (storage.isEmpty()) return null;
+
+		if (config == null || config.pickup() == PickupMode.NONE) {
+			return new WorldChestInvWrapper(storage.get().container, ownerId);
+		} else {
+			return new BlockPickupInvWrapper(sl, this, storage.get(), config);
+		}
 	}
 
 	public void setColor(int color) {
 		if (this.color == color)
 			return;
-		handler = null;
 		this.color = color;
 		this.password = color;
 		this.setChanged();
@@ -102,11 +85,6 @@ public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvid
 		Optional<StorageContainer> storage = getAccess();
 		if (storage.isEmpty()) return null;
 		return new WorldChestContainer(wid, inventory, storage.get().container, storage.get(), this);
-	}
-
-	@Override
-	public void setCustomName(Component component) {
-		name = component;
 	}
 
 	public boolean stillValid(Player player) {
@@ -164,8 +142,8 @@ public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvid
 
 	public void setPickupMode(PickupConfig click) {
 		this.config = click;
-		handler = null;
 		sync();
 		setChanged();
 	}
+
 }

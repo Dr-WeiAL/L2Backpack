@@ -1,24 +1,22 @@
 package dev.xkmc.l2backpack.content.drawer;
 
+import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2serial.serialization.marker.SerialClass;
 import dev.xkmc.l2serial.serialization.marker.SerialField;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 
 @SerialClass
 public class DrawerHandler implements IDrawerHandler {
 
 	@SerialField
-	public Item item = Items.AIR;
+	public ItemStack item = ItemStack.EMPTY;
 
 	@SerialField
-	public int count = 0;
+	public int count = 0, stacking = 1;
 
 	@SerialField
-	public CompoundTag config = new CompoundTag();
+	public PickupConfig config = PickupConfig.DEF;
 
 	private final DrawerBlockEntity parent;
 
@@ -33,10 +31,10 @@ public class DrawerHandler implements IDrawerHandler {
 
 	@Override
 	public @NotNull ItemStack getStackInSlot(int slot) {
-		if (slot == 1) {
+		if (slot != 0) {
 			return ItemStack.EMPTY;
 		}
-		return new ItemStack(item, count);
+		return item.copyWithCount(count);
 	}
 
 	@Override
@@ -44,17 +42,14 @@ public class DrawerHandler implements IDrawerHandler {
 		if (stack.isEmpty()) {
 			return ItemStack.EMPTY;
 		}
-		if (stack.hasTag()) {
-			return stack;
-		}
-		int max = BaseDrawerItem.getStacking(config) * stack.getMaxStackSize();
+		int max = stacking * stack.getMaxStackSize();
 		if (count >= max) {
 			return stack;
 		}
-		if (item == Items.AIR) {
+		if (item.isEmpty()) {
 			int toInsert = Math.min(max, stack.getCount());
 			if (!simulate) {
-				item = stack.getItem();
+				item = stack.copyWithCount(1);
 				count = toInsert;
 				parent.sync();
 			}
@@ -65,12 +60,12 @@ public class DrawerHandler implements IDrawerHandler {
 			ans.setCount(stack.getCount() - toInsert);
 			return ans;
 		}
-		if (item != stack.getItem()) {
+		if (!ItemStack.isSameItemSameComponents(item, stack)) {
 			return stack;
 		}
 		int toInsert = Math.min(max - count, stack.getCount());
 		if (!simulate) {
-			item = stack.getItem();
+			item = stack.copyWithCount(1);
 			count += toInsert;
 			parent.sync();
 		}
@@ -84,15 +79,15 @@ public class DrawerHandler implements IDrawerHandler {
 
 	@Override
 	public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
-		if (item == Items.AIR || count == 0) {
+		if (item.isEmpty() || count == 0) {
 			return ItemStack.EMPTY;
 		}
 		int toExtract = Math.min(amount, count);
-		ItemStack ans = new ItemStack(item, toExtract);
+		ItemStack ans = item.copyWithCount(toExtract);
 		if (!simulate) {
 			count -= toExtract;
 			if (count == 0) {
-				item = Items.AIR;
+				item = ItemStack.EMPTY;
 			}
 			parent.sync();
 		}
@@ -101,11 +96,12 @@ public class DrawerHandler implements IDrawerHandler {
 
 	@Override
 	public int getSlotLimit(int slot) {
-		return BaseDrawerItem.getStacking(config) * item.getMaxStackSize();
+		return stacking * item.getMaxStackSize();
 	}
 
 	@Override
 	public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-		return stack.getTag() == null && (item == Items.AIR || stack.getItem() == item);
+		return item.isEmpty() || ItemStack.isSameItemSameComponents(stack, item);
 	}
+
 }

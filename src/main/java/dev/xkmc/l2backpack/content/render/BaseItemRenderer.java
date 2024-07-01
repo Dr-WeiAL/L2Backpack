@@ -22,7 +22,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -57,8 +56,8 @@ public class BaseItemRenderer extends BlockEntityWithoutLevelRenderer {
 	@Override
 	public void renderByItem(ItemStack stack, ItemDisplayContext type, PoseStack pose,
 							 MultiBufferSource bufferSource, int light, int overlay) {
-		if (stack.getItem() instanceof BaseDrawerItem) {
-			renderDrawer(stack, type, pose, bufferSource, light, overlay);
+		if (stack.getItem() instanceof BaseDrawerItem item) {
+			renderDrawer(item, stack, type, pose, bufferSource, light, overlay);
 		}
 		if (stack.getItem() instanceof BackpackModelItem item) {
 			pose.pushPose();
@@ -130,16 +129,16 @@ public class BaseItemRenderer extends BlockEntityWithoutLevelRenderer {
 		this.model.body.getChild("main_body").render(pose, vc, light, OverlayTexture.NO_OVERLAY);
 	}
 
-	public static void renderDrawer(ItemStack stack, ItemDisplayContext type, PoseStack poseStack,
+	public static void renderDrawer(BaseDrawerItem drawer, ItemStack stack, ItemDisplayContext type, PoseStack poseStack,
 									MultiBufferSource bufferSource, int light, int overlay) {
 		poseStack.popPose(); // transform hack
 		poseStack.pushPose(); // transform hack
 
 		poseStack.pushPose();
 
-		Item item = BaseDrawerItem.getItem(stack);
+		ItemStack item = drawer.getDrawerContent(stack);
 		int count = stack.getItem() instanceof DrawerItem ? DrawerItem.getCount(stack) : 1;
-		ItemStack inv = new ItemStack(item, count);
+		ItemStack inv = item.copyWithCount(count);
 
 		if (inv.isEmpty() || !DrawerCountDeco.showContent() || type != ItemDisplayContext.GUI) {
 			BlockState state = LBBlocks.ENDER_DRAWER.getDefaultState();
@@ -158,7 +157,7 @@ public class BaseItemRenderer extends BlockEntityWithoutLevelRenderer {
 				renderer.renderModel(pose, bufferSource.getBuffer(ClientHooks.getEntityRenderType(rt, false)),
 						state, model, 1F, 1F, 1F, light, overlay, ModelData.EMPTY, rt);
 			}
-			renderItemInside(inv, item instanceof BlockItem ? 0.5D : 0.625D, poseStack, type, bufferSource, light, overlay);
+			renderItemInside(inv, item.getItem() instanceof BlockItem ? 0.5D : 0.625D, poseStack, type, bufferSource, light, overlay);
 		} else {
 			var r = Minecraft.getInstance().getItemRenderer();
 			boolean flat = !r.getModel(inv, null, null, 0).usesBlockLight();

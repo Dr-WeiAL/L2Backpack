@@ -1,38 +1,23 @@
 package dev.xkmc.l2backpack.content.drawer;
 
 import dev.xkmc.l2backpack.content.capability.PickupBagItem;
-import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.insert.OverlayInsertItem;
 import dev.xkmc.l2backpack.init.registrate.LBTriggers;
 import dev.xkmc.l2backpack.network.DrawerInteractToServer;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
 
 public interface BaseDrawerItem extends PickupBagItem, OverlayInsertItem {
 
-	String KEY = "drawerItem", STACKING = "StackingFactor";
+	int MAX_FACTOR = 8, STACKING = 64;
 
-	int MAX_FACTOR = 8;
+	boolean canAccept(ItemStack drawer, ItemStack stack);
 
-	static boolean canAccept(ItemStack drawer, ItemStack stack) {
-		return !stack.hasTag() && !stack.isEmpty() && stack.getItem() == getItem(drawer);
-	}
-
-	static Item getItem(ItemStack drawer) {
-		return Optional.ofNullable(drawer.getTag())
-				.map(e -> e.contains(KEY) ? e.getString(KEY) : null)
-				.map(e -> ForgeRegistries.ITEMS.getValue(new ResourceLocation(e)))
-				.orElse(Items.AIR);
-	}
+	ItemStack getDrawerContent(ItemStack drawer);
 
 	static int loadFromInventory(int max, int count, Item item, Player player) {
 		int ext = 0;
@@ -49,39 +34,13 @@ public interface BaseDrawerItem extends PickupBagItem, OverlayInsertItem {
 		return ext;
 	}
 
-	static int getStacking(ItemStack drawer) {
-		return getStacking(PickupConfig.getConfig(drawer));
-	}
-
-	static int getStacking(@Nullable CompoundTag tag) {
-		if (tag == null) return getStacking();
-		int factor = tag.getInt(STACKING);
-		if (factor < 1) factor = 1;
-		return getStacking() * factor;
-	}
-
-	static int getStackingFactor(ItemStack drawer) {
-		int factor = PickupConfig.getConfig(drawer).getInt(STACKING);
-		if (factor < 1) factor = 1;
-		return factor;
-	}
-
-	static ItemStack setStackingFactor(ItemStack drawer, int factor) {
-		PickupConfig.getConfig(drawer).putInt(STACKING, factor);
-		return drawer;
-	}
-
-	static int getStacking() {
-		return 64;
+	default int getStacking(ItemStack drawer) {
+		return STACKING;
 	}
 
 	void insert(ItemStack drawer, ItemStack stack, Player player);
 
-	default void setItem(ItemStack drawer, Item item, Player player) {
-		ResourceLocation rl = ForgeRegistries.ITEMS.getKey(item);
-		assert rl != null;
-		drawer.getOrCreateTag().putString(KEY, rl.toString());
-	}
+	void setItem(ItemStack drawer, ItemStack item, Player player);
 
 	default ItemStack takeItem(ItemStack drawer, ServerPlayer player) {
 		ItemStack stack = takeItem(drawer, Integer.MAX_VALUE, player, false);
@@ -99,18 +58,9 @@ public interface BaseDrawerItem extends PickupBagItem, OverlayInsertItem {
 	default boolean clientInsert(ItemStack storage, ItemStack carried, int cid, Slot slot, boolean perform, int button,
 								 DrawerInteractToServer.Callback suppress, int limit) {
 		if (carried.isEmpty()) return false;
-		if (carried.hasTag()) return true;
-		if (canSetNewItem(storage)) {
-			if (perform)
-				sendInsertPacket(cid, carried, slot, suppress, limit);
-			return true;
-		}
-		if (BaseDrawerItem.canAccept(storage, carried)) {
-			if (perform)
-				sendInsertPacket(cid, carried, slot, suppress, limit);
-			return true;
-		}
-		return false;
+		if (!canAccept(storage, carried)) return false;
+		if (perform) sendInsertPacket(cid, carried, slot, suppress, limit);
+		return true;
 	}
 
 	default boolean mayClientTake() {
@@ -119,14 +69,13 @@ public interface BaseDrawerItem extends PickupBagItem, OverlayInsertItem {
 
 	@Override
 	default void attemptInsert(ItemStack storage, ItemStack carried, ServerPlayer player) {
-		if (carried.isEmpty() || carried.hasTag()) return;
+		if (carried.isEmpty()) return;
+		if (!canAccept(storage, carried)) return;
 		if (canSetNewItem(storage)) {
-			setItem(storage, carried.getItem(), player);
+			setItem(storage, carried, player);
 		}
-		if (BaseDrawerItem.canAccept(storage, carried)) {
-			insert(storage, carried, player);
-			LBTriggers.DRAWER.get().trigger(player, DrawerInteractToServer.Type.INSERT);
-		}
+		insert(storage, carried, player);
+		LBTriggers.DRAWER.get().trigger(player, DrawerInteractToServer.Type.INSERT);
 	}
 
 	ResourceLocation backgroundLoc();

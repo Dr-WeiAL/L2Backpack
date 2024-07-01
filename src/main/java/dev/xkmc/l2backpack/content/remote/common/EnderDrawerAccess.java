@@ -1,6 +1,5 @@
 package dev.xkmc.l2backpack.content.remote.common;
 
-import dev.xkmc.l2backpack.content.drawer.BaseDrawerItem;
 import dev.xkmc.l2backpack.content.remote.drawer.EnderDrawerBlockEntity;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2core.util.Proxy;
@@ -9,21 +8,22 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.*;
 
-public final class DrawerAccess {
+public final class EnderDrawerAccess {
 
-	public static DrawerAccess of(Level level, ItemStack drawer) {
+	public static EnderDrawerAccess of(Level level, ItemStack drawer) {
 		UUID id = LBItems.DC_OWNER_ID.getOrDefault(drawer, Util.NIL_UUID);
-		Item item = BaseDrawerItem.getItem(drawer);
+		Item item = LBItems.DC_ENDER_DRAWER_ITEM.getOrDefault(drawer, Items.AIR);
 		return of(level, id, item);
 	}
 
 
-	public static DrawerAccess of(Level level, UUID id, Item item) {
+	public static EnderDrawerAccess of(Level level, UUID id, Item item) {
 		return WorldStorage.get((ServerLevel) level).getOrCreateDrawer(id, item);
 	}
 
@@ -33,7 +33,7 @@ public final class DrawerAccess {
 
 	public final List<EnderDrawerBlockEntity> listener = new ArrayList<>();
 
-	DrawerAccess(WorldStorage storage, UUID id, Item item) {
+	EnderDrawerAccess(WorldStorage storage, UUID id, Item item) {
 		this.storage = storage;
 		this.id = id;
 		this.item = item;

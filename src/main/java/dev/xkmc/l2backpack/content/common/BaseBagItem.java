@@ -8,20 +8,20 @@ import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.*;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -41,6 +41,18 @@ import java.util.UUID;
 
 public abstract class BaseBagItem extends Item implements ContentTransfer.Quad, PickupBagItem, InsertOnlyItem, TooltipInvItem {
 
+	public static List<ItemStack> getItems(ItemStack stack) {
+		BaseBagItem item = (BaseBagItem) stack.getItem();
+		NonNullList<ItemStack> list = NonNullList.withSize(item.getRows(stack) * 9, ItemStack.EMPTY);
+		var cont = LBItems.BACKPACK_CONTENT.get(stack);
+		if (cont != null) cont.copyInto(list);
+		return list;
+	}
+
+	public static void setItems(ItemStack stack, List<ItemStack> list) {
+		stack.set(LBItems.BACKPACK_CONTENT, ItemContainerContents.fromItems(list));
+	}
+
 	@OnlyIn(Dist.CLIENT)
 	public static float isOpened(ItemStack stack, ClientLevel level, LivingEntity entity, int i) {
 		if (entity != Proxy.getClientPlayer()) return 0;
@@ -55,46 +67,17 @@ public abstract class BaseBagItem extends Item implements ContentTransfer.Quad, 
 		super(props);
 	}
 
-	public static List<ItemStack> getItems(ItemStack stack) {
-		List<ItemStack> ans = new ArrayList<>();
-		ListTag tag = getListTag(stack);
-		for (Tag value : tag) {
-			if (value instanceof CompoundTag ctag) {
-				ItemStack i = ItemStack.of(ctag);
-				int count = ctag.getInt("Count");
-				if (i.getCount() < count) {
-					i.setCount(count);
-				}
-				ans.add(i);
-			}
-		}
-		if (!ans.isEmpty()) {
-			int size = ((BaseBagItem) stack.getItem()).getRows(stack) * 9;
-			while (ans.size() < size) {
-				ans.add(ItemStack.EMPTY);
-			}
-		}
-		return ans;
-	}
-
-	public static void setItems(ItemStack stack, List<ItemStack> list) {
-		ListTag tag = new ListTag();
-		for (int i = 0; i < list.size(); i++) {
-			tag.add(i, list.get(i).save(new CompoundTag()));
-		}
-		BaseBagItem.setListTag(stack, tag);
-	}
-
 	public static void checkLootGen(ItemStack stack, Player player) {
-		if (!getListTag(stack).isEmpty()) return;
-		CompoundTag ctag = stack.getOrCreateTag();
-		if (!ctag.contains(LOOT)) return;
-		ResourceLocation rl = ResourceLocation.parse(ctag.getString(LOOT));
-		long seed = ctag.getLong(SEED);
-		ctag.remove(LOOT);
-		ctag.remove(SEED);
 		if (!(player.level() instanceof ServerLevel sl)) return;
-		LootTable loottable = sl.getServer().getLootData().getLootTable(rl);
+		if (LBItems.BACKPACK_CONTENT.get(stack) != null) return;
+		String lootStr = LBItems.DC_LOOT_ID.get(stack);
+		if (lootStr == null) return;
+		ResourceLocation rl = ResourceLocation.parse(lootStr);
+		long seed = LBItems.DC_LOOT_SEED.getOrDefault(stack, 0L);
+		stack.remove(LBItems.DC_LOOT_ID);
+		stack.remove(LBItems.DC_LOOT_SEED);
+		LootTable loottable = sl.getServer().reloadableRegistries()
+				.getLootTable(ResourceKey.create(Registries.LOOT_TABLE, rl));
 		LootParams.Builder builder = new LootParams.Builder(sl);
 		builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
 		BaseBagItem bag = (BaseBagItem) stack.getItem();
@@ -126,13 +109,10 @@ public abstract class BaseBagItem extends Item implements ContentTransfer.Quad, 
 
 	@Override
 	public void click(Player player, ItemStack stack, boolean client, boolean shift, boolean right, @Nullable IItemHandler target) {
-		List<ItemStack> list = null;
+		NonNullList<ItemStack> list = NonNullList.withSize(getRows(stack) * 9, ItemStack.EMPTY);
 		if (!client && shift && target != null) {
-			list = getItems(stack);
-			int slot = getRows(stack) * 9;
-			while (list.size() < slot) {
-				list.add(ItemStack.EMPTY);
-			}
+			var cont = LBItems.BACKPACK_CONTENT.get(stack);
+			if (cont != null) cont.copyInto(list);
 		}
 		if (!client && shift && right && target != null) {
 			int moved = ContentTransfer.transfer(list, target);
@@ -157,7 +137,7 @@ public abstract class BaseBagItem extends Item implements ContentTransfer.Quad, 
 	public abstract void open(ServerPlayer player, PlayerSlot<?> slot, ItemStack stack);
 
 	@Override
-	public boolean canEquip(ItemStack stack, EquipmentSlot armorType, Entity entity) {
+	public boolean canEquip(ItemStack stack, EquipmentSlot armorType, LivingEntity entity) {
 		return armorType == EquipmentSlot.CHEST;
 	}
 
@@ -180,37 +160,21 @@ public abstract class BaseBagItem extends Item implements ContentTransfer.Quad, 
 	}
 
 	@Override
-	public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-		return new BaseBagInvWrapper(stack);
-	}
-
-	@Override
 	public int getInvSize(ItemStack stack) {
-		return BaseBagItem.getItems(stack).size();
+		return getRows(stack) * 9;
 	}
 
 	@Override
 	public List<ItemStack> getInvItems(ItemStack stack, Player player) {
-		return BaseBagItem.getItems(stack);
+		return getItems(stack);
 	}
 
 	public void checkInit(ItemStack stack) {
 		if (LBItems.DC_CONT_ID.get(stack) == null) {
 			stack.set(LBItems.DC_CONT_ID, UUID.randomUUID());
 		}
-
-		CompoundTag tag = stack.getOrCreateTag();
-		if (!tag.getBoolean("init")) {
-			tag.putBoolean("init", true);
-			tag.putUUID("container_id", UUID.randomUUID());
-			if (!tag.contains("Items")) {
-				var list = getItems(stack);
-				int size = getRows(stack) * 9;
-				while (list.size() < size) {
-					list.add(ItemStack.EMPTY);
-				}
-				setItems(stack, list);
-			}
+		if (LBItems.BACKPACK_CONTENT.get(stack) == null) {
+			stack.set(LBItems.BACKPACK_CONTENT, ItemContainerContents.EMPTY);
 		}
 	}
 

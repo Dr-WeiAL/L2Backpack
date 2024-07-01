@@ -24,13 +24,18 @@ import dev.xkmc.l2core.init.reg.registrate.SimpleEntry;
 import dev.xkmc.l2core.init.reg.simple.DCReg;
 import dev.xkmc.l2core.init.reg.simple.DCVal;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 
@@ -74,7 +79,18 @@ public class LBItems {
 	public static final DCVal<Long> DC_PASSWORD = DC.longVal("password");
 	public static final DCVal<String> DC_LOOT_ID = DC.str("loot_table");
 	public static final DCVal<Long> DC_LOOT_SEED = DC.longVal("loot_seed");
-	public static final DCVal<PickupConfig> DC_PICKUP = DC.reg("pickup", PickupConfig.class);
+	public static final DCVal<PickupConfig> DC_PICKUP = DC.reg("pickup", PickupConfig.class, true);
+	public static final DCVal<Item> DC_ENDER_DRAWER_ITEM = DC.reg("ender_drawer_item",
+			BuiltInRegistries.ITEM.byNameCodec(), ByteBufCodecs.registry(Registries.ITEM), true);
+	public static final DCVal<ItemStack> DC_DRAWER_STACK = DC.reg("drawer_stack",
+			ItemStack.CODEC, ItemStack.STREAM_CODEC, true);
+	public static final DCVal<Integer> DC_DRAWER_COUNT = DC.intVal("drawer_count");
+	public static final DCVal<Integer> DC_DRAWER_STACKING = DC.intVal("drawer_upgrade");
+
+	public static final DCVal<ItemContainerContents> BAG_CONTENT = DC.reg("bag_content",
+			ItemContainerContents.CODEC, ItemContainerContents.STREAM_CODEC, true);
+	public static final DCVal<ItemContainerContents> BACKPACK_CONTENT = DC.reg("backpack_content",
+			ItemContainerContents.CODEC, ItemContainerContents.STREAM_CODEC, true);
 
 	static {
 		TagKey<Item> curios_tag = ItemTags.create(ResourceLocation.fromNamespaceAndPath("curios", "back"));

@@ -1,63 +1,53 @@
 package dev.xkmc.l2backpack.content.remote.drawer;
 
+import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.drawer.IDrawerBlockEntity;
-import dev.xkmc.l2backpack.content.remote.common.DrawerAccess;
+import dev.xkmc.l2backpack.content.remote.common.EnderDrawerAccess;
 import dev.xkmc.l2serial.serialization.marker.SerialClass;
 import dev.xkmc.l2serial.serialization.marker.SerialField;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.neoforged.neoforge.items.wrapper.InvWrapper;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 @SerialClass
 public class EnderDrawerBlockEntity extends IDrawerBlockEntity {
 
-	@SerialField(toClient = true)
-	public UUID owner_id = Util.NIL_UUID;
-
-	@SerialField(toClient = true)
-	public String owner_name = "";
-
-	@SerialField(toClient = true)
+	@SerialField
+	public UUID ownerId = Util.NIL_UUID;
+	@SerialField
+	public Component ownerName = Component.empty();
+	@SerialField
 	public Item item = Items.AIR;
-
-	@SerialField(toClient = true)
-	public CompoundTag config = new CompoundTag();
-
-	private LazyOptional<IItemHandler> handler;
+	@SerialField
+	public PickupConfig config = PickupConfig.DEF;
 
 	public EnderDrawerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 	}
 
-	@NotNull
-	@Override
-	public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-		if (level != null && !this.remove &&
-				cap == ForgeCapabilities.ITEM_HANDLER) {
-			if (level.isClientSide()) {
-				return LazyOptional.of(() -> new InvWrapper(new SimpleContainer(64))).cast();
-			}
-			if (handler == null) {
-				handler = owner_id == null ? LazyOptional.empty() : LazyOptional.of(() -> new EnderDrawerItemHandler(getAccess(), true));
-			}
-			return this.handler.cast();
+	@Nullable
+	public IItemHandler getItemHandler() {
+		if (level == null || this.remove) return null;
+		if (level.isClientSide()) {
+			return new InvWrapper(new SimpleContainer(64));
 		}
-		return super.getCapability(cap, side);
+		if (ownerId == null) return null;
+		return new EnderDrawerItemHandler(getAccess(), true);
 	}
 
-	public DrawerAccess getAccess() {
-		return DrawerAccess.of(level, owner_id, item);
+	public EnderDrawerAccess getAccess() {
+		return EnderDrawerAccess.of(level, ownerId, item);
 	}
 
 	private boolean added = false;
@@ -81,21 +71,22 @@ public class EnderDrawerBlockEntity extends IDrawerBlockEntity {
 	}
 
 	public void addToListener() {
-		if (!added && level != null && !level.isClientSide() && owner_id != null) {
+		if (!added && level != null && !level.isClientSide() && ownerId != null) {
 			added = true;
 			getAccess().listener.add(this);
 		}
 	}
 
 	public void removeFromListener() {
-		if (added && level != null && !level.isClientSide() && owner_id != null) {
+		if (added && level != null && !level.isClientSide() && ownerId != null) {
 			added = false;
 			getAccess().listener.remove(this);
 		}
 	}
 
 	@Override
-	public Item getItem() {
-		return item;
+	public ItemStack getItem() {
+		return item.getDefaultInstance();
 	}
+
 }

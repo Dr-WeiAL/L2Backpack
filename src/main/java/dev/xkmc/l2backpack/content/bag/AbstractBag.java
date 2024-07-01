@@ -8,13 +8,13 @@ import dev.xkmc.l2backpack.content.common.InvTooltip;
 import dev.xkmc.l2backpack.content.common.TooltipInvItem;
 import dev.xkmc.l2backpack.content.insert.CapInsertItem;
 import dev.xkmc.l2backpack.init.data.LangData;
+import dev.xkmc.l2backpack.init.registrate.LBItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -24,6 +24,7 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -53,14 +54,13 @@ public abstract class AbstractBag extends Item
 
 	public NonNullList<ItemStack> getContent(ItemStack stack) {
 		NonNullList<ItemStack> list = NonNullList.withSize(SIZE, ItemStack.EMPTY);
-		CompoundTag tag = stack.getOrCreateTagElement("BlockEntityTag");
-		if (tag.contains("Items")) ContainerHelper.loadAllItems(tag, list);
+		var cont = stack.get(LBItems.BAG_CONTENT);
+		if (cont != null) cont.copyInto(list);
 		return list;
 	}
 
 	public void setContent(ItemStack stack, NonNullList<ItemStack> list) {
-		CompoundTag tag = stack.getOrCreateTagElement("BlockEntityTag");
-		ContainerHelper.saveAllItems(tag, list);
+		stack.set(LBItems.BAG_CONTENT, ItemContainerContents.fromItems(list));
 	}
 
 	@Override
@@ -122,7 +122,7 @@ public abstract class AbstractBag extends Item
 		return InvTooltip.get(this, stack);
 	}
 
-	public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> list, TooltipFlag flag) {
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		if (Screen.hasAltDown()) {
 			return;
 		}
@@ -192,11 +192,6 @@ public abstract class AbstractBag extends Item
 			}
 		}
 		setContent(stack, list);
-	}
-
-	@Override
-	public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-		return new BagCaps(this, stack);
 	}
 
 	private void throwOut(NonNullList<ItemStack> list, Player player, ItemStack bag) {

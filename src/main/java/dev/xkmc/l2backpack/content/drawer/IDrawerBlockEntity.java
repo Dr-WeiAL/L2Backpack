@@ -4,6 +4,7 @@ import dev.xkmc.l2core.base.tile.BaseBlockEntity;
 import dev.xkmc.l2serial.serialization.marker.SerialClass;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -14,6 +15,6 @@ public abstract class IDrawerBlockEntity extends BaseBlockEntity {
 		super(type, pos, state);
 	}
 
-	public abstract Item getItem();
+	public abstract ItemStack getItem();
 
 }

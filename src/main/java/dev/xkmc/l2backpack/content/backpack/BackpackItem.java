@@ -17,9 +17,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -27,11 +25,6 @@ import java.util.function.Consumer;
 public class BackpackItem extends BaseBagItem implements BackpackModelItem {
 
 	public static final int MAX_ROW = 8;
-
-	public static ItemStack setRow(ItemStack result, int i) {
-		result.getOrCreateTag().putInt(ROW, i);
-		return result;
-	}
 
 	public final DyeColor color;
 
@@ -51,14 +44,9 @@ public class BackpackItem extends BaseBagItem implements BackpackModelItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag flag) {
-		var tag = stack.getOrCreateTag();
-		int rows = tag.getInt("rows");
-		if (rows == 0) {
-			rows = BackpackConfig.SERVER.initialRows.get();
-		}
-		list.add(LangData.IDS.BACKPACK_SLOT.get(Math.max(1, rows), MAX_ROW));
-		if (tag.contains("loot")) {
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		list.add(LangData.IDS.BACKPACK_SLOT.get(getRows(stack), MAX_ROW));
+		if (LBItems.DC_ROW.get(stack) != null) {
 			list.add(LangData.IDS.LOOT.get().withStyle(ChatFormatting.AQUA));
 		} else {
 			PickupConfig.addText(stack, list);

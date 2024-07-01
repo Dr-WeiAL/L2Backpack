@@ -1,11 +1,11 @@
 package dev.xkmc.l2backpack.content.common;
 
 import dev.xkmc.l2backpack.content.click.DrawerQuickInsert;
+import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2core.base.menu.base.BaseContainerMenu;
 import dev.xkmc.l2core.base.menu.base.SpriteManager;
 import dev.xkmc.l2core.util.ServerOnly;
 import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -35,7 +35,7 @@ public abstract class BaseBagMenu<T extends BaseBagMenu<T>> extends BaseContaine
 		ItemStack stack = getStack();
 		if (stack.getItem() instanceof BaseBagItem) {
 			var inv = stack.getCapability(Capabilities.ItemHandler.ITEM);
-			if (player instanceof ServerPlayer sp && inv instanceof BaseBagInvWrapper bag) {
+			if (player instanceof ServerPlayer sp && inv instanceof BaseBagItemHandler bag) {
 				bag.attachEnv(sp, hand);
 			}
 			this.handler = (IItemHandlerModifiable) inv;
@@ -73,11 +73,9 @@ public abstract class BaseBagMenu<T extends BaseBagMenu<T>> extends BaseContaine
 
 	private ItemStack getStackRaw() {
 		ItemStack stack = item_slot.getItem(player);
-		CompoundTag tag = stack.getTag();
 		if (player.level().isClientSide()) return stack;
-		if (tag == null) return ItemStack.EMPTY;
-		if (!tag.contains("container_id")) return ItemStack.EMPTY;
-		if (!tag.getUUID("container_id").equals(uuid)) return ItemStack.EMPTY;
+		var id = LBItems.DC_CONT_ID.get(stack);
+		if (id == null || !id.equals(uuid)) return ItemStack.EMPTY;
 		stack_cache = stack;
 		return stack;
 	}

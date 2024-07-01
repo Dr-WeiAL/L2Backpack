@@ -20,7 +20,7 @@ public class BackpackSel implements ISelectionListener {
 
 	public static final int UP = -1, DOWN = -2, SWAP = -3;
 
-	private static final ResourceLocation ID = new ResourceLocation(L2Backpack.MODID, "backpack");
+	private static final ResourceLocation ID = L2Backpack.loc("backpack");
 
 	@Override
 	public ResourceLocation getID() {
@@ -36,12 +36,12 @@ public class BackpackSel implements ISelectionListener {
 
 	@Override
 	public void handleServerSetSelection(SetSelectedToServer packet, Player player) {
-		IQuickSwapToken<?> token = QuickSwapManager.getToken(player, packet.isAltDown);
+		IQuickSwapToken<?> token = QuickSwapManager.getToken(player, packet.isAltDown());
 		if (token == null) return;
-		if (packet.slot == SWAP)
+		if (packet.slot() == SWAP)
 			token.swap(player);
 		else
-			token.setSelected(packet.slot);
+			token.setSelected(packet.slot());
 	}
 
 	@Override

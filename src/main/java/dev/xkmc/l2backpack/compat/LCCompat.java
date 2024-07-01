@@ -1,17 +1,18 @@
 package dev.xkmc.l2backpack.compat;
 
 import dev.xkmc.l2backpack.events.CapabilityEvents;
-import dev.xkmc.l2complements.events.event.EnderPickupEvent;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 
 public class LCCompat {
 
+	/*TODO
 	@SubscribeEvent
 	public static void onEnderPickup(EnderPickupEvent event) {
 		ItemStack stack = event.getStack();
 		CapabilityEvents.tryInsertItem(event.getPlayer(), stack);
 	}
+
+	 */
 
 }

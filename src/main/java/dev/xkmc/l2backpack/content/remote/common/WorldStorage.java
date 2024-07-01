@@ -59,9 +59,8 @@ public class WorldStorage extends BaseSavedData {
 			return Optional.empty();
 		StorageContainer storage = new StorageContainer(id, color, col);
 		if (loot != null) {
-			LootTable loottable = level.getServer().registryAccess()
-					.registryOrThrow(Registries.LOOT_TABLE)
-					.getOrThrow(ResourceKey.create(Registries.LOOT_TABLE, loot));
+			LootTable loottable = level.getServer().reloadableRegistries()
+					.getLootTable(ResourceKey.create(Registries.LOOT_TABLE, loot));
 			LootParams.Builder builder = new LootParams.Builder(level);
 			if (player != null) {
 				builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
@@ -141,10 +140,10 @@ public class WorldStorage extends BaseSavedData {
 	@SerialField
 	final HashMap<String, HashMap<Item, Integer>> drawer = new HashMap<>();
 
-	private final HashMap<String, HashMap<Item, DrawerAccess>> drawer_cache = new HashMap<>();
+	private final HashMap<String, HashMap<Item, EnderDrawerAccess>> drawer_cache = new HashMap<>();
 
-	public DrawerAccess getOrCreateDrawer(UUID id, Item item) {
+	public EnderDrawerAccess getOrCreateDrawer(UUID id, Item item) {
 		return drawer_cache.computeIfAbsent(id.toString(), e -> new HashMap<>())
-				.computeIfAbsent(item, i -> new DrawerAccess(this, id, item));
+				.computeIfAbsent(item, i -> new EnderDrawerAccess(this, id, item));
 	}
 }

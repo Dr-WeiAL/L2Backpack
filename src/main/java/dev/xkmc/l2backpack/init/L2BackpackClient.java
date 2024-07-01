@@ -59,8 +59,8 @@ public class L2BackpackClient {
 	}
 
 	@SubscribeEvent
-	public static void registerReloadListener(RegisterClientReloadListenersEvent event) {
-		event.registerReloadListener((ResourceManagerReloadListener) resourceManager -> RenderEvents.registerBackpackLayer());
+	public static void registerReloadListener(EntityRenderersEvent.AddLayers event) {
+		RenderEvents.registerBackpackLayer(event);
 	}
 
 	@SubscribeEvent

@@ -14,7 +14,6 @@ import dev.xkmc.l2backpack.init.registrate.LBBlocks;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2core.util.ServerOnly;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -31,7 +30,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
@@ -43,12 +41,12 @@ import java.util.function.Consumer;
 
 public class WorldChestItem extends BlockItem implements BackpackModelItem, PickupBagItem, InsertOnlyItem {
 
-	public static ItemStack initLootGen(ItemStack stack, UUID uuid, String name, DyeColor color, ResourceLocation loot) {
-		var ctag = stack.getOrCreateTag();
-		ctag.putUUID("owner_id", uuid);
-		ctag.putString("owner_name", name);
-		ctag.putLong("password", color.getId());
-		ctag.putString("loot", loot.toString());
+	public static ItemStack initLootGen(ItemStack stack, UUID uuid, Component name, DyeColor color, ResourceLocation loot, long seed) {
+		LBItems.DC_OWNER_ID.set(stack, uuid);
+		LBItems.DC_OWNER_NAME.set(stack, name);
+		LBItems.DC_PASSWORD.set(stack, (long) color.getId());
+		LBItems.DC_LOOT_ID.set(stack, loot.toString());
+		LBItems.DC_LOOT_SEED.set(stack, seed);
 		return stack;
 	}
 
@@ -60,13 +58,12 @@ public class WorldChestItem extends BlockItem implements BackpackModelItem, Pick
 	}
 
 	void refresh(ItemStack stack, Player player) {
-		var ctag = stack.getOrCreateTag();
-		if (!ctag.contains("owner_id")) {
-			ctag.putUUID("owner_id", player.getUUID());
-			ctag.putString("owner_name", player.getName().getString());
-			ctag.putLong("password", color.getId());
+		if (LBItems.DC_OWNER_ID.get(stack) == null) {
+			LBItems.DC_OWNER_ID.set(stack, player.getUUID());
+			LBItems.DC_OWNER_NAME.set(stack, player.getName());
+			LBItems.DC_PASSWORD.set(stack, (long) color.getId());
 		}
-		if (ctag.contains("loot")) {
+		if (LBItems.DC_LOOT_ID.get(stack) != null) {
 			new WorldChestMenuPvd((ServerPlayer) player, stack, this).getContainer((ServerLevel) player.level());
 		}
 	}
@@ -95,22 +92,18 @@ public class WorldChestItem extends BlockItem implements BackpackModelItem, Pick
 			}
 			return InteractionResult.SUCCESS;
 		}
-		if (!context.getItemInHand().getOrCreateTag().contains("owner_id"))
+		if (LBItems.DC_OWNER_ID.get(context.getItemInHand()) == null)
 			return InteractionResult.FAIL;
 		return super.useOn(context);
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag flag) {
-		CompoundTag tag = stack.getTag();
-		if (tag != null) {
-			if (tag.contains("owner_name")) {
-				String name = tag.getString("owner_name");
-				list.add(LangData.IDS.STORAGE_OWNER.get(getName(name)));
-				PickupConfig.addText(stack, list);
-			}
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		var name = LBItems.DC_OWNER_NAME.get(stack);
+		if (name != null) {
+			list.add(LangData.IDS.STORAGE_OWNER.get(name));
+			PickupConfig.addText(stack, list);
 		}
-
 		if (LBItems.DC_LOOT_ID.get(stack) != null)
 			list.add(LangData.IDS.LOOT.get().withStyle(ChatFormatting.AQUA));
 		LangData.addInfo(list, LangData.Info.QUICK_ANY_ACCESS,
@@ -138,18 +131,10 @@ public class WorldChestItem extends BlockItem implements BackpackModelItem, Pick
 
 	@ServerOnly
 	public Optional<StorageContainer> getContainer(ItemStack stack, ServerLevel level) {
-
-		if (!stack.hasTag()) return Optional.empty();
-		CompoundTag tag = stack.getOrCreateTag();
-		if (!tag.contains("owner_id")) return Optional.empty();
-		UUID id = tag.getUUID("owner_id");
-		long pwd = tag.getLong("password");
+		var id = LBItems.DC_OWNER_ID.get(stack);
+		if (id == null) return Optional.empty();
+		long pwd = LBItems.DC_PASSWORD.getOrDefault(stack, 0L);
 		return WorldStorage.get(level).getOrCreateStorage(level, id, color.getId(), pwd, null, null, 0);
-	}
-
-	@Override
-	public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-		return new WorldChestCaps(stack);
 	}
 
 	@Override

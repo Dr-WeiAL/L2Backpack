@@ -21,7 +21,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class BackpackLayerRenderer<T extends LivingEntity, M extends HumanoidModel<T>> extends RenderLayer<T, M> {
 
-	public static final ModelLayerLocation MLL = new ModelLayerLocation(new ResourceLocation(L2Backpack.MODID, "backpack"), "main");
+	public static final ModelLayerLocation MLL = new ModelLayerLocation(L2Backpack.loc("backpack"), "main");
 
 	private final BackpackModel<T> model;
 
@@ -54,7 +54,7 @@ public class BackpackLayerRenderer<T extends LivingEntity, M extends HumanoidMod
 		this.getParentModel().body.translateAndRotate(pose);
 		pose.mulPose(Axis.YP.rotationDegrees(180));
 		pose.scale(0.6F, 0.6F, 0.6F);
-		this.model.body.getChild("main_body").render(pose, vc, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+		this.model.body.getChild("main_body").render(pose, vc, i, OverlayTexture.NO_OVERLAY);
 		pose.popPose();
 	}
 

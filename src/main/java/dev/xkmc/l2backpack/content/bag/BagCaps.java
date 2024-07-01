@@ -2,25 +2,17 @@ package dev.xkmc.l2backpack.content.bag;
 
 import dev.xkmc.l2backpack.content.capability.InvPickupCap;
 import dev.xkmc.l2backpack.content.capability.PickupConfig;
-import dev.xkmc.l2backpack.content.capability.PickupModeCap;
 import dev.xkmc.l2backpack.content.capability.PickupTrace;
-import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public class BagCaps extends InvPickupCap<FastBagItemHandler> implements ICapabilityProvider {
+public class BagCaps extends InvPickupCap<FastBagItemHandler> {
 
 	private final AbstractBag bag;
 	private final ItemStack stack;
 	private final BagItemHandler itemHandler;
 
-	public BagCaps(AbstractBag bag, ItemStack stack) {
-		this.bag = bag;
+	public BagCaps(ItemStack stack) {
+		this.bag = (AbstractBag) stack.getItem();
 		this.stack = stack;
 		itemHandler = new BagItemHandler(bag, stack);
 	}
@@ -43,17 +35,6 @@ public class BagCaps extends InvPickupCap<FastBagItemHandler> implements ICapabi
 	@Override
 	public PickupConfig getPickupMode() {
 		return PickupConfig.get(stack);
-	}
-
-	@Override
-	public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-		if (cap == PickupModeCap.TOKEN) {
-			return holder.cast();
-		}
-		if (cap == ForgeCapabilities.ITEM_HANDLER) {
-			return handler.cast();
-		}
-		return LazyOptional.empty();
 	}
 
 }

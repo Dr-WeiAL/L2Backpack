@@ -42,11 +42,11 @@ public class ContentTransfer {
 		return count;
 	}
 
-	public static int transfer(Item item, int count, IItemHandler cap) {
-		int maxSize = cap instanceof IDrawerHandler ? count : item.getDefaultMaxStackSize();
+	public static int transfer(ItemStack item, int count, IItemHandler cap) {
+		int maxSize = cap instanceof IDrawerHandler ? count : item.getMaxStackSize();
 		while (count > 0) {
 			int step = Math.min(maxSize, count);
-			ItemStack toInsert = new ItemStack(item, step);
+			ItemStack toInsert = item.copyWithCount(step);
 			ItemStack remainer = ItemHandlerHelper.insertItemStacked(cap, toInsert, false);
 			count = count - step + remainer.getCount();
 			if (!remainer.isEmpty()) {

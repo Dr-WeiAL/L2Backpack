@@ -4,14 +4,14 @@ import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.common.ContentTransfer;
 import dev.xkmc.l2backpack.content.drawer.BaseDrawerItem;
 import dev.xkmc.l2backpack.content.drawer.DrawerInvWrapper;
-import dev.xkmc.l2backpack.content.remote.common.DrawerAccess;
+import dev.xkmc.l2backpack.content.remote.common.EnderDrawerAccess;
 import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.events.TooltipUpdateEvents;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.data.LangData;
+import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2backpack.init.registrate.LBTriggers;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,28 +23,15 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 import java.util.function.Consumer;
 
 public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 
-	public static final String KEY_OWNER_ID = "owner_id";
-	public static final String KEY_OWNER_NAME = "owner_name";
-
-	public static Optional<UUID> getOwner(ItemStack stack) {
-		CompoundTag tag = stack.getTag();
-		if (tag != null) {
-			if (tag.contains(KEY_OWNER_ID)) {
-				return Optional.of(tag.getUUID(KEY_OWNER_ID));
-			}
-		}
-		return Optional.empty();
+	public static Item getItem(ItemStack drawer) {
+		return LBItems.DC_ENDER_DRAWER_ITEM.getOrDefault(drawer, Items.AIR);
 	}
 
 	public EnderDrawerItem(Block block, Properties properties) {
@@ -56,17 +43,28 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 		consumer.accept(BaseItemRenderer.EXTENSIONS);
 	}
 
+	@Override
+	public ItemStack getDrawerContent(ItemStack drawer) {
+		return getItem(drawer).getDefaultInstance();
+	}
+
+	@Override
+	public boolean canAccept(ItemStack drawer, ItemStack stack) {
+		Item item = getItem(drawer);
+		return item == Items.AIR || stack.isComponentsPatchEmpty() && stack.getItem() == item;
+	}
+
 	void refresh(ItemStack drawer, Player player) {
-		if (!drawer.getOrCreateTag().contains(KEY_OWNER_ID)) {
-			drawer.getOrCreateTag().putUUID(KEY_OWNER_ID, player.getUUID());
-			drawer.getOrCreateTag().putString(KEY_OWNER_NAME, player.getName().getString());
+		if (LBItems.DC_OWNER_ID.get(drawer) == null) {
+			drawer.set(LBItems.DC_OWNER_ID, player.getUUID());
+			drawer.set(LBItems.DC_OWNER_NAME, player.getName());
 		}
 	}
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
-		if (BaseDrawerItem.getItem(stack) == Items.AIR)
+		if (getItem(stack) == Items.AIR)
 			return InteractionResultHolder.fail(stack);
 		if (!(player instanceof ServerPlayer sp)) {
 			ContentTransfer.playDrawerSound(player);
@@ -78,9 +76,9 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 			player.getInventory().placeItemBackInInventory(take);
 			ContentTransfer.onExtract(player, c, stack);
 		} else {
-			DrawerAccess access = DrawerAccess.of(world, stack);
+			EnderDrawerAccess access = EnderDrawerAccess.of(world, stack);
 			int count = access.getCount();
-			int max = BaseDrawerItem.getStacking(stack) * access.item().getMaxStackSize();
+			int max = getStacking(stack) * access.item().getDefaultMaxStackSize();
 			int ext = BaseDrawerItem.loadFromInventory(max, count, access.item(), player);
 			count += ext;
 			access.setCount(count);
@@ -93,9 +91,9 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 	public InteractionResult useOn(UseOnContext context) {
 		if (!context.getLevel().isClientSide() && context.getPlayer() != null)
 			refresh(context.getItemInHand(), context.getPlayer());
-		if (!context.getItemInHand().getOrCreateTag().contains(KEY_OWNER_ID))
+		if (context.getItemInHand().get(LBItems.DC_OWNER_ID) == null)
 			return InteractionResult.FAIL;
-		if (BaseDrawerItem.getItem(context.getItemInHand()) == Items.AIR) {
+		if (getItem(context.getItemInHand()) == Items.AIR) {
 			if (!context.getLevel().isClientSide()) {
 				if (context.getPlayer() instanceof ServerPlayer serverPlayer) {
 					serverPlayer.sendSystemMessage(LangData.IDS.NO_ITEM.get().withStyle(ChatFormatting.RED), true);
@@ -114,9 +112,9 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 	@Override
 	public void insert(ItemStack drawer, ItemStack stack, Player player) {
 		refresh(drawer, player);
-		DrawerAccess access = DrawerAccess.of(player.level(), drawer);
+		EnderDrawerAccess access = EnderDrawerAccess.of(player.level(), drawer);
 		int count = access.getCount();
-		int take = Math.min(BaseDrawerItem.getStacking(stack) * stack.getMaxStackSize() - count, stack.getCount());
+		int take = Math.min(getStacking(drawer) * stack.getMaxStackSize() - count, stack.getCount());
 		access.setCount(access.getCount() + take);
 		stack.shrink(take);
 	}
@@ -124,9 +122,9 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 	@Override
 	public ItemStack takeItem(ItemStack drawer, int max, Player player, boolean simulate) {
 		refresh(drawer, player);
-		DrawerAccess access = DrawerAccess.of(player.level(), drawer);
-		Item item = BaseDrawerItem.getItem(drawer);
-		int take = Math.min(access.getCount(), Math.min(max, item.getMaxStackSize()));
+		EnderDrawerAccess access = EnderDrawerAccess.of(player.level(), drawer);
+		Item item = getItem(drawer);
+		int take = Math.min(access.getCount(), Math.min(max, item.getDefaultMaxStackSize()));
 		if (!simulate)
 			access.setCount(access.getCount() - take);
 		return new ItemStack(item, take);
@@ -134,29 +132,28 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 
 	@Override
 	public boolean canSetNewItem(ItemStack drawer) {
-		return BaseDrawerItem.getItem(drawer) == Items.AIR;
+		return getItem(drawer) == Items.AIR;
 	}
 
 	@Override
-	public void setItem(ItemStack drawer, Item item, Player player) {
+	public void setItem(ItemStack drawer, ItemStack item, Player player) {
 		refresh(drawer, player);
-		BaseDrawerItem.super.setItem(drawer, item, player);
+		LBItems.DC_ENDER_DRAWER_ITEM.set(drawer, item.getItem());
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag flag) {
-		Item item = BaseDrawerItem.getItem(stack);
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		Item item = getItem(stack);
+		var id = LBItems.DC_OWNER_ID.get(stack);
 		if (item != Items.AIR) {
-			int count = TooltipUpdateEvents.getCount(stack.getOrCreateTag().getUUID(KEY_OWNER_ID), item);
+			int count = id == null ? -1 : TooltipUpdateEvents.getCount(id, item);
 			list.add(LangData.IDS.DRAWER_CONTENT.get(item.getDescription(), count < 0 ? "???" : count));
 		}
-		CompoundTag tag = stack.getTag();
-		if (tag != null) {
-			if (tag.contains(KEY_OWNER_NAME)) {
-				String name = tag.getString(KEY_OWNER_NAME);
-				list.add(LangData.IDS.STORAGE_OWNER.get(name));
-				PickupConfig.addText(stack, list);
-			}
+		var name = LBItems.DC_OWNER_NAME.get(stack);
+		if (name != null) {
+			list.add(LangData.IDS.STORAGE_OWNER.get(name));
+			PickupConfig.addText(stack, list);
+
 		}
 		LangData.addInfo(list,
 				LangData.Info.ENDER_DRAWER,
@@ -170,14 +167,14 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 		return this.getOrCreateDescriptionId();
 	}
 
-	@Override
-	public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
+	public DrawerInvWrapper getCaps(ItemStack stack, Void ignored) {
 		return new DrawerInvWrapper(stack, trace -> trace.player == null ? null : new EnderDrawerInvAccess(stack, this, trace.player));
 	}
 
 	@Override
 	public void serverTrigger(ItemStack storage, ServerPlayer player) {
-		if (EnderDrawerItem.getOwner(storage).map(e -> !e.equals(player.getUUID())).orElse(false)) {
+		var id = LBItems.DC_OWNER_ID.get(storage);
+		if (id != null && !id.equals(player.getUUID())) {
 			LBTriggers.SHARE.get().trigger(player);
 		}
 	}

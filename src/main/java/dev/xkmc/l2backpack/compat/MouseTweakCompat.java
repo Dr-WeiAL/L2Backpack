@@ -2,15 +2,11 @@ package dev.xkmc.l2backpack.compat;
 
 import dev.xkmc.l2backpack.content.drawer.BaseDrawerItem;
 import dev.xkmc.l2backpack.content.drawer.DrawerItem;
-import dev.xkmc.l2backpack.events.ClientEventHandler;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import yalter.mousetweaks.MouseButton;
 
 public class MouseTweakCompat {
 
+	/* TODO
 	public static boolean delegateSlotClick(AbstractContainerScreen<?> menu, Slot slot, MouseButton btn, boolean shift, Click click) {
 		ItemStack src = slot.getItem();
 		ItemStack carried = menu.getMenu().getCarried();
@@ -31,32 +27,34 @@ public class MouseTweakCompat {
 		return false;
 	}
 
+	 */
+
 	public static ItemStack wrapSlotGet(ItemStack stack) {
 		if (stack.getItem() instanceof DrawerItem drawer) {
 			int count = DrawerItem.getCount(stack);
 			if (count == 0) {
 				return ItemStack.EMPTY;
 			}
-			Item item = BaseDrawerItem.getItem(stack);
+			ItemStack item = drawer.getDrawerContent(stack);
 			int max = item.getMaxStackSize();
-			int cap = max * BaseDrawerItem.getStacking(stack);
+			int cap = max * drawer.getStacking(stack);
 			if (max == 1) {
-				return new ItemStack(item, 1);
+				return item.copyWithCount(1);
 			}
 			if (cap - count < max / 2) {
-				return new ItemStack(item, max + count - cap);
+				return item.copyWithCount(max + count - cap);
 			}
 			if (count < max / 2) {
-				return new ItemStack(item, count);
+				return item.copyWithCount(count);
 			}
-			return new ItemStack(item, max / 2);
+			return item.copyWithCount(max / 2);
 		}
 		return stack;
 	}
 
 	public interface Click {
 
-		void click(MouseButton mouseButton);
+		//TODO void click(MouseButton mouseButton);
 
 	}
 

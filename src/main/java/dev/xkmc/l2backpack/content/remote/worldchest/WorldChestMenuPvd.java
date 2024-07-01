@@ -2,9 +2,9 @@ package dev.xkmc.l2backpack.content.remote.worldchest;
 
 import dev.xkmc.l2backpack.content.remote.common.StorageContainer;
 import dev.xkmc.l2backpack.content.remote.common.WorldStorage;
+import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2backpack.init.registrate.LBTriggers;
 import dev.xkmc.l2core.util.ServerOnly;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -37,17 +37,16 @@ public record WorldChestMenuPvd(ServerPlayer player, ItemStack stack, WorldChest
 
 	@ServerOnly
 	public Optional<StorageContainer> getContainer(ServerLevel level) {
-		CompoundTag tag = stack.getOrCreateTag();
-		UUID id = tag.getUUID("owner_id");
-		long pwd = tag.getLong("password");
-		long seed = 0;
-		ResourceLocation loot = null;
-		if (tag.contains("loot")) {
-			loot =  ResourceLocation.parse(tag.getString("loot"));
-			tag.remove("loot");
-			seed = tag.getLong("seed");
-			tag.remove("seed");
+		UUID id = LBItems.DC_OWNER_ID.get(stack);
+		long pwd = LBItems.DC_PASSWORD.getOrDefault(stack, 0L);
+		String lootStr = LBItems.DC_LOOT_ID.get(stack);
+		long seed = LBItems.DC_LOOT_SEED.getOrDefault(stack, 0L);
+		if (lootStr != null) {
+			stack.remove(LBItems.DC_LOOT_ID);
+			stack.remove(LBItems.DC_LOOT_SEED);
 		}
+		if (id == null) return Optional.empty();
+		ResourceLocation loot = lootStr == null ? null : ResourceLocation.parse(lootStr);
 		return WorldStorage.get(level).getOrCreateStorage(level, id, item.color.getId(), pwd, player, loot, seed);
 	}
 
