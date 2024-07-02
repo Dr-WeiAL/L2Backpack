@@ -102,7 +102,7 @@ public class ContentTransfer {
 		return count;
 	}
 
-	public static int loadFrom(Item item, int space, IItemHandler cap) {
+	public static int loadFrom(ItemStack item, int space, IItemHandler cap) {
 		int n = cap.getSlots();
 		int count = 0;
 		for (int i = 0; i < n; i++) {
@@ -110,7 +110,7 @@ public class ContentTransfer {
 			while (true) {
 				ItemStack stack = cap.getStackInSlot(i);
 				if (stack.isEmpty()) break; // slot empty
-				if (stack.hasTag() || stack.getItem() != item) break; // invalid
+				if (!ItemStack.isSameItemSameComponents(item, stack)) break; // invalid
 				int allow = Math.min(space, Math.min(stack.getMaxStackSize(), stack.getCount()));
 				ItemStack removal = cap.extractItem(i, allow, false);
 				int toRemove = removal.getCount();
@@ -177,16 +177,15 @@ public class ContentTransfer {
 		player.playSound(SoundEvents.AMETHYST_BLOCK_PLACE, 1, 1);
 	}
 
-	public static Item filterMaxItem(IItemHandler target) {
-		Map<Item, Integer> map = new HashMap<>();
+	public static ItemStack filterMaxItem(IItemHandler target) {
+		Map<ItemStack, Integer> map = new HashMap<>();
 		for (int i = 0; i < target.getSlots(); i++) {
 			ItemStack stack = target.getStackInSlot(i);
-			if (stack.hasTag()) continue;
-			map.compute(stack.getItem(), (k, v) -> (v == null ? 0 : v) + stack.getCount());
+			map.compute(stack, (k, v) -> (v == null ? 0 : v) + stack.getCount());
 		}
-		Item max = Items.AIR;
+		ItemStack max = ItemStack.EMPTY;
 		int count = 0;
-		for (Map.Entry<Item, Integer> ent : map.entrySet()) {
+		for (var ent : map.entrySet()) {
 			if (ent.getValue() > count) {
 				max = ent.getKey();
 				count = ent.getValue();

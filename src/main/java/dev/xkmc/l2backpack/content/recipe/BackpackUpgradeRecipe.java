@@ -10,13 +10,20 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SmithingRecipeInput;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.data.loading.DatagenModLoader;
 
 import static dev.xkmc.l2backpack.content.backpack.BackpackItem.MAX_ROW;
 
 public class BackpackUpgradeRecipe extends AbstractSmithingRecipe<BackpackUpgradeRecipe> {
 
+	private static int initRow() {
+		if (DatagenModLoader.isRunningDataGen())
+			return 2;
+		return BackpackConfig.SERVER.initialRows.get();
+	}
+
 	public BackpackUpgradeRecipe(Ingredient template, Ingredient base, Ingredient addition, ItemStack result) {
-		super(template, base, addition, LBItems.DC_ROW.set(result, BackpackConfig.SERVER.initialRows.get() + 1));
+		super(template, base, addition, LBItems.DC_ROW.set(result, initRow() + 1));
 	}
 
 	@Override

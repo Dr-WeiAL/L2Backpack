@@ -5,8 +5,10 @@
       "conditions": {
         "items": [
           {
-            "nbt": "{rows:3}",
-            "tag": "l2backpack:backpacks"
+            "components": {
+              "l2backpack:row": 3
+            },
+            "items": "#l2backpack:backpacks"
           }
         ]
       },
@@ -14,18 +16,15 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
-      "translate": "advancements.l2backpack.advancements.backpacks.upgrade.description"
+      "translate": "advancements.l2backpack.backpacks.upgrade.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
-      "item": "l2backpack:backpack_light_gray"
+      "count": 1,
+      "id": "l2backpack:backpack_light_gray"
     },
-    "show_toast": true,
     "title": {
-      "translate": "advancements.l2backpack.advancements.backpacks.upgrade.title"
+      "translate": "advancements.l2backpack.backpacks.upgrade.title"
     }
   },
   "requirements": [

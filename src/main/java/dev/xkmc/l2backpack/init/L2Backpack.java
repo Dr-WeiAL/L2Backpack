@@ -119,7 +119,7 @@ public class L2Backpack {
 		LangData.addTranslations(REGISTRATE::addRawLang);
 		var gen = event.getGenerator();
 		boolean server = event.includeServer();
-		gen.addProvider(server, new SlotGen(gen));
+		gen.addProvider(server, new SlotGen(gen, event.getLookupProvider()));
 		//TODO event.getGenerator().addProvider(event.includeServer(), new BackpackGLMProvider(event.getGenerator().getPackOutput()));
 	}
 

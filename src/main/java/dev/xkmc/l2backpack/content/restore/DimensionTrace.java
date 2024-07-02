@@ -18,7 +18,8 @@ public class DimensionTrace extends TrackedEntryType<DimensionTraceData> {
 		if (comp == null) {
 			comp = Component.translatable(LBMenu.getLangKey(LBMenu.MT_WORLD_CHEST.get()));
 		}
-		var op = WorldStorage.get((ServerLevel) player.level()).getStorageWithoutPassword(data.uuid(), data.color());
+		var op = WorldStorage.get((ServerLevel) player.level())
+				.getStorageWithoutPassword(data.uuid(), data.color());
 		if (op.isPresent()) {
 			player.openMenu(new SimpleStorageMenuPvd(comp, op.get()));
 			return LayerPopType.REMAIN;

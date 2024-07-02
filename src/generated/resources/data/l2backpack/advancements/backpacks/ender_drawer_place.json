@@ -14,18 +14,16 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
-      "translate": "advancements.l2backpack.advancements.backpacks.ender_drawer_place.description"
+      "translate": "advancements.l2backpack.backpacks.ender_drawer_place.description"
     },
     "frame": "goal",
-    "hidden": false,
     "icon": {
-      "item": "l2backpack:ender_drawer"
+      "count": 1,
+      "id": "l2backpack:ender_drawer"
     },
-    "show_toast": true,
     "title": {
-      "translate": "advancements.l2backpack.advancements.backpacks.ender_drawer_place.title"
+      "translate": "advancements.l2backpack.backpacks.ender_drawer_place.title"
     }
   },
   "requirements": [

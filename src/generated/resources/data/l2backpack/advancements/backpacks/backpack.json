@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "l2backpack:backpacks"
+            "items": "#l2backpack:backpacks"
           }
         ]
       },
@@ -13,18 +13,15 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
-      "translate": "advancements.l2backpack.advancements.backpacks.backpack.description"
+      "translate": "advancements.l2backpack.backpacks.backpack.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
-      "item": "l2backpack:backpack_red"
+      "count": 1,
+      "id": "l2backpack:backpack_red"
     },
-    "show_toast": true,
     "title": {
-      "translate": "advancements.l2backpack.advancements.backpacks.backpack.title"
+      "translate": "advancements.l2backpack.backpacks.backpack.title"
     }
   },
   "requirements": [

@@ -79,7 +79,7 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 			EnderDrawerAccess access = EnderDrawerAccess.of(world, stack);
 			int count = access.getCount();
 			int max = getStacking(stack) * access.item().getDefaultMaxStackSize();
-			int ext = BaseDrawerItem.loadFromInventory(max, count, access.item(), player);
+			int ext = BaseDrawerItem.loadFromInventory(max, count, access.item().getDefaultInstance(), player);
 			count += ext;
 			access.setCount(count);
 			ContentTransfer.onCollect(player, ext, stack);

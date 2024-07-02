@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "l2backpack:dimensional_storages"
+            "items": "#l2backpack:dimensional_storages"
           }
         ]
       },
@@ -13,18 +13,15 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
-      "translate": "advancements.l2backpack.advancements.backpacks.dimension.description"
+      "translate": "advancements.l2backpack.backpacks.dimension.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
-      "item": "l2backpack:dimensional_storage_white"
+      "count": 1,
+      "id": "l2backpack:dimensional_storage_white"
     },
-    "show_toast": true,
     "title": {
-      "translate": "advancements.l2backpack.advancements.backpacks.dimension.title"
+      "translate": "advancements.l2backpack.backpacks.dimension.title"
     }
   },
   "requirements": [

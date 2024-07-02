@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "l2backpack:ender_backpack"
-            ]
+            "items": "l2backpack:ender_backpack"
           }
         ]
       },
@@ -15,18 +13,15 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
-      "translate": "advancements.l2backpack.advancements.backpacks.ender.description"
+      "translate": "advancements.l2backpack.backpacks.ender.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
-      "item": "l2backpack:ender_backpack"
+      "count": 1,
+      "id": "l2backpack:ender_backpack"
     },
-    "show_toast": true,
     "title": {
-      "translate": "advancements.l2backpack.advancements.backpacks.ender.title"
+      "translate": "advancements.l2backpack.backpacks.ender.title"
     }
   },
   "requirements": [

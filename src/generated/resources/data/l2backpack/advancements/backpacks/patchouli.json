@@ -1,31 +1,14 @@
 {
-  "parent": "l2backpack:backpacks/root",
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:mod_loaded",
+      "type": "neoforge:mod_loaded",
       "modid": "patchouli"
     }
   ],
+  "parent": "l2backpack:backpacks/root",
   "criteria": {
     "0": {
-      "conditions": {},
       "trigger": "minecraft:tick"
-    }
-  },
-  "display": {
-    "announce_to_chat": true,
-    "description": {
-      "translate": "advancements.l2backpack.advancements.backpacks.patchouli.description"
-    },
-    "frame": "task",
-    "hidden": false,
-    "icon": {
-      "item": "patchouli:guide_book",
-      "nbt": "{\"patchouli:book\":\"l2backpack:backpack_guide\"}"
-    },
-    "show_toast": true,
-    "title": {
-      "translate": "advancements.l2backpack.advancements.backpacks.patchouli.title"
     }
   },
   "requirements": [

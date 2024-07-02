@@ -47,7 +47,7 @@ public record WorldChestMenuPvd(ServerPlayer player, ItemStack stack, WorldChest
 		}
 		if (id == null) return Optional.empty();
 		ResourceLocation loot = lootStr == null ? null : ResourceLocation.parse(lootStr);
-		return WorldStorage.get(level).getOrCreateStorage(level, id, item.color.getId(), pwd, player, loot, seed);
+		return WorldStorage.get(level).getOrCreateStorage(id, item.color.getId(), pwd, player, loot, seed);
 	}
 
 	@ServerOnly

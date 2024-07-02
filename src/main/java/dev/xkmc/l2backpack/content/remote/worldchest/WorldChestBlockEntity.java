@@ -49,7 +49,7 @@ public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvid
 		if (!(level instanceof ServerLevel sl)) {
 			return new InvWrapper(new SimpleContainer(27));
 		}
-		Optional<StorageContainer> storage = WorldStorage.get(sl).getOrCreateStorage(sl, ownerId, color, password, null, null, 0);
+		Optional<StorageContainer> storage = WorldStorage.get(sl).getOrCreateStorage(ownerId, color, password, null, null, 0);
 		if (storage.isEmpty()) return null;
 
 		if (config == null || config.pickup() == PickupMode.NONE) {
@@ -98,7 +98,7 @@ public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvid
 
 	private Optional<StorageContainer> getAccess() {
 		assert level != null;
-		return WorldStorage.get((ServerLevel) level).getOrCreateStorage((ServerLevel) level, ownerId, color, password, null, null, 0);
+		return WorldStorage.get((ServerLevel) level).getOrCreateStorage(ownerId, color, password, null, null, 0);
 	}
 
 	private boolean added = false;

@@ -98,7 +98,7 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 			boolean perform = !canSetNewItem(drawer);
 			if (!perform) {
 				item = ContentTransfer.filterMaxItem(new InvWrapper(player.getInventory()));
-				if (item != Items.AIR) {
+				if (!item.isEmpty()) {
 					perform = true;
 					setItem(drawer, item, player);
 				}
@@ -140,7 +140,7 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 			boolean perform = !canSetNewItem(stack);
 			if (!perform) {
 				item = ContentTransfer.filterMaxItem(target);
-				if (item != Items.AIR) {
+				if (!item.isEmpty()) {
 					setItem(stack, item, player);
 					perform = true;
 				}

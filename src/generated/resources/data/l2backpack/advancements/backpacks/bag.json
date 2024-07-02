@@ -16,18 +16,15 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
-      "translate": "advancements.l2backpack.advancements.backpacks.bag.description"
+      "translate": "advancements.l2backpack.backpacks.bag.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
-      "item": "l2backpack:armor_bag"
+      "count": 1,
+      "id": "l2backpack:armor_bag"
     },
-    "show_toast": true,
     "title": {
-      "translate": "advancements.l2backpack.advancements.backpacks.bag.title"
+      "translate": "advancements.l2backpack.backpacks.bag.title"
     }
   },
   "requirements": [

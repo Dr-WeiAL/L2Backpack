@@ -134,7 +134,7 @@ public class WorldChestItem extends BlockItem implements BackpackModelItem, Pick
 		var id = LBItems.DC_OWNER_ID.get(stack);
 		if (id == null) return Optional.empty();
 		long pwd = LBItems.DC_PASSWORD.getOrDefault(stack, 0L);
-		return WorldStorage.get(level).getOrCreateStorage(level, id, color.getId(), pwd, null, null, 0);
+		return WorldStorage.get(level).getOrCreateStorage(id, color.getId(), pwd, null, null, 0);
 	}
 
 	@Override

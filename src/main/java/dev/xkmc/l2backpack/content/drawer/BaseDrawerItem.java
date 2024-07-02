@@ -8,7 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 public interface BaseDrawerItem extends PickupBagItem, OverlayInsertItem {
@@ -19,11 +18,11 @@ public interface BaseDrawerItem extends PickupBagItem, OverlayInsertItem {
 
 	ItemStack getDrawerContent(ItemStack drawer);
 
-	static int loadFromInventory(int max, int count, Item item, Player player) {
+	static int loadFromInventory(int max, int count, ItemStack item, Player player) {
 		int ext = 0;
 		for (int i = 0; i < 36; i++) {
 			ItemStack inv_stack = player.getInventory().items.get(i);
-			if (inv_stack.getItem() == item && !inv_stack.hasTag()) {
+			if (ItemStack.isSameItemSameComponents(item, inv_stack)) {
 				int take = Math.min(max - count, inv_stack.getCount());
 				count += take;
 				ext += take;

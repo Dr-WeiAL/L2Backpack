@@ -2,23 +2,20 @@
   "parent": "l2backpack:backpacks/ender_drawer_place",
   "criteria": {
     "0": {
-      "conditions": {},
       "trigger": "l2backpack:shared_drive"
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
-      "translate": "advancements.l2backpack.advancements.backpacks.dimension_share.description"
+      "translate": "advancements.l2backpack.backpacks.dimension_share.description"
     },
     "frame": "challenge",
-    "hidden": false,
     "icon": {
-      "item": "l2backpack:dimensional_storage_blue"
+      "count": 1,
+      "id": "l2backpack:dimensional_storage_blue"
     },
-    "show_toast": true,
     "title": {
-      "translate": "advancements.l2backpack.advancements.backpacks.dimension_share.title"
+      "translate": "advancements.l2backpack.backpacks.dimension_share.title"
     }
   },
   "requirements": [

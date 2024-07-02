@@ -2,23 +2,20 @@
   "parent": "l2backpack:backpacks/dimension_recursion",
   "criteria": {
     "0": {
-      "conditions": {},
       "trigger": "l2backpack:remote_hopper"
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
-      "translate": "advancements.l2backpack.advancements.backpacks.dimension_hopper.description"
+      "translate": "advancements.l2backpack.backpacks.dimension_hopper.description"
     },
     "frame": "goal",
-    "hidden": false,
     "icon": {
-      "item": "l2backpack:dimensional_storage_light_gray"
+      "count": 1,
+      "id": "l2backpack:dimensional_storage_light_gray"
     },
-    "show_toast": true,
     "title": {
-      "translate": "advancements.l2backpack.advancements.backpacks.dimension_hopper.title"
+      "translate": "advancements.l2backpack.backpacks.dimension_hopper.title"
     }
   },
   "requirements": [

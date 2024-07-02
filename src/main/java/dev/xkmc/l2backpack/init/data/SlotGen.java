@@ -1,27 +1,20 @@
 package dev.xkmc.l2backpack.init.data;
 
-import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2core.serial.config.RecordDataProvider;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 public class SlotGen extends RecordDataProvider {
 
-	public SlotGen(DataGenerator generator) {
-		super(generator, "Curios Generator");
+	public SlotGen(DataGenerator generator, CompletableFuture<HolderLookup.Provider> pvd) {
+		super(generator, pvd, "Curios Generator");
 	}
 
 	@Override
 	public void add(BiConsumer<String, Record> map) {
-		map.accept(L2Backpack.MODID + "/curios/entities/l2backpack_entity", new CurioEntityBuilder(
-				new ArrayList<>(List.of(new ResourceLocation("player"))),
-				new ArrayList<>(List.of("back")),
-				SlotCondition.of()
-		));
 	}
 
 }

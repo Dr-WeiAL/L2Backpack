@@ -3,6 +3,7 @@ package dev.xkmc.l2backpack.content.remote.common;
 import dev.xkmc.l2core.capability.level.BaseSavedData;
 import dev.xkmc.l2serial.serialization.marker.SerialClass;
 import dev.xkmc.l2serial.serialization.marker.SerialField;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
@@ -21,12 +22,15 @@ import java.util.Optional;
 import java.util.UUID;
 
 @SerialClass
-public class WorldStorage extends BaseSavedData {
+public class WorldStorage extends BaseSavedData<WorldStorage> {
 
-	public static final String ID = "l2backpack:dimensional";
+	private static final String ID = "l2backpack:dimensional";
+	private static final Factory<WorldStorage> FACTORY = new Factory<>(WorldStorage::new, WorldStorage::new);
 
 	public static WorldStorage get(ServerLevel level) {
-		return level.getDataStorage().computeIfAbsent(WorldStorage::new, ID);
+		var ans = level.getDataStorage().computeIfAbsent(FACTORY, ID);
+		ans.level = level;
+		return ans;
 	}
 
 	@SerialField
@@ -34,15 +38,17 @@ public class WorldStorage extends BaseSavedData {
 
 	private final HashMap<UUID, StorageContainer[]> cache = new HashMap<>();
 
+	private ServerLevel level;
+
 	private WorldStorage() {
-
+		super(WorldStorage.class);
 	}
 
-	private WorldStorage(CompoundTag data) {
-		super(WorldStorage.class, data);
+	private WorldStorage(CompoundTag tag, HolderLookup.Provider pvd) {
+		super(WorldStorage.class, tag, pvd);
 	}
 
-	public Optional<StorageContainer> getOrCreateStorage(ServerLevel level, UUID id, int color, long password,
+	public Optional<StorageContainer> getOrCreateStorage(UUID id, int color, long password,
 														 @Nullable ServerPlayer player,
 														 @Nullable ResourceLocation loot,
 														 long seed) {
@@ -57,7 +63,7 @@ public class WorldStorage extends BaseSavedData {
 		CompoundTag col = getColor(id, color, password);
 		if (col.getLong("password") != password)
 			return Optional.empty();
-		StorageContainer storage = new StorageContainer(id, color, col);
+		StorageContainer storage = new StorageContainer(id, color, col, level.registryAccess());
 		if (loot != null) {
 			LootTable loottable = level.getServer().reloadableRegistries()
 					.getLootTable(ResourceKey.create(Registries.LOOT_TABLE, loot));
@@ -82,7 +88,7 @@ public class WorldStorage extends BaseSavedData {
 		if (colOptional.isEmpty()) {
 			return Optional.empty();
 		}
-		StorageContainer storage = new StorageContainer(id, color, colOptional.get());
+		StorageContainer storage = new StorageContainer(id, color, colOptional.get(), level.registryAccess());
 		putStorage(id, color, storage);
 		return Optional.of(storage);
 	}
@@ -91,7 +97,7 @@ public class WorldStorage extends BaseSavedData {
 		cache.remove(id);
 		CompoundTag col = getColor(id, color, password);
 		col.putLong("password", password);
-		StorageContainer storage = new StorageContainer(id, color, col);
+		StorageContainer storage = new StorageContainer(id, color, col, level.registryAccess());
 		putStorage(id, color, storage);
 		return storage;
 	}

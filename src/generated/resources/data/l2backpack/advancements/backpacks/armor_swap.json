@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "l2backpack:armor_swap"
-            ]
+            "items": "l2backpack:armor_swap"
           }
         ]
       },
@@ -15,18 +13,15 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
-      "translate": "advancements.l2backpack.advancements.backpacks.armor_swap.description"
+      "translate": "advancements.l2backpack.backpacks.armor_swap.description"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
-      "item": "l2backpack:armor_swap"
+      "count": 1,
+      "id": "l2backpack:armor_swap"
     },
-    "show_toast": true,
     "title": {
-      "translate": "advancements.l2backpack.advancements.backpacks.armor_swap.title"
+      "translate": "advancements.l2backpack.backpacks.armor_swap.title"
     }
   },
   "requirements": [
