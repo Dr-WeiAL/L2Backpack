@@ -1,12 +1,15 @@
 package dev.xkmc.l2backpack.compat;
 
-import dev.xkmc.l2backpack.content.drawer.BaseDrawerItem;
 import dev.xkmc.l2backpack.content.drawer.DrawerItem;
+import dev.xkmc.l2backpack.events.ClientEventHandler;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import yalter.mousetweaks.MouseButton;
 
 public class MouseTweakCompat {
 
-	/* TODO
+
 	public static boolean delegateSlotClick(AbstractContainerScreen<?> menu, Slot slot, MouseButton btn, boolean shift, Click click) {
 		ItemStack src = slot.getItem();
 		ItemStack carried = menu.getMenu().getCarried();
@@ -26,8 +29,6 @@ public class MouseTweakCompat {
 		}
 		return false;
 	}
-
-	 */
 
 	public static ItemStack wrapSlotGet(ItemStack stack) {
 		if (stack.getItem() instanceof DrawerItem drawer) {
@@ -54,7 +55,7 @@ public class MouseTweakCompat {
 
 	public interface Click {
 
-		//TODO void click(MouseButton mouseButton);
+		void click(MouseButton mouseButton);
 
 	}
 
