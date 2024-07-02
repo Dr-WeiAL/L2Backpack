@@ -37,7 +37,7 @@ public class DimensionalCaps extends InvPickupCap<DimensionalInvWrapper> {
 			var opt = item.getContainer(stack, trace.level);
 			if (opt.isPresent()) {
 				var storage = opt.get();
-				return new DimensionalInvWrapper(storage.container, storage.id);
+				return new DimensionalInvWrapper(storage.get(), storage.id);
 			}
 		}
 		return null;

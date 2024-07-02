@@ -32,7 +32,7 @@ public record DimensionalMenuPvd(ServerPlayer player, ItemStack stack, Dimension
 		if (!container.id.equals(player.getUUID())) {
 			LBTriggers.SHARE.get().trigger((ServerPlayer) player);
 		}
-		return new DimensionalContainer(id, inventory, container.container, container, null);
+		return new DimensionalContainer(id, inventory, container.get(), container, null);
 	}
 
 	@ServerOnly

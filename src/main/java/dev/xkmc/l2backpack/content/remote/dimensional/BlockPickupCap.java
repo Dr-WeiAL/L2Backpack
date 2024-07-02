@@ -31,7 +31,7 @@ public class BlockPickupCap extends InvPickupCap<DimensionalInvWrapper> {
 
 	@Override
 	public DimensionalInvWrapper getInv(PickupTrace trace) {
-		return new DimensionalInvWrapper(storage.container, storage.id);
+		return new DimensionalInvWrapper(storage.get(), storage.id);
 	}
 
 }

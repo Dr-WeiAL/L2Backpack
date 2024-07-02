@@ -13,7 +13,7 @@ public class BlockPickupInvWrapper extends DimensionalInvWrapper {
 	private final ServerLevel level;
 
 	public BlockPickupInvWrapper(ServerLevel level, DimensionalBlockEntity be, StorageContainer storage, PickupConfig config) {
-		super(storage.container, storage.id);
+		super(storage.get(), storage.id);
 		this.level = level;
 		cap = new BlockPickupCap(be, storage, config);
 	}

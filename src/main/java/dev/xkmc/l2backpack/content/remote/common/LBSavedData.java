@@ -34,9 +34,7 @@ public class LBSavedData extends BaseSavedData<LBSavedData> {
 	}
 
 	@SerialField
-	private final HashMap<String, CompoundTag> storage = new HashMap<>();
-
-	private final HashMap<UUID, StorageContainer[]> cache = new HashMap<>();
+	protected final HashMap<UUID, User> byPlayer = new HashMap<>();
 
 	private ServerLevel level;
 
@@ -48,108 +46,57 @@ public class LBSavedData extends BaseSavedData<LBSavedData> {
 		super(LBSavedData.class, tag, pvd);
 	}
 
+	protected User get(UUID id) {
+		return byPlayer.computeIfAbsent(id, l -> new User(id, level.registryAccess()));
+	}
+
 	public Optional<StorageContainer> getOrCreateStorage(UUID id, int color, long password,
 														 @Nullable ServerPlayer player,
 														 @Nullable ResourceLocation loot,
 														 long seed) {
-		if (cache.containsKey(id)) {
-			StorageContainer storage = cache.get(id)[color];
-			if (storage != null) {
-				if (storage.password == password)
-					return Optional.of(storage);
-				return Optional.empty();
+		StorageContainer storage = get(id).dimensional[color];
+		if (!storage.init) {
+			storage.init = true;
+			storage.password = password;
+			if (loot != null) {
+				LootTable loottable = level.getServer().reloadableRegistries()
+						.getLootTable(ResourceKey.create(Registries.LOOT_TABLE, loot));
+				LootParams.Builder builder = new LootParams.Builder(level);
+				if (player != null) {
+					builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
+				}
+				loottable.fill(storage.get(), builder.create(LootContextParamSets.EMPTY), seed);
 			}
 		}
-		CompoundTag col = getColor(id, color, password);
-		if (col.getLong("password") != password)
-			return Optional.empty();
-		StorageContainer storage = new StorageContainer(id, color, col, level.registryAccess());
-		if (loot != null) {
-			LootTable loottable = level.getServer().reloadableRegistries()
-					.getLootTable(ResourceKey.create(Registries.LOOT_TABLE, loot));
-			LootParams.Builder builder = new LootParams.Builder(level);
-			if (player != null) {
-				builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
-			}
-			loottable.fill(storage.container, builder.create(LootContextParamSets.EMPTY), seed);
-		}
-		putStorage(id, color, storage);
-		return Optional.of(storage);
+		if (storage.password == password)
+			return Optional.of(storage);
+		return Optional.empty();
 	}
 
 	public Optional<StorageContainer> getStorageWithoutPassword(UUID id, int color) {
-		if (cache.containsKey(id)) {
-			StorageContainer storage = cache.get(id)[color];
-			if (storage != null) {
-				return Optional.of(storage);
-			}
-		}
-		Optional<CompoundTag> colOptional = getColorWithoutPassword(id, color);
-		if (colOptional.isEmpty()) {
-			return Optional.empty();
-		}
-		StorageContainer storage = new StorageContainer(id, color, colOptional.get(), level.registryAccess());
-		putStorage(id, color, storage);
-		return Optional.of(storage);
+		StorageContainer ans = get(id).dimensional[color];
+		if (!ans.init) return Optional.empty();
+		return Optional.of(ans);
 	}
-
-	public StorageContainer changePassword(UUID id, int color, long password) {
-		cache.remove(id);
-		CompoundTag col = getColor(id, color, password);
-		col.putLong("password", password);
-		StorageContainer storage = new StorageContainer(id, color, col, level.registryAccess());
-		putStorage(id, color, storage);
-		return storage;
-	}
-
-	private void putStorage(UUID id, int color, StorageContainer storage) {
-		StorageContainer[] arr;
-		if (cache.containsKey(id))
-			arr = cache.get(id);
-		else cache.put(id, arr = new StorageContainer[16]);
-		arr[color] = storage;
-	}
-
-	private CompoundTag getColor(UUID id, int color, long password) {
-		CompoundTag ans;
-		String sid = id.toString();
-		if (!storage.containsKey(sid)) {
-			storage.put(sid, ans = new CompoundTag());
-			ans.putUUID("owner_id", id);
-		} else ans = storage.get(sid);
-		CompoundTag col;
-		if (ans.contains("color_" + color)) {
-			col = ans.getCompound("color_" + color);
-		} else {
-			col = new CompoundTag();
-			col.putLong("password", password);
-			ans.put("color_" + color, col);
-		}
-		return col;
-	}
-
-	private Optional<CompoundTag> getColorWithoutPassword(UUID id, int color) {
-		CompoundTag ans;
-		String sid = id.toString();
-		if (!storage.containsKey(sid)) {
-			return Optional.empty();
-		} else ans = storage.get(sid);
-		CompoundTag col;
-		if (ans.contains("color_" + color)) {
-			col = ans.getCompound("color_" + color);
-		} else {
-			return Optional.empty();
-		}
-		return Optional.of(col);
-	}
-
-	@SerialField
-	final HashMap<String, HashMap<Item, Integer>> drawer = new HashMap<>();
-
-	private final HashMap<String, HashMap<Item, EnderDrawerAccess>> drawer_cache = new HashMap<>();
 
 	public EnderDrawerAccess getOrCreateDrawer(UUID id, Item item) {
-		return drawer_cache.computeIfAbsent(id.toString(), e -> new HashMap<>())
-				.computeIfAbsent(item, i -> new EnderDrawerAccess(this, id, item));
+		return new EnderDrawerAccess(this, id, item);
 	}
+
+	@SerialClass
+	public static class User {
+
+		@SerialField
+		protected final StorageContainer[] dimensional = new StorageContainer[16];
+
+		@SerialField
+		protected final HashMap<Item, Integer> drawer = new HashMap<>();
+
+		public User(UUID id, HolderLookup.Provider pvd) {
+			for (int i = 0; i < 16; i++)
+				dimensional[i] = new StorageContainer(id, i, pvd);
+		}
+
+	}
+
 }

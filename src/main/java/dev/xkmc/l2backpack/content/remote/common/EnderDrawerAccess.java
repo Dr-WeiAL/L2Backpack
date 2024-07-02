@@ -40,7 +40,7 @@ public final class EnderDrawerAccess {
 	}
 
 	private HashMap<Item, Integer> getMap() {
-		return storage.drawer.computeIfAbsent(id.toString(), k -> new HashMap<>());
+		return storage.get(id).drawer;
 	}
 
 	public int getCount() {

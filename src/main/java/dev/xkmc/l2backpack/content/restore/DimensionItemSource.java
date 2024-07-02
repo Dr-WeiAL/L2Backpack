@@ -13,7 +13,7 @@ public class DimensionItemSource extends ItemSource<DimensionSourceData> {
 		if (player.level().isClientSide()) return ItemStack.EMPTY;
 		return LBSavedData.get((ServerLevel) player.level())
 				.getStorageWithoutPassword(data.uuid(), data.color())
-				.map(e -> e.container.getItem(data.slot())).orElse(ItemStack.EMPTY);
+				.map(e -> e.get().getItem(data.slot())).orElse(ItemStack.EMPTY);
 	}
 
 }

@@ -55,12 +55,12 @@ public class BaseBagItemHandler extends ComponentItemHandler {
 					.getStorageWithoutPassword(data.uuid(), data.color());
 			if (opt.isEmpty()) return;
 			var cont = opt.get();
-			var slot = cont.container.getItem(data.slot());
+			var slot = cont.get().getItem(data.slot());
 			if (parent.stack != slot) {
 				parent.callbackData = null;
 				return;
 			}
-			cont.container.setChanged();
+			cont.get().setChanged();
 		}
 
 	}

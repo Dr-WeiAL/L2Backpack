@@ -53,7 +53,7 @@ public class DimensionalBlockEntity extends BaseBlockEntity implements MenuProvi
 		if (storage.isEmpty()) return null;
 
 		if (config == null || config.pickup() == PickupMode.NONE) {
-			return new DimensionalInvWrapper(storage.get().container, ownerId);
+			return new DimensionalInvWrapper(storage.get().get(), ownerId);
 		} else {
 			return new BlockPickupInvWrapper(sl, this, storage.get(), config);
 		}
@@ -84,7 +84,7 @@ public class DimensionalBlockEntity extends BaseBlockEntity implements MenuProvi
 		if (level == null || ownerId == null) return null;
 		Optional<StorageContainer> storage = getAccess();
 		if (storage.isEmpty()) return null;
-		return new DimensionalContainer(wid, inventory, storage.get().container, storage.get(), this);
+		return new DimensionalContainer(wid, inventory, storage.get().get(), storage.get(), this);
 	}
 
 	public boolean stillValid(Player player) {
@@ -124,14 +124,14 @@ public class DimensionalBlockEntity extends BaseBlockEntity implements MenuProvi
 	public void addToListener() {
 		if (!added && level != null && !level.isClientSide() && ownerId != null) {
 			added = true;
-			getAccess().ifPresent(e -> e.container.addListener(this));
+			getAccess().ifPresent(e -> e.get().addListener(this));
 		}
 	}
 
 	public void removeFromListener() {
 		if (added && level != null && !level.isClientSide() && ownerId != null) {
 			added = false;
-			getAccess().ifPresent(e -> e.container.removeListener(this));
+			getAccess().ifPresent(e -> e.get().removeListener(this));
 		}
 	}
 

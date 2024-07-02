@@ -142,7 +142,7 @@ public class DimensionalItem extends BlockItem implements BackpackModelItem, Pic
 		var opt = getContainer(stack, player.serverLevel());
 		if (opt.isPresent()) {
 			var storage = opt.get();
-			return new DimensionalInvWrapper(storage.container, storage.id);
+			return new DimensionalInvWrapper(storage.get(), storage.id);
 		}
 		return null;
 	}

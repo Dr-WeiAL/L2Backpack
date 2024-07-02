@@ -46,7 +46,7 @@ public class BackpackItem extends BaseBagItem implements BackpackModelItem {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		list.add(LangData.IDS.BACKPACK_SLOT.get(getRows(stack), MAX_ROW));
-		if (LBItems.DC_ROW.get(stack) != null) {
+		if (LBItems.DC_LOOT_ID.get(stack) != null) {
 			list.add(LangData.IDS.LOOT.get().withStyle(ChatFormatting.AQUA));
 		} else {
 			PickupConfig.addText(stack, list);

@@ -87,7 +87,7 @@ public record DrawerInteractToServer(
 			}
 		}
 		if (wid != 0) {
-			menu.getSlot(slot).setChanged();
+			menu.getSlot(slot).set(storage);
 		}
 		if (player.isCreative() && wid == 0) {
 			L2Backpack.HANDLER.toClientPlayer(new CreativeSetCarryToClient(carried), player);

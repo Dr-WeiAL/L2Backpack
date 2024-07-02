@@ -61,7 +61,7 @@ public class DimensionalContainer extends BaseContainerMenu<DimensionalContainer
 				return false;
 			}
 		}
-		return storage == null || storage.isValid();
+		return storage != null;
 	}
 
 	public ItemStack quickMoveStack(Player pl, int id) {
