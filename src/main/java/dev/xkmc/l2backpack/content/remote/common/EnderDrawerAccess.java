@@ -24,16 +24,16 @@ public final class EnderDrawerAccess {
 
 
 	public static EnderDrawerAccess of(Level level, UUID id, Item item) {
-		return WorldStorage.get((ServerLevel) level).getOrCreateDrawer(id, item);
+		return LBSavedData.get((ServerLevel) level).getOrCreateDrawer(id, item);
 	}
 
-	private final WorldStorage storage;
+	private final LBSavedData storage;
 	private final UUID id;
 	private final Item item;
 
 	public final List<EnderDrawerBlockEntity> listener = new ArrayList<>();
 
-	EnderDrawerAccess(WorldStorage storage, UUID id, Item item) {
+	EnderDrawerAccess(LBSavedData storage, UUID id, Item item) {
 		this.storage = storage;
 		this.id = id;
 		this.item = item;

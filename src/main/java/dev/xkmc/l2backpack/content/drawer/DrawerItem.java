@@ -7,6 +7,7 @@ import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.data.LangData;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
+import dev.xkmc.l2core.util.DCStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -17,7 +18,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -46,7 +46,7 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 
 	@Override
 	public ItemStack getDrawerContent(ItemStack drawer) {
-		ItemStack stack = LBItems.DC_DRAWER_STACK.getOrDefault(drawer, ItemStack.EMPTY);
+		ItemStack stack = LBItems.DC_DRAWER_STACK.getOrDefault(drawer, new DCStack(ItemStack.EMPTY)).stack();
 		int count = getCount(drawer);
 		return count == 0 ? ItemStack.EMPTY : stack;
 	}
@@ -57,7 +57,7 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 			drawer.remove(LBItems.DC_DRAWER_STACK);
 			drawer.remove(LBItems.DC_DRAWER_COUNT);
 		} else {
-			LBItems.DC_DRAWER_STACK.set(drawer, item.copyWithCount(1));
+			LBItems.DC_DRAWER_STACK.set(drawer, new DCStack(item.copyWithCount(1)));
 		}
 	}
 

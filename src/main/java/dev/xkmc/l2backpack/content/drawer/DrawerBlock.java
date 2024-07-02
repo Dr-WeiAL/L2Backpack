@@ -4,6 +4,7 @@ import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.common.ContentTransfer;
 import dev.xkmc.l2backpack.init.registrate.LBBlocks;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
+import dev.xkmc.l2core.util.DCStack;
 import dev.xkmc.l2modularblock.impl.BlockEntityBlockMethodImpl;
 import dev.xkmc.l2modularblock.mult.SetPlacedByBlockMethod;
 import dev.xkmc.l2modularblock.mult.UseItemOnBlockMethod;
@@ -90,7 +91,7 @@ public class DrawerBlock implements UseItemOnBlockMethod, GetBlockItemBlockMetho
 
 	private ItemStack buildStack(DrawerBlockEntity chest) {
 		ItemStack stack = LBItems.DRAWER.asStack();
-		LBItems.DC_DRAWER_STACK.set(stack, chest.handler.item);
+		LBItems.DC_DRAWER_STACK.set(stack, new DCStack(chest.handler.item));
 		LBItems.DC_DRAWER_COUNT.set(stack, chest.handler.count);
 		LBItems.DC_DRAWER_STACKING.set(stack, chest.handler.stacking);
 		LBItems.DC_PICKUP.set(stack, chest.handler.config);

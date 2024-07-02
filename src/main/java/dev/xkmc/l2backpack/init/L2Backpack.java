@@ -11,7 +11,7 @@ import dev.xkmc.l2backpack.content.common.BaseBagItemHandler;
 import dev.xkmc.l2backpack.content.remote.player.EnderBackpackCaps;
 import dev.xkmc.l2backpack.content.remote.player.EnderSyncCap;
 import dev.xkmc.l2backpack.content.remote.player.EnderSyncPacket;
-import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestCaps;
+import dev.xkmc.l2backpack.content.remote.dimensional.DimensionalCaps;
 import dev.xkmc.l2backpack.events.BackpackSel;
 import dev.xkmc.l2backpack.events.BackpackSlotClickListener;
 import dev.xkmc.l2backpack.init.data.*;
@@ -93,7 +93,7 @@ public class L2Backpack {
 
 			event.registerItem(LBMisc.PICKUP, (stack, c) -> new BaseBagInvWrapper(stack), backpacks);
 			event.registerItem(LBMisc.PICKUP, (stack, c) -> new EnderBackpackCaps(stack), LBItems.ENDER_BACKPACK);
-			event.registerItem(LBMisc.PICKUP, (stack, c) -> new WorldChestCaps(stack), LBItems.DIMENSIONAL_STORAGE);
+			event.registerItem(LBMisc.PICKUP, (stack, c) -> new DimensionalCaps(stack), LBItems.DIMENSIONAL_STORAGE);
 			event.registerItem(LBMisc.PICKUP, LBItems.DRAWER.get()::getCaps, LBItems.DRAWER);
 			event.registerItem(LBMisc.PICKUP, LBItems.ENDER_DRAWER.get()::getCaps, LBItems.ENDER_DRAWER);
 			event.registerItem(LBMisc.PICKUP, (stack, c) -> new BagCaps(stack), LBItems.ARMOR_BAG, LBItems.BOOK_BAG);

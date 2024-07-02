@@ -1,4 +1,4 @@
-package dev.xkmc.l2backpack.content.remote.worldchest;
+package dev.xkmc.l2backpack.content.remote.dimensional;
 
 import dev.xkmc.l2backpack.content.capability.PickupBagItem;
 import dev.xkmc.l2backpack.content.capability.PickupConfig;
@@ -6,7 +6,7 @@ import dev.xkmc.l2backpack.content.common.BackpackModelItem;
 import dev.xkmc.l2backpack.content.common.ContentTransfer;
 import dev.xkmc.l2backpack.content.insert.InsertOnlyItem;
 import dev.xkmc.l2backpack.content.remote.common.StorageContainer;
-import dev.xkmc.l2backpack.content.remote.common.WorldStorage;
+import dev.xkmc.l2backpack.content.remote.common.LBSavedData;
 import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.data.LangData;
@@ -39,7 +39,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class WorldChestItem extends BlockItem implements BackpackModelItem, PickupBagItem, InsertOnlyItem {
+public class DimensionalItem extends BlockItem implements BackpackModelItem, PickupBagItem, InsertOnlyItem {
 
 	public static ItemStack initLootGen(ItemStack stack, UUID uuid, Component name, DyeColor color, ResourceLocation loot, long seed) {
 		LBItems.DC_OWNER_ID.set(stack, uuid);
@@ -52,7 +52,7 @@ public class WorldChestItem extends BlockItem implements BackpackModelItem, Pick
 
 	public final DyeColor color;
 
-	public WorldChestItem(DyeColor color, Properties props) {
+	public DimensionalItem(DyeColor color, Properties props) {
 		super(LBBlocks.WORLD_CHEST.get(), props.stacksTo(1).fireResistant());
 		this.color = color;
 	}
@@ -64,7 +64,7 @@ public class WorldChestItem extends BlockItem implements BackpackModelItem, Pick
 			LBItems.DC_PASSWORD.set(stack, (long) color.getId());
 		}
 		if (LBItems.DC_LOOT_ID.get(stack) != null) {
-			new WorldChestMenuPvd((ServerPlayer) player, stack, this).getContainer((ServerLevel) player.level());
+			new DimensionalMenuPvd((ServerPlayer) player, stack, this).getContainer((ServerLevel) player.level());
 		}
 	}
 
@@ -72,7 +72,7 @@ public class WorldChestItem extends BlockItem implements BackpackModelItem, Pick
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
 		if (!level.isClientSide()) {
-			new WorldChestMenuPvd((ServerPlayer) player, stack, this).open();
+			new DimensionalMenuPvd((ServerPlayer) player, stack, this).open();
 		} else {
 			ContentTransfer.playSound(player);
 		}
@@ -86,7 +86,7 @@ public class WorldChestItem extends BlockItem implements BackpackModelItem, Pick
 		if (context.getPlayer() != null && !context.getPlayer().isCrouching()) {
 			ItemStack stack = context.getItemInHand();
 			if (!context.getLevel().isClientSide()) {
-				new WorldChestMenuPvd((ServerPlayer) context.getPlayer(), stack, this).open();
+				new DimensionalMenuPvd((ServerPlayer) context.getPlayer(), stack, this).open();
 			} else {
 				ContentTransfer.playSound(context.getPlayer());
 			}
@@ -134,7 +134,7 @@ public class WorldChestItem extends BlockItem implements BackpackModelItem, Pick
 		var id = LBItems.DC_OWNER_ID.get(stack);
 		if (id == null) return Optional.empty();
 		long pwd = LBItems.DC_PASSWORD.getOrDefault(stack, 0L);
-		return WorldStorage.get(level).getOrCreateStorage(id, color.getId(), pwd, null, null, 0);
+		return LBSavedData.get(level).getOrCreateStorage(id, color.getId(), pwd, null, null, 0);
 	}
 
 	@Override
@@ -142,7 +142,7 @@ public class WorldChestItem extends BlockItem implements BackpackModelItem, Pick
 		var opt = getContainer(stack, player.serverLevel());
 		if (opt.isPresent()) {
 			var storage = opt.get();
-			return new WorldChestInvWrapper(storage.container, storage.id);
+			return new DimensionalInvWrapper(storage.container, storage.id);
 		}
 		return null;
 	}

@@ -3,7 +3,7 @@ package dev.xkmc.l2backpack.init.loot;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestItem;
+import dev.xkmc.l2backpack.content.remote.dimensional.DimensionalItem;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2core.util.MathHelper;
@@ -64,7 +64,7 @@ public class BackpackLootModifier extends LootModifier {
 				stack = LBItems.DIMENSIONAL_STORAGE[color.ordinal()].asStack();
 				var uuid = MathHelper.getUUIDFromString(name);
 				var comp = Component.translatable(L2Backpack.MODID + ".loot." + name + ".name");
-				WorldChestItem.initLootGen(stack, uuid, comp, color, loot, seed);
+				DimensionalItem.initLootGen(stack, uuid, comp, color, loot, seed);
 			} else {
 				stack = LBItems.BACKPACKS[color.ordinal()].asStack();
 				stack.set(LBItems.DC_LOOT_ID, loot.toString());

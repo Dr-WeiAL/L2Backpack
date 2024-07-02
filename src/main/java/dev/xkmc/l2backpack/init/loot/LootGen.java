@@ -2,7 +2,7 @@ package dev.xkmc.l2backpack.init.loot;
 
 import com.tterrag.registrate.providers.loot.RegistrateLootTableProvider;
 import dev.xkmc.l2backpack.init.L2Backpack;
-import dev.xkmc.l2core.util.LootTableTemplate;
+import dev.xkmc.l2core.serial.loot.LootTableTemplate;
 import dev.xkmc.l2core.util.MathHelper;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;

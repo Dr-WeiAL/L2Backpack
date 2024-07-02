@@ -7,8 +7,8 @@ import dev.xkmc.l2backpack.content.drawer.DrawerBlockEntity;
 import dev.xkmc.l2backpack.content.remote.common.EnderParticleBlock;
 import dev.xkmc.l2backpack.content.remote.drawer.EnderDrawerBlock;
 import dev.xkmc.l2backpack.content.remote.drawer.EnderDrawerBlockEntity;
-import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestBlock;
-import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestBlockEntity;
+import dev.xkmc.l2backpack.content.remote.dimensional.DimensionalBlock;
+import dev.xkmc.l2backpack.content.remote.dimensional.DimensionalBlockEntity;
 import dev.xkmc.l2backpack.content.render.DrawerRenderer;
 import dev.xkmc.l2modularblock.core.BlockTemplates;
 import dev.xkmc.l2modularblock.core.DelegateBlock;
@@ -24,7 +24,7 @@ import static dev.xkmc.l2backpack.init.L2Backpack.REGISTRATE;
 public class LBBlocks {
 
 	public static final BlockEntry<DelegateBlock> WORLD_CHEST;
-	public static final BlockEntityEntry<WorldChestBlockEntity> TE_WORLD_CHEST;
+	public static final BlockEntityEntry<DimensionalBlockEntity> TE_WORLD_CHEST;
 
 	public static final BlockEntry<DelegateBlock> ENDER_DRAWER;
 	public static final BlockEntityEntry<EnderDrawerBlockEntity> TE_ENDER_DRAWER;
@@ -34,16 +34,16 @@ public class LBBlocks {
 
 	static {
 		WORLD_CHEST = REGISTRATE.block("dimensional_storage", p -> DelegateBlock.newBaseBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.ENDER_CHEST),
-						BlockTemplates.HORIZONTAL, WorldChestBlock.INSTANCE, EnderParticleBlock.INSTANCE,
-						WorldChestBlock.TILE_ENTITY_SUPPLIER_BUILDER))
+						BlockTemplates.HORIZONTAL, DimensionalBlock.INSTANCE, EnderParticleBlock.INSTANCE,
+						DimensionalBlock.TILE_ENTITY_SUPPLIER_BUILDER))
 				.blockstate((ctx, pvd) -> pvd.horizontalBlock(ctx.getEntry(), state -> pvd.models()
-						.withExistingParent(ctx.getName() + "_" + state.getValue(WorldChestBlock.COLOR).getName(),
+						.withExistingParent(ctx.getName() + "_" + state.getValue(DimensionalBlock.COLOR).getName(),
 								pvd.modLoc("backpack"))
-						.texture("0", "block/dimensional_storage/" + state.getValue(WorldChestBlock.COLOR).getName())))
+						.texture("0", "block/dimensional_storage/" + state.getValue(DimensionalBlock.COLOR).getName())))
 				.loot((table, block) -> table.dropOther(block, Blocks.ENDER_CHEST))
 				.tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL)
 				.defaultLang().register();
-		TE_WORLD_CHEST = REGISTRATE.blockEntity("dimensional_storage", WorldChestBlockEntity::new)
+		TE_WORLD_CHEST = REGISTRATE.blockEntity("dimensional_storage", DimensionalBlockEntity::new)
 				.validBlock(WORLD_CHEST).register();
 
 		ENDER_DRAWER = REGISTRATE.block("ender_drawer", p -> DelegateBlock.newBaseBlock(

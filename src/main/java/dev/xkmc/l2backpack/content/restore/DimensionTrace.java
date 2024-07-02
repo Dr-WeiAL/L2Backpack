@@ -1,7 +1,7 @@
 package dev.xkmc.l2backpack.content.restore;
 
-import dev.xkmc.l2backpack.content.remote.common.WorldStorage;
-import dev.xkmc.l2backpack.content.remote.worldchest.SimpleStorageMenuPvd;
+import dev.xkmc.l2backpack.content.remote.common.LBSavedData;
+import dev.xkmc.l2backpack.content.remote.dimensional.SimpleStorageMenuPvd;
 import dev.xkmc.l2backpack.init.registrate.LBMenu;
 import dev.xkmc.l2menustacker.screen.base.LayerPopType;
 import dev.xkmc.l2menustacker.screen.track.TrackedEntryType;
@@ -18,7 +18,7 @@ public class DimensionTrace extends TrackedEntryType<DimensionTraceData> {
 		if (comp == null) {
 			comp = Component.translatable(LBMenu.getLangKey(LBMenu.MT_WORLD_CHEST.get()));
 		}
-		var op = WorldStorage.get((ServerLevel) player.level())
+		var op = LBSavedData.get((ServerLevel) player.level())
 				.getStorageWithoutPassword(data.uuid(), data.color());
 		if (op.isPresent()) {
 			player.openMenu(new SimpleStorageMenuPvd(comp, op.get()));

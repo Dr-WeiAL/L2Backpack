@@ -62,7 +62,7 @@ public abstract class BaseBagMenu<T extends BaseBagMenu<T>> extends BaseContaine
 		if (getStackRaw().isEmpty() || oldStack != newStack) {
 			return false;
 		}
-		return getStack().getCapability(Capabilities.ItemHandler.ITEM) == handler;
+		return true;
 	}
 
 	public ItemStack getStack() {
@@ -83,7 +83,7 @@ public abstract class BaseBagMenu<T extends BaseBagMenu<T>> extends BaseContaine
 	public ItemStack quickMoveStack(Player pl, int id) {
 		ItemStack stack = this.slots.get(id).getItem();
 		if (quickMove(pl, this, stack, id)) {
-			this.slots.get(id).setChanged();
+			this.slots.get(id).set(stack);
 		}
 		return ItemStack.EMPTY;
 	}

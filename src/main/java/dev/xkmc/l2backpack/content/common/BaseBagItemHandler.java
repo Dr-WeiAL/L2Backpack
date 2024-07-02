@@ -1,6 +1,6 @@
 package dev.xkmc.l2backpack.content.common;
 
-import dev.xkmc.l2backpack.content.remote.common.WorldStorage;
+import dev.xkmc.l2backpack.content.remote.common.LBSavedData;
 import dev.xkmc.l2backpack.content.restore.DimensionSourceData;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
@@ -51,7 +51,7 @@ public class BaseBagItemHandler extends ComponentItemHandler {
 	private record CallbackData(BaseBagItemHandler parent, ServerPlayer player, DimensionSourceData data) {
 
 		private void setChanged() {
-			var opt = WorldStorage.get(player.serverLevel())
+			var opt = LBSavedData.get(player.serverLevel())
 					.getStorageWithoutPassword(data.uuid(), data.color());
 			if (opt.isEmpty()) return;
 			var cont = opt.get();

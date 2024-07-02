@@ -1,4 +1,4 @@
-package dev.xkmc.l2backpack.content.remote.worldchest;
+package dev.xkmc.l2backpack.content.remote.dimensional;
 
 import dev.xkmc.l2backpack.content.remote.common.StorageContainer;
 import net.minecraft.network.chat.Component;
@@ -16,7 +16,7 @@ public record SimpleStorageMenuPvd(Component comp, StorageContainer cont) implem
 
 	@Override
 	public AbstractContainerMenu createMenu(int wid, Inventory inv, Player player) {
-		return new WorldChestContainer(wid, inv, cont.container, cont, null);
+		return new DimensionalContainer(wid, inv, cont.container, cont, null);
 	}
 
 }

@@ -1,9 +1,9 @@
-package dev.xkmc.l2backpack.content.remote.worldchest;
+package dev.xkmc.l2backpack.content.remote.dimensional;
 
 import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.capability.PickupMode;
 import dev.xkmc.l2backpack.content.remote.common.StorageContainer;
-import dev.xkmc.l2backpack.content.remote.common.WorldStorage;
+import dev.xkmc.l2backpack.content.remote.common.LBSavedData;
 import dev.xkmc.l2core.base.tile.BaseBlockEntity;
 import dev.xkmc.l2serial.serialization.marker.SerialClass;
 import dev.xkmc.l2serial.serialization.marker.SerialField;
@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @SerialClass
-public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvider, Nameable, ContainerListener {
+public class DimensionalBlockEntity extends BaseBlockEntity implements MenuProvider, Nameable, ContainerListener {
 
 	@SerialField
 	public UUID ownerId;
@@ -39,7 +39,7 @@ public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvid
 
 	private Component name;
 
-	public WorldChestBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+	public DimensionalBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 	}
 
@@ -49,11 +49,11 @@ public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvid
 		if (!(level instanceof ServerLevel sl)) {
 			return new InvWrapper(new SimpleContainer(27));
 		}
-		Optional<StorageContainer> storage = WorldStorage.get(sl).getOrCreateStorage(ownerId, color, password, null, null, 0);
+		Optional<StorageContainer> storage = LBSavedData.get(sl).getOrCreateStorage(ownerId, color, password, null, null, 0);
 		if (storage.isEmpty()) return null;
 
 		if (config == null || config.pickup() == PickupMode.NONE) {
-			return new WorldChestInvWrapper(storage.get().container, ownerId);
+			return new DimensionalInvWrapper(storage.get().container, ownerId);
 		} else {
 			return new BlockPickupInvWrapper(sl, this, storage.get(), config);
 		}
@@ -84,7 +84,7 @@ public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvid
 		if (level == null || ownerId == null) return null;
 		Optional<StorageContainer> storage = getAccess();
 		if (storage.isEmpty()) return null;
-		return new WorldChestContainer(wid, inventory, storage.get().container, storage.get(), this);
+		return new DimensionalContainer(wid, inventory, storage.get().container, storage.get(), this);
 	}
 
 	public boolean stillValid(Player player) {
@@ -98,7 +98,7 @@ public class WorldChestBlockEntity extends BaseBlockEntity implements MenuProvid
 
 	private Optional<StorageContainer> getAccess() {
 		assert level != null;
-		return WorldStorage.get((ServerLevel) level).getOrCreateStorage(ownerId, color, password, null, null, 0);
+		return LBSavedData.get((ServerLevel) level).getOrCreateStorage(ownerId, color, password, null, null, 0);
 	}
 
 	private boolean added = false;

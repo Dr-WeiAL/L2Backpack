@@ -22,12 +22,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 @SerialClass
-public class WorldStorage extends BaseSavedData<WorldStorage> {
+public class LBSavedData extends BaseSavedData<LBSavedData> {
 
 	private static final String ID = "l2backpack:dimensional";
-	private static final Factory<WorldStorage> FACTORY = new Factory<>(WorldStorage::new, WorldStorage::new);
+	private static final Factory<LBSavedData> FACTORY = new Factory<>(LBSavedData::new, LBSavedData::new);
 
-	public static WorldStorage get(ServerLevel level) {
+	public static LBSavedData get(ServerLevel level) {
 		var ans = level.getDataStorage().computeIfAbsent(FACTORY, ID);
 		ans.level = level;
 		return ans;
@@ -40,12 +40,12 @@ public class WorldStorage extends BaseSavedData<WorldStorage> {
 
 	private ServerLevel level;
 
-	private WorldStorage() {
-		super(WorldStorage.class);
+	private LBSavedData() {
+		super(LBSavedData.class);
 	}
 
-	private WorldStorage(CompoundTag tag, HolderLookup.Provider pvd) {
-		super(WorldStorage.class, tag, pvd);
+	private LBSavedData(CompoundTag tag, HolderLookup.Provider pvd) {
+		super(LBSavedData.class, tag, pvd);
 	}
 
 	public Optional<StorageContainer> getOrCreateStorage(UUID id, int color, long password,

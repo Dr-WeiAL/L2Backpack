@@ -90,12 +90,12 @@ public interface DrawerQuickInsert {
 			if (j <= maxSize) {
 				src.setCount(0);
 				dst.setCount(j);
-				slot.setChanged();
+				slot.set(dst);
 				return true;
 			} else if (dst.getCount() < maxSize) {
 				src.shrink(maxSize - dst.getCount());
 				dst.setCount(maxSize);
-				slot.setChanged();
+				slot.set(dst);
 				return true;
 			}
 		}

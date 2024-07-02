@@ -1,4 +1,4 @@
-package dev.xkmc.l2backpack.content.remote.worldchest;
+package dev.xkmc.l2backpack.content.remote.dimensional;
 
 import dev.xkmc.l2backpack.init.registrate.LBTriggers;
 import dev.xkmc.l2core.util.Proxy;
@@ -9,11 +9,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class WorldChestInvWrapper extends InvWrapper {
+public class DimensionalInvWrapper extends InvWrapper {
 
 	private final UUID id;
 
-	public WorldChestInvWrapper(Container inv, UUID id) {
+	public DimensionalInvWrapper(Container inv, UUID id) {
 		super(inv);
 		this.id = id;
 	}

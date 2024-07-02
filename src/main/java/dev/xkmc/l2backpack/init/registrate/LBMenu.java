@@ -8,8 +8,8 @@ import dev.xkmc.l2backpack.content.quickswap.armorswap.ArmorBagMenu;
 import dev.xkmc.l2backpack.content.quickswap.armorswap.ArmorSetBagMenu;
 import dev.xkmc.l2backpack.content.quickswap.quiver.QuiverMenu;
 import dev.xkmc.l2backpack.content.quickswap.scabbard.ScabbardMenu;
-import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestContainer;
-import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestScreen;
+import dev.xkmc.l2backpack.content.remote.dimensional.DimensionalContainer;
+import dev.xkmc.l2backpack.content.remote.dimensional.DimensionalScreen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
@@ -26,9 +26,9 @@ public class LBMenu {
 					() -> BackpackScreen::new)
 			.lang(LBMenu::getLangKey).register();
 
-	public static final MenuEntry<WorldChestContainer> MT_WORLD_CHEST = REGISTRATE.menu("dimensional_storage",
-					WorldChestContainer::fromNetwork,
-					() -> WorldChestScreen::new)
+	public static final MenuEntry<DimensionalContainer> MT_WORLD_CHEST = REGISTRATE.menu("dimensional_storage",
+					DimensionalContainer::fromNetwork,
+					() -> DimensionalScreen::new)
 			.lang(LBMenu::getLangKey).register();
 
 	public static final MenuEntry<QuiverMenu> MT_ARROW = REGISTRATE.menu("arrow_bag",

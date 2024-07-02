@@ -1,4 +1,4 @@
-package dev.xkmc.l2backpack.content.remote.worldchest;
+package dev.xkmc.l2backpack.content.remote.dimensional;
 
 import dev.xkmc.l2backpack.content.backpack.BackpackMenu;
 import dev.xkmc.l2backpack.content.click.DrawerQuickInsert;
@@ -16,11 +16,11 @@ import net.minecraft.world.item.ItemStack;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class WorldChestContainer extends BaseContainerMenu<WorldChestContainer> implements DrawerQuickInsert {
+public class DimensionalContainer extends BaseContainerMenu<DimensionalContainer> implements DrawerQuickInsert {
 
-	public static WorldChestContainer fromNetwork(MenuType<WorldChestContainer> type, int windowId, Inventory inv) {
+	public static DimensionalContainer fromNetwork(MenuType<DimensionalContainer> type, int windowId, Inventory inv) {
 		//TODO
-		return new WorldChestContainer(windowId, inv, new SimpleContainer(27), null, null);
+		return new DimensionalContainer(windowId, inv, new SimpleContainer(27), null, null);
 	}
 
 	protected final Player player;
@@ -29,11 +29,11 @@ public class WorldChestContainer extends BaseContainerMenu<WorldChestContainer> 
 	protected final StorageContainer storage;
 
 	@Nullable
-	private final WorldChestBlockEntity activeChest;
+	private final DimensionalBlockEntity activeChest;
 
-	public WorldChestContainer(int windowId, Inventory inventory, SimpleContainer cont,
-							   @Nullable StorageContainer storage,
-							   @Nullable WorldChestBlockEntity entity) {
+	public DimensionalContainer(int windowId, Inventory inventory, SimpleContainer cont,
+								@Nullable StorageContainer storage,
+								@Nullable DimensionalBlockEntity entity) {
 		super(LBMenu.MT_WORLD_CHEST.get(), windowId, inventory, BackpackMenu.MANAGERS[2], menu -> cont, false);
 		this.player = inventory.player;
 		this.addSlot("grid", stack -> true);

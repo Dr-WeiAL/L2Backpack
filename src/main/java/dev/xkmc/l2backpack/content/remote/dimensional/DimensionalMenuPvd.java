@@ -1,7 +1,7 @@
-package dev.xkmc.l2backpack.content.remote.worldchest;
+package dev.xkmc.l2backpack.content.remote.dimensional;
 
 import dev.xkmc.l2backpack.content.remote.common.StorageContainer;
-import dev.xkmc.l2backpack.content.remote.common.WorldStorage;
+import dev.xkmc.l2backpack.content.remote.common.LBSavedData;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2backpack.init.registrate.LBTriggers;
 import dev.xkmc.l2core.util.ServerOnly;
@@ -18,7 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.Optional;
 import java.util.UUID;
 
-public record WorldChestMenuPvd(ServerPlayer player, ItemStack stack, WorldChestItem item) implements MenuProvider {
+public record DimensionalMenuPvd(ServerPlayer player, ItemStack stack, DimensionalItem item) implements MenuProvider {
 
 	@Override
 	public Component getDisplayName() {
@@ -32,7 +32,7 @@ public record WorldChestMenuPvd(ServerPlayer player, ItemStack stack, WorldChest
 		if (!container.id.equals(player.getUUID())) {
 			LBTriggers.SHARE.get().trigger((ServerPlayer) player);
 		}
-		return new WorldChestContainer(id, inventory, container.container, container, null);
+		return new DimensionalContainer(id, inventory, container.container, container, null);
 	}
 
 	@ServerOnly
@@ -47,7 +47,7 @@ public record WorldChestMenuPvd(ServerPlayer player, ItemStack stack, WorldChest
 		}
 		if (id == null) return Optional.empty();
 		ResourceLocation loot = lootStr == null ? null : ResourceLocation.parse(lootStr);
-		return WorldStorage.get(level).getOrCreateStorage(id, item.color.getId(), pwd, player, loot, seed);
+		return LBSavedData.get(level).getOrCreateStorage(id, item.color.getId(), pwd, player, loot, seed);
 	}
 
 	@ServerOnly

@@ -2,7 +2,7 @@ package dev.xkmc.l2backpack.content.tool;
 
 import dev.xkmc.l2backpack.compat.CuriosCompat;
 import dev.xkmc.l2backpack.content.capability.PickupConfig;
-import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestBlockEntity;
+import dev.xkmc.l2backpack.content.remote.dimensional.DimensionalBlockEntity;
 import dev.xkmc.l2backpack.events.BackpackSlotClickListener;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -48,7 +48,7 @@ public abstract class TweakerTool extends Item implements IBagTool {
 
 	@Override
 	public InteractionResult useOn(UseOnContext ctx) {
-		if (ctx.getLevel().getBlockEntity(ctx.getClickedPos()) instanceof WorldChestBlockEntity be) {
+		if (ctx.getLevel().getBlockEntity(ctx.getClickedPos()) instanceof DimensionalBlockEntity be) {
 			if (!ctx.getLevel().isClientSide()) {
 				be.setPickupMode(click(be.config));
 			}

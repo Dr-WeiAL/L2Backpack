@@ -1,4 +1,4 @@
-package dev.xkmc.l2backpack.content.remote.worldchest;
+package dev.xkmc.l2backpack.content.remote.dimensional;
 
 import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.common.ContentTransfer;
@@ -38,15 +38,15 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class WorldChestBlock implements CreateBlockStateBlockMethod, DefaultStateBlockMethod, PlacementBlockMethod,
+public class DimensionalBlock implements CreateBlockStateBlockMethod, DefaultStateBlockMethod, PlacementBlockMethod,
 		UseItemOnBlockMethod, GetBlockItemBlockMethod, SpecialDropBlockMethod, SetPlacedByBlockMethod, ShapeBlockMethod {
 
-	public static final WorldChestBlock INSTANCE = new WorldChestBlock();
+	public static final DimensionalBlock INSTANCE = new DimensionalBlock();
 
 	protected static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
 
-	public static final BlockEntityBlockMethod<WorldChestBlockEntity> TILE_ENTITY_SUPPLIER_BUILDER =
-			new WorldChestAnalogBlockEntity<>(LBBlocks.TE_WORLD_CHEST, WorldChestBlockEntity.class);
+	public static final BlockEntityBlockMethod<DimensionalBlockEntity> TILE_ENTITY_SUPPLIER_BUILDER =
+			new DimensionalAnalogBlockEntity<>(LBBlocks.TE_WORLD_CHEST, DimensionalBlockEntity.class);
 
 	public static final EnumProperty<DyeColor> COLOR = EnumProperty.create("color", DyeColor.class);
 
@@ -63,7 +63,7 @@ public class WorldChestBlock implements CreateBlockStateBlockMethod, DefaultStat
 	@Override
 	public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
 		BlockEntity blockentity = level.getBlockEntity(pos);
-		if (blockentity instanceof WorldChestBlockEntity chest) {
+		if (blockentity instanceof DimensionalBlockEntity chest) {
 			if (stack.getItem() instanceof TweakerTool) {
 				return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 			}
@@ -95,7 +95,7 @@ public class WorldChestBlock implements CreateBlockStateBlockMethod, DefaultStat
 	@Override
 	public ItemStack getCloneItemStack(BlockGetter world, BlockPos pos, BlockState state) {
 		BlockEntity be = world.getBlockEntity(pos);
-		if (be instanceof WorldChestBlockEntity chest) {
+		if (be instanceof DimensionalBlockEntity chest) {
 			return buildStack(state, chest);
 		}
 		return LBItems.DIMENSIONAL_STORAGE[state.getValue(COLOR).getId()].asStack();
@@ -103,13 +103,13 @@ public class WorldChestBlock implements CreateBlockStateBlockMethod, DefaultStat
 
 	public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
 		BlockEntity blockentity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
-		if (blockentity instanceof WorldChestBlockEntity chest) {
+		if (blockentity instanceof DimensionalBlockEntity chest) {
 			return List.of(buildStack(state, chest));
 		}
 		return List.of(LBItems.DIMENSIONAL_STORAGE[state.getValue(COLOR).getId()].asStack());
 	}
 
-	public static ItemStack buildStack(BlockState state, WorldChestBlockEntity chest) {
+	public static ItemStack buildStack(BlockState state, DimensionalBlockEntity chest) {
 		ItemStack stack = LBItems.DIMENSIONAL_STORAGE[state.getValue(COLOR).getId()].asStack();
 		if (chest.ownerId != null) {
 			stack.set(LBItems.DC_OWNER_ID, chest.ownerId);
@@ -122,14 +122,14 @@ public class WorldChestBlock implements CreateBlockStateBlockMethod, DefaultStat
 
 	@Override
 	public BlockState getStateForPlacement(BlockState def, BlockPlaceContext context) {
-		return def.setValue(COLOR, ((WorldChestItem) context.getItemInHand().getItem()).color);
+		return def.setValue(COLOR, ((DimensionalItem) context.getItemInHand().getItem()).color);
 	}
 
 	@Override
 	public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
 		BlockEntity blockentity = level.getBlockEntity(pos);
 		var config = PickupConfig.get(stack);
-		if (blockentity instanceof WorldChestBlockEntity chest) {
+		if (blockentity instanceof DimensionalBlockEntity chest) {
 			chest.ownerId = LBItems.DC_OWNER_ID.getOrDefault(stack, Util.NIL_UUID);
 			chest.ownerName = LBItems.DC_OWNER_NAME.getOrDefault(stack, Component.empty());
 			chest.password = LBItems.DC_PASSWORD.getOrDefault(stack, 0L);

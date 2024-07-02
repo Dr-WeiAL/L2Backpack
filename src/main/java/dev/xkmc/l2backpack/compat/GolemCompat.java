@@ -1,28 +1,12 @@
 package dev.xkmc.l2backpack.compat;
 
-import com.mojang.datafixers.util.Pair;
 import com.tterrag.registrate.providers.RegistrateTagsProvider;
 import dev.xkmc.l2backpack.content.common.BaseBagItem;
-import dev.xkmc.l2backpack.content.quickswap.common.IQuickSwapToken;
-import dev.xkmc.l2backpack.content.quickswap.type.QuickSwapManager;
-import dev.xkmc.l2backpack.content.quickswap.type.QuickSwapTypes;
-import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestInvWrapper;
-import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestItem;
-import dev.xkmc.l2backpack.events.ArrowBagEvents;
-import dev.xkmc.l2backpack.init.registrate.LBBlocks;
+import dev.xkmc.l2backpack.content.remote.dimensional.DimensionalItem;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
-import dev.xkmc.l2library.util.GenericItemStack;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.bus.api.EventPriority;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class GolemCompat {
 
@@ -34,7 +18,7 @@ public class GolemCompat {
 		if (stack.getItem() instanceof BaseBagItem) {
 			return true;
 		}
-		if (stack.getItem() instanceof WorldChestItem) {
+		if (stack.getItem() instanceof DimensionalItem) {
 			return LBItems.DC_OWNER_ID.get(stack) != null;
 		}
 		return false;

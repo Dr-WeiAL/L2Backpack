@@ -15,7 +15,7 @@ import dev.xkmc.l2backpack.content.quickswap.quiver.Quiver;
 import dev.xkmc.l2backpack.content.quickswap.scabbard.Scabbard;
 import dev.xkmc.l2backpack.content.remote.drawer.EnderDrawerItem;
 import dev.xkmc.l2backpack.content.remote.player.EnderBackpackItem;
-import dev.xkmc.l2backpack.content.remote.worldchest.WorldChestItem;
+import dev.xkmc.l2backpack.content.remote.dimensional.DimensionalItem;
 import dev.xkmc.l2backpack.content.tool.DestroyTweakerTool;
 import dev.xkmc.l2backpack.content.tool.PickupTweakerTool;
 import dev.xkmc.l2backpack.init.L2Backpack;
@@ -23,6 +23,7 @@ import dev.xkmc.l2backpack.init.data.TagGen;
 import dev.xkmc.l2core.init.reg.registrate.SimpleEntry;
 import dev.xkmc.l2core.init.reg.simple.DCReg;
 import dev.xkmc.l2core.init.reg.simple.DCVal;
+import dev.xkmc.l2core.util.DCStack;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -34,7 +35,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
@@ -53,7 +53,7 @@ public class LBItems {
 
 	// -------- common --------
 	public static final ItemEntry<BackpackItem>[] BACKPACKS;
-	public static final ItemEntry<WorldChestItem>[] DIMENSIONAL_STORAGE;
+	public static final ItemEntry<DimensionalItem>[] DIMENSIONAL_STORAGE;
 	public static final ItemEntry<EnderBackpackItem> ENDER_BACKPACK;
 	public static final ItemEntry<Item> ENDER_POCKET;
 	public static final ItemEntry<PickupTweakerTool> PICKUP_TWEAKER;
@@ -82,8 +82,7 @@ public class LBItems {
 	public static final DCVal<PickupConfig> DC_PICKUP = DC.reg("pickup", PickupConfig.class, true);
 	public static final DCVal<Item> DC_ENDER_DRAWER_ITEM = DC.reg("ender_drawer_item",
 			BuiltInRegistries.ITEM.byNameCodec(), ByteBufCodecs.registry(Registries.ITEM), true);
-	public static final DCVal<ItemStack> DC_DRAWER_STACK = DC.reg("drawer_stack",
-			ItemStack.CODEC, ItemStack.STREAM_CODEC, true);
+	public static final DCVal<DCStack> DC_DRAWER_STACK = DC.stack("drawer_stack");
 	public static final DCVal<Integer> DC_DRAWER_COUNT = DC.intVal("drawer_count");
 	public static final DCVal<Integer> DC_DRAWER_STACKING = DC.intVal("drawer_upgrade");
 
@@ -109,7 +108,7 @@ public class LBItems {
 			DIMENSIONAL_STORAGE = new ItemEntry[16];
 			for (int i = 0; i < 16; i++) {
 				DyeColor color = DyeColor.values()[i];
-				DIMENSIONAL_STORAGE[i] = REGISTRATE.item("dimensional_storage_" + color.getName(), p -> new WorldChestItem(color, p))
+				DIMENSIONAL_STORAGE[i] = REGISTRATE.item("dimensional_storage_" + color.getName(), p -> new DimensionalItem(color, p))
 						.tag(TagGen.DIMENSIONAL_STORAGES, curios_tag)
 						.model((ctx, pvd) -> pvd.getBuilder(ctx.getName()).parent(
 								new ModelFile.UncheckedModelFile("builtin/entity")))

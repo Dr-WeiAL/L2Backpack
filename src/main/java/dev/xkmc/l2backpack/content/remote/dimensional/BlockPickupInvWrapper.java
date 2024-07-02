@@ -1,4 +1,4 @@
-package dev.xkmc.l2backpack.content.remote.worldchest;
+package dev.xkmc.l2backpack.content.remote.dimensional;
 
 import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.capability.PickupTrace;
@@ -7,12 +7,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class BlockPickupInvWrapper extends WorldChestInvWrapper {
+public class BlockPickupInvWrapper extends DimensionalInvWrapper {
 
 	private final BlockPickupCap cap;
 	private final ServerLevel level;
 
-	public BlockPickupInvWrapper(ServerLevel level, WorldChestBlockEntity be, StorageContainer storage, PickupConfig config) {
+	public BlockPickupInvWrapper(ServerLevel level, DimensionalBlockEntity be, StorageContainer storage, PickupConfig config) {
 		super(storage.container, storage.id);
 		this.level = level;
 		cap = new BlockPickupCap(be, storage, config);
