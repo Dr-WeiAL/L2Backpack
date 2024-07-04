@@ -5,7 +5,7 @@ import dev.xkmc.l2backpack.content.click.DoubleClickItem;
 import dev.xkmc.l2backpack.content.common.ContentTransfer;
 import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.init.L2Backpack;
-import dev.xkmc.l2backpack.init.data.LangData;
+import dev.xkmc.l2backpack.init.data.LBLang;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2core.util.DCStack;
 import net.minecraft.ChatFormatting;
@@ -185,18 +185,18 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 		ItemStack content = getDrawerContent(drawer);
 		int count = getCount(drawer);
 		if (!canSetNewItem(drawer)) {
-			list.add(LangData.IDS.DRAWER_CONTENT.get(content.getHoverName(), count));
+			list.add(LBLang.IDS.DRAWER_CONTENT.get(content.getHoverName(), count));
 		}
-		list.add(LangData.IDS.BACKPACK_SLOT.get(LBItems.DC_DRAWER_STACKING.getOrDefault(drawer, 1), MAX_FACTOR)
+		list.add(LBLang.IDS.BACKPACK_SLOT.get(LBItems.DC_DRAWER_STACKING.getOrDefault(drawer, 1), MAX_FACTOR)
 				.withStyle(ChatFormatting.GRAY));
 		PickupConfig.addText(drawer, list);
-		LangData.addInfo(list,
-				LangData.Info.DRAWER_USE,
-				LangData.Info.LOAD,
-				LangData.Info.PLACE,
-				LangData.Info.EXTRACT_DRAWER,
-				LangData.Info.COLLECT_DRAWER,
-				LangData.Info.PICKUP);
+		LBLang.addInfo(list,
+				LBLang.Info.DRAWER_USE,
+				LBLang.Info.LOAD,
+				LBLang.Info.PLACE,
+				LBLang.Info.EXTRACT_DRAWER,
+				LBLang.Info.COLLECT_DRAWER,
+				LBLang.Info.PICKUP);
 	}
 
 	public String getDescriptionId() {

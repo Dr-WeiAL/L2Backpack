@@ -8,7 +8,7 @@ import dev.xkmc.l2backpack.content.drawer.DrawerItem;
 import dev.xkmc.l2backpack.content.insert.OverlayInsertItem;
 import dev.xkmc.l2backpack.content.tool.IBagTool;
 import dev.xkmc.l2backpack.init.L2Backpack;
-import dev.xkmc.l2backpack.init.data.BackpackKeys;
+import dev.xkmc.l2backpack.init.data.LBKeys;
 import dev.xkmc.l2backpack.network.CreativeSetCarryToServer;
 import dev.xkmc.l2backpack.network.DrawerInteractToServer;
 import dev.xkmc.l2core.util.Proxy;
@@ -40,7 +40,7 @@ public class ClientEventHandler {
 		}
 		if (Minecraft.getInstance().screen == null &&
 				Proxy.getClientPlayer() != null &&
-				event.test(BackpackKeys.OPEN.map.getKey()) &&
+				event.test(LBKeys.OPEN.map.getKey()) &&
 				event.getAction() == InputConstants.PRESS) {
 			if (BackpackSlotClickListener.canOpen(Proxy.getClientPlayer().getItemBySlot(EquipmentSlot.CHEST)) ||
 					CuriosCompat.getSlot(Proxy.getClientPlayer(), BackpackSlotClickListener::canOpen).isPresent())

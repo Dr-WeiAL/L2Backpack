@@ -7,12 +7,11 @@ import dev.xkmc.l2backpack.content.common.ContentTransfer;
 import dev.xkmc.l2backpack.content.common.InvTooltip;
 import dev.xkmc.l2backpack.content.common.TooltipInvItem;
 import dev.xkmc.l2backpack.content.insert.CapInsertItem;
-import dev.xkmc.l2backpack.init.data.LangData;
+import dev.xkmc.l2backpack.init.data.LBLang;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -126,14 +125,14 @@ public abstract class AbstractBag extends Item
 		if (Screen.hasAltDown()) {
 			return;
 		}
-		list.add(LangData.IDS.BAG_SIZE.get(getSize(stack), SIZE));
+		list.add(LBLang.IDS.BAG_SIZE.get(getSize(stack), SIZE));
 		PickupConfig.addText(stack, list);
-		LangData.addInfo(list,
-				LangData.Info.COLLECT_BAG,
-				LangData.Info.LOAD,
-				LangData.Info.EXTRACT_BAG);
+		LBLang.addInfo(list,
+				LBLang.Info.COLLECT_BAG,
+				LBLang.Info.LOAD,
+				LBLang.Info.EXTRACT_BAG);
 		if (!Screen.hasShiftDown()) {
-			list.add(LangData.Info.ALT_CONTENT.get().withStyle(ChatFormatting.GRAY));
+			list.add(LBLang.Info.ALT_CONTENT.get().withStyle(ChatFormatting.GRAY));
 		}
 	}
 

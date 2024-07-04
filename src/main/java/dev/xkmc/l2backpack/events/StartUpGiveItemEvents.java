@@ -2,7 +2,7 @@ package dev.xkmc.l2backpack.events;
 
 import dev.xkmc.l2backpack.content.common.BaseBagItem;
 import dev.xkmc.l2backpack.init.L2Backpack;
-import dev.xkmc.l2backpack.init.data.BackpackConfig;
+import dev.xkmc.l2backpack.init.data.LBConfig;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
 import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,7 +26,7 @@ public class StartUpGiveItemEvents {
 		if (adv == null) return;
 		var prog = sp.getAdvancements().getOrStartProgress(adv);
 		if (prog.isDone()) return;
-		int target = BackpackConfig.SERVER.startupBackpackCondition.get();
+		int target = LBConfig.SERVER.startupBackpackCondition.get();
 		var list = sp.getInventory().items;
 		int count = 0;
 		for (ItemStack stack : list) {
@@ -35,7 +35,7 @@ public class StartUpGiveItemEvents {
 			}
 		}
 		if (count < target) return;
-		int initialRow = Math.max(BackpackConfig.SERVER.initialRows.get(), (count - 1) / 9 + 1);
+		int initialRow = Math.max(LBConfig.SERVER.initialRows.get(), (count - 1) / 9 + 1);
 		ItemStack stack = LBItems.DC_ROW.set(LBItems.BACKPACKS[DyeColor.WHITE.ordinal()].asStack(), initialRow);
 		var ans = NonNullList.withSize(initialRow * 9, ItemStack.EMPTY);
 		int index = 0;

@@ -6,11 +6,10 @@ import dev.xkmc.l2backpack.content.common.InvTooltip;
 import dev.xkmc.l2backpack.content.quickswap.common.QuickSwapOverlay;
 import dev.xkmc.l2backpack.content.quickswap.quiver.Quiver;
 import dev.xkmc.l2backpack.content.render.*;
-import dev.xkmc.l2backpack.init.data.BackpackKeys;
+import dev.xkmc.l2backpack.init.data.LBKeys;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -70,7 +69,7 @@ public class L2BackpackClient {
 
 	@SubscribeEvent
 	public static void registerKeys(RegisterKeyMappingsEvent event) {
-		for (var e : BackpackKeys.values()) {
+		for (var e : LBKeys.values()) {
 			event.register(e.map);
 		}
 	}

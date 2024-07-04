@@ -6,7 +6,7 @@ import dev.xkmc.l2backpack.content.quickswap.type.ISideInfoRenderer;
 import dev.xkmc.l2backpack.content.quickswap.type.QuickSwapManager;
 import dev.xkmc.l2backpack.content.quickswap.type.QuickSwapType;
 import dev.xkmc.l2backpack.events.BackpackSel;
-import dev.xkmc.l2backpack.init.data.BackpackConfig;
+import dev.xkmc.l2backpack.init.data.LBConfig;
 import dev.xkmc.l2core.util.Proxy;
 import dev.xkmc.l2itemselector.init.data.L2Keys;
 import dev.xkmc.l2itemselector.overlay.SelectionSideBar;
@@ -101,7 +101,7 @@ public class QuickSwapOverlay extends SelectionSideBar<ISwapEntry<?>, QuickSwapO
 
 	@Override
 	public boolean onCenter() {
-		return BackpackConfig.CLIENT.previewOnCenter.get();
+		return LBConfig.CLIENT.previewOnCenter.get();
 	}
 
 	protected void renderEntry(SelectionSideBar.Context ctx, ISwapEntry<?> token, int i, int selected) {

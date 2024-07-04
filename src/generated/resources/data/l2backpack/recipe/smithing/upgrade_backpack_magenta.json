@@ -7,9 +7,6 @@
     "item": "l2backpack:backpack_magenta"
   },
   "result": {
-    "components": {
-      "l2backpack:row": 3
-    },
     "count": 1,
     "id": "l2backpack:backpack_magenta"
   },

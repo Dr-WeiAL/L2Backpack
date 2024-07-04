@@ -2,7 +2,7 @@ package dev.xkmc.l2backpack.content.common;
 
 import dev.xkmc.l2backpack.content.drawer.IDrawerHandler;
 import dev.xkmc.l2backpack.init.advancement.BagInteractTrigger;
-import dev.xkmc.l2backpack.init.data.LangData;
+import dev.xkmc.l2backpack.init.data.LBLang;
 import dev.xkmc.l2backpack.init.registrate.LBTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -11,9 +11,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -143,28 +141,28 @@ public class ContentTransfer {
 
 	public static void onDump(Player player, int count, ItemStack stack) {
 		if (player instanceof ServerPlayer serverPlayer) {
-			serverPlayer.sendSystemMessage(LangData.IDS.DUMP_FEEDBACK.get(count), true);
+			serverPlayer.sendSystemMessage(LBLang.IDS.DUMP_FEEDBACK.get(count), true);
 			LBTriggers.INTERACT.get().trigger(serverPlayer, stack, BagInteractTrigger.Type.DUMP, count);
 		}
 	}
 
 	public static void onLoad(Player player, int count, ItemStack stack) {
 		if (player instanceof ServerPlayer serverPlayer && count > 0) {//TODO event called twice
-			serverPlayer.sendSystemMessage(LangData.IDS.LOAD_FEEDBACK.get(count), true);
+			serverPlayer.sendSystemMessage(LBLang.IDS.LOAD_FEEDBACK.get(count), true);
 			LBTriggers.INTERACT.get().trigger(serverPlayer, stack, BagInteractTrigger.Type.LOAD, count);
 		}
 	}
 
 	public static void onExtract(Player player, int count, ItemStack stack) {
 		if (player instanceof ServerPlayer serverPlayer) {
-			serverPlayer.sendSystemMessage(LangData.IDS.EXTRACT_FEEDBACK.get(count), true);
+			serverPlayer.sendSystemMessage(LBLang.IDS.EXTRACT_FEEDBACK.get(count), true);
 			LBTriggers.INTERACT.get().trigger(serverPlayer, stack, BagInteractTrigger.Type.EXTRACT, count);
 		}
 	}
 
 	public static void onCollect(Player player, int count, ItemStack stack) {
 		if (player instanceof ServerPlayer serverPlayer) {
-			serverPlayer.sendSystemMessage(LangData.IDS.COLLECT_FEEDBACK.get(count), true);
+			serverPlayer.sendSystemMessage(LBLang.IDS.COLLECT_FEEDBACK.get(count), true);
 			LBTriggers.INTERACT.get().trigger(serverPlayer, stack, BagInteractTrigger.Type.COLLECT, count);
 		}
 	}

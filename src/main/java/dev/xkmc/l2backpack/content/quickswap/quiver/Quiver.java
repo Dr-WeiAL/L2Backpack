@@ -8,7 +8,7 @@ import dev.xkmc.l2backpack.content.quickswap.common.SingleSwapToken;
 import dev.xkmc.l2backpack.content.quickswap.type.QuickSwapType;
 import dev.xkmc.l2backpack.content.quickswap.type.QuickSwapTypes;
 import dev.xkmc.l2backpack.content.render.ItemOnBackItem;
-import dev.xkmc.l2backpack.init.data.LangData;
+import dev.xkmc.l2backpack.init.data.LBLang;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
 import net.minecraft.network.chat.Component;
@@ -54,9 +54,9 @@ public class Quiver extends SingleSwapItem implements ItemOnBackItem {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		PickupConfig.addText(stack, list);
-		LangData.addInfo(list,
-				LangData.Info.ARROW_INFO,
-				LangData.Info.INHERIT);
+		LBLang.addInfo(list,
+				LBLang.Info.ARROW_INFO,
+				LBLang.Info.INHERIT);
 	}
 
 	@Nullable

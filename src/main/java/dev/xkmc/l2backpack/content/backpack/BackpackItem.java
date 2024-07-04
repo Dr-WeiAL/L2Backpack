@@ -5,8 +5,8 @@ import dev.xkmc.l2backpack.content.common.BackpackModelItem;
 import dev.xkmc.l2backpack.content.common.BaseBagItem;
 import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.init.L2Backpack;
-import dev.xkmc.l2backpack.init.data.BackpackConfig;
-import dev.xkmc.l2backpack.init.data.LangData;
+import dev.xkmc.l2backpack.init.data.LBConfig;
+import dev.xkmc.l2backpack.init.data.LBLang;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
 import net.minecraft.ChatFormatting;
@@ -36,7 +36,7 @@ public class BackpackItem extends BaseBagItem implements BackpackModelItem {
 	@Override
 	public int getRows(ItemStack stack) {
 		int old = LBItems.DC_ROW.getOrDefault(stack, 0);
-		int ans = Mth.clamp(old, BackpackConfig.SERVER.initialRows.get(), MAX_ROW);
+		int ans = Mth.clamp(old, LBConfig.SERVER.initialRows.get(), MAX_ROW);
 		if (old != ans) {
 			stack.set(LBItems.DC_ROW, ans);
 		}
@@ -45,21 +45,21 @@ public class BackpackItem extends BaseBagItem implements BackpackModelItem {
 
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-		list.add(LangData.IDS.BACKPACK_SLOT.get(getRows(stack), MAX_ROW));
+		list.add(LBLang.IDS.BACKPACK_SLOT.get(getRows(stack), MAX_ROW));
 		if (LBItems.DC_LOOT_ID.get(stack) != null) {
-			list.add(LangData.IDS.LOOT.get().withStyle(ChatFormatting.AQUA));
+			list.add(LBLang.IDS.LOOT.get().withStyle(ChatFormatting.AQUA));
 		} else {
 			PickupConfig.addText(stack, list);
 		}
-		LangData.addInfo(list,
-				LangData.Info.QUICK_INV_ACCESS,
-				LangData.Info.KEYBIND,
-				LangData.Info.UPGRADE,
-				LangData.Info.LOAD,
-				LangData.Info.EXIT,
-				LangData.Info.PICKUP
+		LBLang.addInfo(list,
+				LBLang.Info.QUICK_INV_ACCESS,
+				LBLang.Info.KEYBIND,
+				LBLang.Info.UPGRADE,
+				LBLang.Info.LOAD,
+				LBLang.Info.EXIT,
+				LBLang.Info.PICKUP
 		);
-		LangData.altInsert(list);
+		LBLang.altInsert(list);
 	}
 
 	@Override

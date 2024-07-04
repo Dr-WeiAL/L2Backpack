@@ -19,7 +19,7 @@ import dev.xkmc.l2backpack.content.remote.dimensional.DimensionalItem;
 import dev.xkmc.l2backpack.content.tool.DestroyTweakerTool;
 import dev.xkmc.l2backpack.content.tool.PickupTweakerTool;
 import dev.xkmc.l2backpack.init.L2Backpack;
-import dev.xkmc.l2backpack.init.data.TagGen;
+import dev.xkmc.l2backpack.init.data.LBTagGen;
 import dev.xkmc.l2core.init.reg.registrate.SimpleEntry;
 import dev.xkmc.l2core.init.reg.simple.DCReg;
 import dev.xkmc.l2core.init.reg.simple.DCVal;
@@ -99,7 +99,7 @@ public class LBItems {
 			for (int i = 0; i < 16; i++) {
 				DyeColor color = DyeColor.values()[i];
 				BACKPACKS[i] = REGISTRATE.item("backpack_" + color.getName(), p -> new BackpackItem(color, p))
-						.tag(TagGen.BACKPACKS, curios_tag)
+						.tag(LBTagGen.BACKPACKS, curios_tag)
 						.model((ctx, pvd) -> pvd.getBuilder(ctx.getName()).parent(
 								new ModelFile.UncheckedModelFile("builtin/entity")))
 						.lang(RegistrateLangProvider.toEnglishName(color.getName() + "_backpack"))
@@ -109,7 +109,7 @@ public class LBItems {
 			for (int i = 0; i < 16; i++) {
 				DyeColor color = DyeColor.values()[i];
 				DIMENSIONAL_STORAGE[i] = REGISTRATE.item("dimensional_storage_" + color.getName(), p -> new DimensionalItem(color, p))
-						.tag(TagGen.DIMENSIONAL_STORAGES, curios_tag)
+						.tag(LBTagGen.DIMENSIONAL_STORAGES, curios_tag)
 						.model((ctx, pvd) -> pvd.getBuilder(ctx.getName()).parent(
 								new ModelFile.UncheckedModelFile("builtin/entity")))
 						.lang(RegistrateLangProvider.toEnglishName(color.getName() + "_dimensional_backpack")).register();
@@ -117,7 +117,7 @@ public class LBItems {
 			ENDER_BACKPACK = REGISTRATE.item("ender_backpack", EnderBackpackItem::new)
 					.model((ctx, pvd) -> pvd.getBuilder(ctx.getName()).parent(
 							new ModelFile.UncheckedModelFile("builtin/entity")))
-					.tag(curios_tag, TagGen.ENDER_CHEST).defaultLang().register();
+					.tag(curios_tag, LBTagGen.ENDER_CHEST).defaultLang().register();
 
 			ENDER_POCKET = simpleItem("ender_pocket");
 
@@ -126,14 +126,14 @@ public class LBItems {
 			DESTROY_TWEAKER = REGISTRATE.item("destroy_tweaker_tool", p -> new DestroyTweakerTool(p.stacksTo(1)))
 					.defaultModel().defaultLang().register();
 
-			ARMOR_BAG = REGISTRATE.item("armor_bag", EquipmentBag::new).tag(TagGen.BAGS)
+			ARMOR_BAG = REGISTRATE.item("armor_bag", EquipmentBag::new).tag(LBTagGen.BAGS)
 					.model((ctx, pvd) -> pvd.generated(ctx).override()
 							.predicate(L2Backpack.loc("fill"), 1)
 							.model(pvd.getBuilder(ctx.getName() + "_filled")
 									.parent(new ModelFile.UncheckedModelFile("item/generated"))
 									.texture("layer0", pvd.modLoc("item/" + ctx.getName() + "_filled"))))
 					.lang("Equipment Bag").register();
-			BOOK_BAG = REGISTRATE.item("book_bag", BookBag::new).tag(TagGen.BAGS)
+			BOOK_BAG = REGISTRATE.item("book_bag", BookBag::new).tag(LBTagGen.BAGS)
 					.model((ctx, pvd) -> pvd.generated(ctx).override()
 							.predicate(L2Backpack.loc("fill"), 1)
 							.model(pvd.getBuilder(ctx.getName() + "_filled")
@@ -141,20 +141,20 @@ public class LBItems {
 									.texture("layer0", pvd.modLoc("item/" + ctx.getName() + "_filled"))))
 					.defaultLang().register();
 			QUIVER = REGISTRATE.item("arrow_bag", Quiver::new).model(LBItems::createArrowBagModel)
-					.tag(curios_tag, TagGen.SWAPS).lang("Quiver").register();
-			SCABBARD = REGISTRATE.item("tool_swap", Scabbard::new).defaultModel().tag(curios_tag, TagGen.SWAPS).defaultLang().register();
-			ARMOR_SWAP = REGISTRATE.item("armor_swap", ArmorSwap::new).defaultModel().tag(curios_tag, TagGen.SWAPS).defaultLang().register();
-			SUIT_SWAP = REGISTRATE.item("suit_swap", ArmorSetSwap::new).defaultModel().tag(curios_tag, TagGen.SWAPS).defaultLang().register();
+					.tag(curios_tag, LBTagGen.SWAPS).lang("Quiver").register();
+			SCABBARD = REGISTRATE.item("tool_swap", Scabbard::new).defaultModel().tag(curios_tag, LBTagGen.SWAPS).defaultLang().register();
+			ARMOR_SWAP = REGISTRATE.item("armor_swap", ArmorSwap::new).defaultModel().tag(curios_tag, LBTagGen.SWAPS).defaultLang().register();
+			SUIT_SWAP = REGISTRATE.item("suit_swap", ArmorSetSwap::new).defaultModel().tag(curios_tag, LBTagGen.SWAPS).defaultLang().register();
 
 			DRAWER = REGISTRATE.item("drawer", p -> new DrawerItem(LBBlocks.DRAWER.get(), p))
 					.model((ctx, pvd) -> pvd.getBuilder(ctx.getName()).parent(
 							new ModelFile.UncheckedModelFile("builtin/entity")))
-					.tag(TagGen.DRAWERS).defaultLang().register();
+					.tag(LBTagGen.DRAWERS).defaultLang().register();
 
 			ENDER_DRAWER = REGISTRATE.item("ender_drawer", p -> new EnderDrawerItem(LBBlocks.ENDER_DRAWER.get(), p))
 					.model((ctx, pvd) -> pvd.getBuilder(ctx.getName()).parent(
 							new ModelFile.UncheckedModelFile("builtin/entity")))
-					.tag(TagGen.DRAWERS).defaultLang().register();
+					.tag(LBTagGen.DRAWERS).defaultLang().register();
 		}
 	}
 

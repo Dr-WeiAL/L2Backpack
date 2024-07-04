@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.BiConsumer;
 
-public class LangData {
+public class LBLang {
 
 	public static void addInfo(List<Component> list, Info... text) {
 		if (Screen.hasShiftDown()) {
@@ -141,7 +141,7 @@ public class LangData {
 			pvd.accept(L2Backpack.MODID + ".loot." + pl.id + ".name", pl.pname);
 			pvd.accept(L2Backpack.MODID + ".loot." + pl.id + ".item", pl.bname);
 		}
-		pvd.accept(BackpackKeys.OPEN.id, "Open backpack on back");
+		pvd.accept(LBKeys.OPEN.id, "Open backpack on back");
 	}
 
 	public static String asId(String name) {

@@ -8,7 +8,7 @@ import dev.xkmc.l2backpack.content.remote.common.EnderDrawerAccess;
 import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.events.TooltipUpdateEvents;
 import dev.xkmc.l2backpack.init.L2Backpack;
-import dev.xkmc.l2backpack.init.data.LangData;
+import dev.xkmc.l2backpack.init.data.LBLang;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2backpack.init.registrate.LBTriggers;
 import net.minecraft.ChatFormatting;
@@ -96,7 +96,7 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 		if (getItem(context.getItemInHand()) == Items.AIR) {
 			if (!context.getLevel().isClientSide()) {
 				if (context.getPlayer() instanceof ServerPlayer serverPlayer) {
-					serverPlayer.sendSystemMessage(LangData.IDS.NO_ITEM.get().withStyle(ChatFormatting.RED), true);
+					serverPlayer.sendSystemMessage(LBLang.IDS.NO_ITEM.get().withStyle(ChatFormatting.RED), true);
 				}
 			}
 			return InteractionResult.FAIL;
@@ -147,20 +147,20 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 		var id = LBItems.DC_OWNER_ID.get(stack);
 		if (item != Items.AIR) {
 			int count = id == null ? -1 : TooltipUpdateEvents.getCount(id, item);
-			list.add(LangData.IDS.DRAWER_CONTENT.get(item.getDescription(), count < 0 ? "???" : count));
+			list.add(LBLang.IDS.DRAWER_CONTENT.get(item.getDescription(), count < 0 ? "???" : count));
 		}
 		var name = LBItems.DC_OWNER_NAME.get(stack);
 		if (name != null) {
-			list.add(LangData.IDS.STORAGE_OWNER.get(name));
+			list.add(LBLang.IDS.STORAGE_OWNER.get(name));
 			PickupConfig.addText(stack, list);
 
 		}
-		LangData.addInfo(list,
-				LangData.Info.ENDER_DRAWER,
-				LangData.Info.EXTRACT_DRAWER,
-				LangData.Info.PLACE,
-				LangData.Info.COLLECT_DRAWER,
-				LangData.Info.ENDER_DRAWER_USE);
+		LBLang.addInfo(list,
+				LBLang.Info.ENDER_DRAWER,
+				LBLang.Info.EXTRACT_DRAWER,
+				LBLang.Info.PLACE,
+				LBLang.Info.COLLECT_DRAWER,
+				LBLang.Info.ENDER_DRAWER_USE);
 	}
 
 	public String getDescriptionId() {

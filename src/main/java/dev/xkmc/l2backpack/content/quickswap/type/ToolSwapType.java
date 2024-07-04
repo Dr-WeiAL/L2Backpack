@@ -1,7 +1,7 @@
 package dev.xkmc.l2backpack.content.quickswap.type;
 
 import dev.xkmc.l2backpack.content.quickswap.entry.ISingleSwapHandler;
-import dev.xkmc.l2backpack.init.data.BackpackConfig;
+import dev.xkmc.l2backpack.init.data.LBConfig;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -14,7 +14,7 @@ public class ToolSwapType extends QuickSwapType implements ISingleSwapAction {
 
 	@Override
 	public boolean activePopup() {
-		return BackpackConfig.CLIENT.popupToolOnSwitch.get();
+		return LBConfig.CLIENT.popupToolOnSwitch.get();
 	}
 
 	@Override

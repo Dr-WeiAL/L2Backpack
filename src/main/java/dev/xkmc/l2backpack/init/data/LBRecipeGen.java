@@ -25,7 +25,7 @@ import java.util.function.BiFunction;
 
 import static dev.xkmc.l2core.serial.recipe.AbstractSmithingRecipe.TEMPLATE_PLACEHOLDER;
 
-public class RecipeGen {
+public class LBRecipeGen {
 
 	public static void genRecipe(RegistrateRecipeProvider pvd) {
 		{
@@ -41,7 +41,7 @@ public class RecipeGen {
 						.save(pvd, L2Backpack.MODID + ":shaped/craft_backpack_" + color.getName());
 
 				unlock(pvd, new CustomShapelessBuilder<>(BackpackDyeRecipe::new, backpack, 1)::unlockedBy, backpack)
-						.group("backpack_dye").requires(Ingredient.of(TagGen.BACKPACKS))
+						.group("backpack_dye").requires(Ingredient.of(LBTagGen.BACKPACKS))
 						.requires(Ingredient.of(dye)).save(pvd, L2Backpack.MODID + ":shapeless/dye_backpack_" + color.getName());
 
 				unlock(pvd, new CustomSmithingBuilder<>(BackpackUpgradeRecipe::new, TEMPLATE_PLACEHOLDER, Ingredient.of(backpack),

@@ -10,7 +10,7 @@ import org.lwjgl.glfw.GLFW;
 
 import static dev.xkmc.l2backpack.content.backpack.BackpackItem.MAX_ROW;
 
-public class BackpackConfig {
+public class LBConfig {
 
 	public static class Client {
 

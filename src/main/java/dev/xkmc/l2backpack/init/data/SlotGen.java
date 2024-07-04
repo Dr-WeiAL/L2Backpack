@@ -1,20 +1,23 @@
 package dev.xkmc.l2backpack.init.data;
 
-import dev.xkmc.l2core.serial.config.RecordDataProvider;
+import dev.xkmc.l2backpack.init.L2Backpack;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
+import net.minecraft.world.entity.EntityType;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import top.theillusivec4.curios.api.CuriosDataProvider;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiConsumer;
 
-public class SlotGen extends RecordDataProvider {
+public class SlotGen extends CuriosDataProvider {
 
-	public SlotGen(DataGenerator generator, CompletableFuture<HolderLookup.Provider> pvd) {
-		super(generator, pvd, "Curios Generator");
+	public SlotGen(PackOutput output, ExistingFileHelper fileHelper, CompletableFuture<HolderLookup.Provider> registries) {
+		super(L2Backpack.MODID, output, fileHelper, registries);
 	}
 
 	@Override
-	public void add(BiConsumer<String, Record> map) {
+	public void generate(HolderLookup.Provider provider, ExistingFileHelper existingFileHelper) {
+		createEntities("player").addEntities(EntityType.PLAYER).addSlots("back");
 	}
 
 }

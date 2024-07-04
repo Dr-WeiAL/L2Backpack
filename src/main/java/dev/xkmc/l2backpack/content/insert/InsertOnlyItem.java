@@ -1,7 +1,7 @@
 package dev.xkmc.l2backpack.content.insert;
 
 import dev.xkmc.l2backpack.init.L2Backpack;
-import dev.xkmc.l2backpack.init.data.BackpackConfig;
+import dev.xkmc.l2backpack.init.data.LBConfig;
 import dev.xkmc.l2backpack.network.DrawerInteractToServer;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,7 +14,7 @@ public interface InsertOnlyItem extends CapInsertItem {
 
 	@Override
 	default boolean clientInsert(ItemStack storage, ItemStack carried, int cid, Slot slot, boolean perform, int button, DrawerInteractToServer.Callback suppress, int limit) {
-		if (!BackpackConfig.CLIENT.allowBackpackInsert(button)) return false;
+		if (!LBConfig.CLIENT.allowBackpackInsert(button)) return false;
 		return CapInsertItem.super.clientInsert(storage, carried, cid, slot, perform, button, suppress, limit);
 	}
 

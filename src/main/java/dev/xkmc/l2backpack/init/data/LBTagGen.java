@@ -9,7 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.fml.ModList;
 
-public class TagGen {
+public class LBTagGen {
 
 
 	public static final TagKey<Item> BACKPACKS = ItemTags.create(L2Backpack.loc("backpacks"));

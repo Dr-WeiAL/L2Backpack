@@ -30,7 +30,7 @@ import java.util.Optional;
 
 import static dev.xkmc.l2backpack.content.backpack.BackpackItem.MAX_ROW;
 
-public class AdvGen {
+public class LBAdvGen {
 
 	public static void genAdvancements(RegistrateAdvancementProvider pvd) {
 		pvd.accept(Advancement.Builder.advancement().addCriterion("locate",
@@ -45,7 +45,7 @@ public class AdvGen {
 						L2Backpack.loc("backpack_guide"),
 						"Intro to Backpacks", "Read the backpack guide")
 				.root().create("backpack", backpack(DyeColor.RED),
-						CriterionBuilder.item(TagGen.BACKPACKS),
+						CriterionBuilder.item(LBTagGen.BACKPACKS),
 						"Your First Backpack!", "Obtain a Backpack")
 				.create("press_b", backpack(DyeColor.CYAN),
 						CriterionBuilder.one(SlotClickTrigger.fromKeyBind().build()),
@@ -86,17 +86,17 @@ public class AdvGen {
 						CriterionBuilder.item(LBItems.ENDER_POCKET.get()),
 						"4D Pocket", "Obtain an Ender Pocket")
 				.create("upgrade", backpack(DyeColor.LIGHT_GRAY),
-						CriterionBuilder.item(TagGen.BACKPACKS,
+						CriterionBuilder.item(LBTagGen.BACKPACKS,
 								DataComponentPredicate.builder().expect(LBItems.DC_ROW.get(), 3).build()),
 						"Expand the Space", "Upgrade a Backpack")
 				.create("upgrade_max", backpack(DyeColor.GRAY),
-						CriterionBuilder.item(TagGen.BACKPACKS,
+						CriterionBuilder.item(LBTagGen.BACKPACKS,
 								DataComponentPredicate.builder().expect(LBItems.DC_ROW.get(), MAX_ROW).build()),
 						"Maximize the Space", "Upgrade a Backpack to max level").type(AdvancementType.CHALLENGE)
 
 				// dimensional backpack
 				.root().enter().create("dimension", dimension(DyeColor.WHITE),
-						CriterionBuilder.item(TagGen.DIMENSIONAL_STORAGES),
+						CriterionBuilder.item(LBTagGen.DIMENSIONAL_STORAGES),
 						"Another Ender Chest?", "Obtain a Dimensional Backpack")
 				.create("dimension_recursion", dimension(DyeColor.YELLOW),
 						CriterionBuilder.one(SlotClickTrigger.fromBackpack(LBMisc.IS_DIM.get()).build()),
