@@ -9,7 +9,7 @@ import dev.xkmc.l2backpack.init.registrate.LBBlocks;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2backpack.init.registrate.LBMisc;
 import dev.xkmc.l2backpack.init.registrate.LBTriggers;
-import dev.xkmc.l2backpack.network.DrawerInteractToServer;
+import dev.xkmc.l2backpack.network.ClickInteractToServer;
 import dev.xkmc.l2core.serial.advancements.AdvancementGenerator;
 import dev.xkmc.l2core.serial.advancements.CriterionBuilder;
 import dev.xkmc.l2menustacker.screen.base.L2MSReg;
@@ -113,10 +113,10 @@ public class LBAdvGen {
 						CriterionBuilder.item(LBItems.DRAWER.get()),
 						"Portable Drawer", "Obtain a Drawer")
 				.create("drawer_store", LBItems.DRAWER.get(),
-						CriterionBuilder.one(DrawerInteractTrigger.fromType(DrawerInteractToServer.Type.INSERT).build()),
+						CriterionBuilder.one(DrawerInteractTrigger.fromType(ClickInteractToServer.Type.INSERT).build()),
 						"Is it a Stack?", "Put items into a Drawer")
 				.create("drawer_take", LBItems.DRAWER.get(),
-						CriterionBuilder.one(DrawerInteractTrigger.fromType(DrawerInteractToServer.Type.TAKE).build()),
+						CriterionBuilder.one(DrawerInteractTrigger.fromType(ClickInteractToServer.Type.TAKE).build()),
 						"It is a Stack", "Take items from a Drawer")
 				.create("drawer_collect", LBItems.DRAWER.get(),
 						CriterionBuilder.one(BagInteractTrigger.fromType(BagInteractTrigger.Type.COLLECT,

@@ -10,7 +10,7 @@ import dev.xkmc.l2backpack.content.tool.IBagTool;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.data.LBKeys;
 import dev.xkmc.l2backpack.network.CreativeSetCarryToServer;
-import dev.xkmc.l2backpack.network.DrawerInteractToServer;
+import dev.xkmc.l2backpack.network.ClickInteractToServer;
 import dev.xkmc.l2core.util.Proxy;
 import dev.xkmc.l2itemselector.events.GenericKeyEvent;
 import net.minecraft.client.Minecraft;
@@ -135,7 +135,7 @@ public class ClientEventHandler {
 		if (player == null || !slot.allowModification(player)) {
 			return false;
 		}
-		return drawer.clientInsert(storage, carried, cont.getMenu().containerId, slot, perform, button, DrawerInteractToServer.Callback.REGULAR, 0);
+		return drawer.clientInsert(storage, carried, cont.getMenu().containerId, slot, perform, button, ClickInteractToServer.Callback.REGULAR, 0);
 	}
 
 	private static boolean extractItem(ScreenEvent.MouseButtonPressed.Pre event, AbstractContainerScreen<?> cont, @Nullable Slot slot) {
@@ -153,22 +153,22 @@ public class ClientEventHandler {
 		}
 		if (drawer.mayClientTake() && stack.isEmpty()) {
 			if (Screen.hasShiftDown())
-				sendDrawerPacket(DrawerInteractToServer.Type.QUICK_MOVE, cont, slot);
+				sendDrawerPacket(ClickInteractToServer.Type.QUICK_MOVE, cont, slot);
 			else
-				sendDrawerPacket(DrawerInteractToServer.Type.TAKE, cont, slot);
+				sendDrawerPacket(ClickInteractToServer.Type.TAKE, cont, slot);
 			return true;
 		}
 		return false;
 	}
 
-	private static void sendDrawerPacket(DrawerInteractToServer.Type type, AbstractContainerScreen<?> cont, Slot slot) {
-		sendDrawerPacket(type, cont, slot, DrawerInteractToServer.Callback.REGULAR, 0);
+	private static void sendDrawerPacket(ClickInteractToServer.Type type, AbstractContainerScreen<?> cont, Slot slot) {
+		sendDrawerPacket(type, cont, slot, ClickInteractToServer.Callback.REGULAR, 0);
 	}
 
-	private static void sendDrawerPacket(DrawerInteractToServer.Type type, AbstractContainerScreen<?> cont, Slot slot,
-										 DrawerInteractToServer.Callback suppress, int limit) {
+	private static void sendDrawerPacket(ClickInteractToServer.Type type, AbstractContainerScreen<?> cont, Slot slot,
+										 ClickInteractToServer.Callback suppress, int limit) {
 		int index = cont.getMenu().containerId == 0 ? slot.getSlotIndex() : slot.index;
-		L2Backpack.HANDLER.toServer(new DrawerInteractToServer(type, cont.getMenu().containerId,
+		L2Backpack.HANDLER.toServer(new ClickInteractToServer(type, cont.getMenu().containerId,
 				index, cont.getMenu().getCarried(), suppress, limit));
 	}
 
@@ -184,8 +184,8 @@ public class ClientEventHandler {
 		}
 		if (drawer.mayClientTake() && stack.isEmpty()) {
 			cont.getMenu().setCarried(drawer.takeItem(drawerStack, Integer.MAX_VALUE, Proxy.getClientPlayer(), false));
-			sendDrawerPacket(DrawerInteractToServer.Type.TAKE, cont, slot,
-					DrawerInteractToServer.Callback.SUPPRESS, 0);
+			sendDrawerPacket(ClickInteractToServer.Type.TAKE, cont, slot,
+					ClickInteractToServer.Callback.SUPPRESS, 0);
 			return true;
 		}
 		return false;
@@ -202,7 +202,7 @@ public class ClientEventHandler {
 			return false;
 		}
 		boolean ans = drawer.clientInsert(storage, carried, cont.getMenu().containerId, slot, true, 0,
-				limit == 0 ? DrawerInteractToServer.Callback.SCRAMBLE : DrawerInteractToServer.Callback.SUPPRESS, limit);
+				limit == 0 ? ClickInteractToServer.Callback.SCRAMBLE : ClickInteractToServer.Callback.SUPPRESS, limit);
 		if (ans) {
 			if (limit == 0) {
 				cont.getMenu().setCarried(ItemStack.EMPTY);

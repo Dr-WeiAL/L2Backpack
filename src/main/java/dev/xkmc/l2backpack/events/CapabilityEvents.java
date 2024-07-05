@@ -35,7 +35,7 @@ public class CapabilityEvents {
 	 */
 	public static void tryInsertItem(ServerPlayer player, ItemStack stack) {
 		ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
-		var cap = stack.getCapability(LBMisc.PICKUP);
+		var cap = chest.getCapability(LBMisc.PICKUP);
 		if (cap != null) cap.doPickup(stack, new PickupTrace(false, player));
 		if (stack.isEmpty()) return;
 		CuriosCompat.getSlot(player, e -> {

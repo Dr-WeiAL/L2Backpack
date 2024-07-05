@@ -14,10 +14,10 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-public record DrawerInteractToServer(
+public record ClickInteractToServer(
 		Type type, int wid, int slot, ItemStack stack,
 		Callback suppress, int limit
-) implements SerialPacketBase<DrawerInteractToServer> {
+) implements SerialPacketBase<ClickInteractToServer> {
 
 	public enum Type {
 		INSERT, TAKE, QUICK_MOVE, PICKUP

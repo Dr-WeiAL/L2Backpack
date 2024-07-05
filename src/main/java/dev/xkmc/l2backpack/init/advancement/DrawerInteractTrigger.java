@@ -1,7 +1,7 @@
 package dev.xkmc.l2backpack.init.advancement;
 
 import dev.xkmc.l2backpack.init.registrate.LBTriggers;
-import dev.xkmc.l2backpack.network.DrawerInteractToServer;
+import dev.xkmc.l2backpack.network.ClickInteractToServer;
 import dev.xkmc.l2core.serial.advancements.BaseCriterion;
 import dev.xkmc.l2core.serial.advancements.BaseCriterionInstance;
 import dev.xkmc.l2serial.serialization.marker.SerialClass;
@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 
 public class DrawerInteractTrigger extends BaseCriterion<DrawerInteractTrigger.Ins, DrawerInteractTrigger> {
 
-	public static Ins fromType(DrawerInteractToServer.Type type) {
+	public static Ins fromType(ClickInteractToServer.Type type) {
 		Ins ans = new Ins(LBTriggers.DRAWER.get());
 		ans.type = type;
 		return ans;
@@ -22,7 +22,7 @@ public class DrawerInteractTrigger extends BaseCriterion<DrawerInteractTrigger.I
 		super(Ins.class);
 	}
 
-	public void trigger(ServerPlayer player, DrawerInteractToServer.Type type) {
+	public void trigger(ServerPlayer player, ClickInteractToServer.Type type) {
 		this.trigger(player, e -> (e.type == null || e.type == type));
 	}
 
@@ -31,7 +31,7 @@ public class DrawerInteractTrigger extends BaseCriterion<DrawerInteractTrigger.I
 
 		@Nullable
 		@SerialField
-		private DrawerInteractToServer.Type type;
+		private ClickInteractToServer.Type type;
 
 		protected Ins(DrawerInteractTrigger drawerInteractTrigger) {
 			super(drawerInteractTrigger);

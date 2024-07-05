@@ -2,10 +2,6 @@ package dev.xkmc.l2backpack.content.remote.common;
 
 import dev.xkmc.l2serial.serialization.marker.SerialClass;
 import dev.xkmc.l2serial.serialization.marker.SerialField;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerListener;
 import net.minecraft.world.SimpleContainer;
@@ -18,9 +14,8 @@ import java.util.UUID;
 @SerialClass
 public class StorageContainer implements ContainerListener {
 
-	public final UUID id;
-	public final int color;
-	public final RegistryOps<Tag> ops;
+	public UUID id;
+	public int color;
 
 	@SerialField
 	private final List<ItemStack> tag = new ArrayList<>();
@@ -32,12 +27,6 @@ public class StorageContainer implements ContainerListener {
 	boolean init = false;
 
 	private SimpleContainer container;
-
-	StorageContainer(UUID id, int color, HolderLookup.Provider pvd) {
-		this.id = id;
-		this.color = color;
-		this.ops = pvd.createSerializationContext(NbtOps.INSTANCE);
-	}
 
 	public SimpleContainer get() {
 		if (container == null) {

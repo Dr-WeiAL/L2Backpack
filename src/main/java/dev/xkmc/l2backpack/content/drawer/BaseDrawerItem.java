@@ -3,7 +3,7 @@ package dev.xkmc.l2backpack.content.drawer;
 import dev.xkmc.l2backpack.content.capability.PickupBagItem;
 import dev.xkmc.l2backpack.content.insert.OverlayInsertItem;
 import dev.xkmc.l2backpack.init.registrate.LBTriggers;
-import dev.xkmc.l2backpack.network.DrawerInteractToServer;
+import dev.xkmc.l2backpack.network.ClickInteractToServer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -37,6 +37,10 @@ public interface BaseDrawerItem extends PickupBagItem, OverlayInsertItem {
 		return STACKING;
 	}
 
+	default int getStacking(ItemStack drawer, ItemStack content) {
+		return getStacking(drawer) * content.getMaxStackSize();
+	}
+
 	void insert(ItemStack drawer, ItemStack stack, Player player);
 
 	void setItem(ItemStack drawer, ItemStack item, Player player);
@@ -44,7 +48,7 @@ public interface BaseDrawerItem extends PickupBagItem, OverlayInsertItem {
 	default ItemStack takeItem(ItemStack drawer, ServerPlayer player) {
 		ItemStack stack = takeItem(drawer, Integer.MAX_VALUE, player, false);
 		if (!stack.isEmpty()) {
-			LBTriggers.DRAWER.get().trigger(player, DrawerInteractToServer.Type.TAKE);
+			LBTriggers.DRAWER.get().trigger(player, ClickInteractToServer.Type.TAKE);
 		}
 		return stack;
 	}
@@ -55,7 +59,7 @@ public interface BaseDrawerItem extends PickupBagItem, OverlayInsertItem {
 
 	@Override
 	default boolean clientInsert(ItemStack storage, ItemStack carried, int cid, Slot slot, boolean perform, int button,
-								 DrawerInteractToServer.Callback suppress, int limit) {
+								 ClickInteractToServer.Callback suppress, int limit) {
 		if (carried.isEmpty()) return false;
 		if (!canAccept(storage, carried)) return false;
 		if (perform) sendInsertPacket(cid, carried, slot, suppress, limit);
@@ -74,7 +78,7 @@ public interface BaseDrawerItem extends PickupBagItem, OverlayInsertItem {
 			setItem(storage, carried, player);
 		}
 		insert(storage, carried, player);
-		LBTriggers.DRAWER.get().trigger(player, DrawerInteractToServer.Type.INSERT);
+		LBTriggers.DRAWER.get().trigger(player, ClickInteractToServer.Type.INSERT);
 	}
 
 	ResourceLocation backgroundLoc();

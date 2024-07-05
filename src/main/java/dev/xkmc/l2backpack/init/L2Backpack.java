@@ -51,7 +51,7 @@ public class L2Backpack {
 	public static final BackpackSlotClickListener SLOT_CLICK = new BackpackSlotClickListener();
 
 	public static final PacketHandler HANDLER = new PacketHandler(MODID, 3,
-			e -> e.create(DrawerInteractToServer.class, PLAY_TO_SERVER),
+			e -> e.create(ClickInteractToServer.class, PLAY_TO_SERVER),
 			e -> e.create(CreativeSetCarryToClient.class, PLAY_TO_CLIENT),
 			e -> e.create(CreativeSetCarryToServer.class, PLAY_TO_SERVER),
 			e -> e.create(RequestTooltipUpdateEvent.class, PLAY_TO_SERVER),

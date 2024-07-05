@@ -17,7 +17,7 @@ public abstract class InvPickupCap<T extends IItemHandlerModifiable> implements 
 	public boolean mayStack(T inv, int slot, ItemStack stack, PickupConfig config) {
 		if (!isValid(stack)) return false;
 		ItemStack old = inv.getStackInSlot(slot);
-		if (old.getCapability(LBMisc.PICKUP) == null) return false;
+		if (old.getCapability(LBMisc.PICKUP) != null) return false;
 		if (config.pickup() == PickupMode.ALL && old.isEmpty()) {
 			return true;
 		}
