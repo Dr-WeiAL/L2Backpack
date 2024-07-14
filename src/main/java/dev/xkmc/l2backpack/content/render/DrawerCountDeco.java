@@ -72,7 +72,7 @@ public class DrawerCountDeco implements IItemDecorator {
 			else return count / 1000 + "k";
 		}
 		if (item instanceof EnderDrawerItem) {
-			return Screen.hasShiftDown() ? "?" : "";
+			return Screen.hasShiftDown() || showContent() ? "?" : "";
 		}
 		return "";
 	}

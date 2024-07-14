@@ -79,11 +79,13 @@ public class BackpackSlotClickListener extends WritableStackClickHandler {
 	}
 
 	private void handleNoMenu(ServerPlayer player, int index) {
-		ItemStack stack = player.containerMenu.getSlot(index).getItem();
+		var slot = player.containerMenu.getSlot(index);
+		ItemStack stack = slot.getItem();
 		ItemStack carried = player.containerMenu.getCarried();
 		if (carried.getItem() instanceof IBagTool tool) {
 			if (stack.getItem() instanceof PickupBagItem) {
 				tool.click(stack);
+				slot.set(stack);
 				return;
 			}
 		}

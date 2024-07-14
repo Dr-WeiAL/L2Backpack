@@ -18,6 +18,10 @@ public class CapabilityEvents {
 	@SubscribeEvent
 	public static void onItemPickup(ItemEntityPickupEvent.Pre event) {
 		if (!(event.getPlayer() instanceof ServerPlayer player)) return;
+		var e = event.getItemEntity();
+		var uuid = e.getTarget();
+		if (e.hasPickUpDelay() || (uuid != null && !uuid.equals(player.getUUID())))
+			return;
 		ItemStack stack = event.getItemEntity().getItem();
 		ItemStack copy = stack.copy();
 		int count = stack.getCount();

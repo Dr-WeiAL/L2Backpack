@@ -67,7 +67,11 @@ public abstract class InvPickupCap<T extends IItemHandlerModifiable> implements 
 					if (slot.isEmpty()) continue;
 					var opt = slot.getCapability(LBMisc.PICKUP);
 					if (opt == null) continue;
-					ans += opt.doPickup(stack, trace);
+					int taken = opt.doPickup(stack, trace);
+					ans += taken;
+					if (taken > 0 && !trace.simulate) {
+						inv.setStackInSlot(i, slot);
+					}
 				}
 			}
 		}

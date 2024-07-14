@@ -4,6 +4,8 @@ import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.common.ContentTransfer;
 import dev.xkmc.l2backpack.content.drawer.BaseDrawerItem;
 import dev.xkmc.l2backpack.content.drawer.DrawerInvWrapper;
+import dev.xkmc.l2backpack.content.insert.CapInsertItem;
+import dev.xkmc.l2backpack.content.insert.OverlayInsertItem;
 import dev.xkmc.l2backpack.content.remote.common.EnderDrawerAccess;
 import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.events.TooltipUpdateEvents;
@@ -50,8 +52,9 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 
 	@Override
 	public boolean canAccept(ItemStack drawer, ItemStack stack) {
+		if (stack.getItem() instanceof OverlayInsertItem) return false;
 		Item item = getItem(drawer);
-		return item == Items.AIR || stack.isComponentsPatchEmpty() && stack.getItem() == item;
+		return stack.isComponentsPatchEmpty() && (item == Items.AIR || stack.getItem() == item);
 	}
 
 	void refresh(ItemStack drawer, Player player) {

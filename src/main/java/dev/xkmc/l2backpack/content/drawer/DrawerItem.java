@@ -3,6 +3,7 @@ package dev.xkmc.l2backpack.content.drawer;
 import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.click.DoubleClickItem;
 import dev.xkmc.l2backpack.content.common.ContentTransfer;
+import dev.xkmc.l2backpack.content.insert.OverlayInsertItem;
 import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.data.LBLang;
@@ -64,6 +65,7 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 	@Override
 	public boolean canAccept(ItemStack drawer, ItemStack stack) {
 		if (!stack.getItem().canFitInsideContainerItems()) return false;
+		if (stack.getItem() instanceof OverlayInsertItem) return false;
 		ItemStack content = getDrawerContent(drawer);
 		return content.isEmpty() || ItemStack.isSameItemSameComponents(content, stack);
 	}
