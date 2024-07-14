@@ -1,3 +1,5 @@
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
@@ -12,6 +14,9 @@ buildscript {
 
 plugins {
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'net.darkhax.curseforgegradle' version '[1.1.24,)'
+    id "at.stnwtr.gradle-secrets-plugin" version "1.0.1"
+    id "com.modrinth.minotaur" version "2.+"
 }
 
 apply plugin: 'maven-publish'
@@ -209,4 +214,40 @@ dependencies {
     implementation fg.deobf("curse.maven:sophisticated-backpacks-422301:5296475")
     implementation fg.deobf("curse.maven:sophisticated-core-618298:5326245")
 
+}
+
+tasks.register('publishCurseForge', TaskPublishCurseForge) {
+    apiToken = secrets.get("curseforge_token")
+    def mainFile = upload(project.curseforge_project, new File("./build/libs/${modid}-${ll_version}.jar"))
+    mainFile.changelog = new File('./changelog.txt')
+    mainFile.addEnvironment("Client", "Server")
+    mainFile.addGameVersion("1.20.1")
+    mainFile.addModLoader("Forge","NeoForge")
+    mainFile.addRequirement("l2library")
+    mainFile.addOptional(
+            "curios",
+            "l2-complements",
+            "modulargolems",
+            "mouse-tweaks")
+    mainFile.releaseType = "release"
+    disableVersionDetection()
+}
+
+modrinth {
+    token = secrets.get("modrinth_token")
+    projectId = project.modrinth_project
+    versionName = "L2 Backpack ${project.ll_version}"
+    versionNumber = project.ll_version
+    versionType = "release"
+    uploadFile = new File("./build/libs/${modid}-${ll_version}.jar")
+    gameVersions = ["1.20.1"]
+    loaders = ["forge", "neoforge"]
+    changelog = new File('./changelog.txt').text.split("\n\n")[0]
+    dependencies {
+        required.project "l2library"
+        optional.project "curios"
+        optional.project "l2-complements"
+        optional.project "modular-golems"
+        optional.project "mouse-tweaks"
+    }
 }
