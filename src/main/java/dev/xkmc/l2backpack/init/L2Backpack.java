@@ -2,15 +2,13 @@ package dev.xkmc.l2backpack.init;
 
 import com.tterrag.registrate.providers.ProviderType;
 import dev.xkmc.l2backpack.LCCompat;
-import dev.xkmc.l2backpack.compat.GolemCompat;
-import dev.xkmc.l2backpack.compat.PatchouliCompat;
+import dev.xkmc.l2backpack.compat.*;
 import dev.xkmc.l2backpack.content.capability.PickupModeCap;
 import dev.xkmc.l2backpack.content.remote.common.WorldStorage;
 import dev.xkmc.l2backpack.content.remote.player.EnderSyncCap;
 import dev.xkmc.l2backpack.content.remote.player.EnderSyncPacket;
 import dev.xkmc.l2backpack.events.BackpackSel;
 import dev.xkmc.l2backpack.events.BackpackSlotClickListener;
-import dev.xkmc.l2backpack.events.PatchouliClickListener;
 import dev.xkmc.l2backpack.init.advancement.BackpackTriggers;
 import dev.xkmc.l2backpack.init.data.*;
 import dev.xkmc.l2backpack.init.loot.LootGen;
@@ -35,6 +33,7 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.p3pp3rf1y.sophisticatedbackpacks.SophisticatedBackpacks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -83,6 +82,11 @@ public class L2Backpack {
 			PatchouliCompat.gen();
 			new PatchouliClickListener();
 			MinecraftForge.EVENT_BUS.register(PatchouliClickListener.class);
+		}
+		if (ModList.get().isLoaded(SophisticatedBackpacks.MOD_ID)) {
+			SophisticatedCompat.init();
+			new SophisticatedClickListener();
+			MinecraftForge.EVENT_BUS.register(SophisticatedCompat.class);
 		}
 	}
 

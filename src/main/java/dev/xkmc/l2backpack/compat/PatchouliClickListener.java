@@ -1,4 +1,4 @@
-package dev.xkmc.l2backpack.events;
+package dev.xkmc.l2backpack.compat;
 
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2screentracker.click.ReadOnlyStackClickHandler;

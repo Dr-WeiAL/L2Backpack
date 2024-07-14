@@ -1,6 +1,6 @@
-TODO add more slots to dimensional storage
-TODO feeding module
-TODO experience module
+2.4.23
+- Allow opening Sophisticated backpacks via right click in player inventory and ender chest inventory
+- Upgrades in Sophisticated backpacks in Ender backpack will still work
 
 2.4.22
 - L2C ender reach compat
