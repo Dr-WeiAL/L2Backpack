@@ -2,7 +2,6 @@ package dev.xkmc.l2backpack.compat;
 
 import dev.xkmc.l2backpack.content.remote.player.EnderSyncCap;
 import dev.xkmc.l2backpack.content.remote.player.EnderTickEvent;
-import dev.xkmc.l2screentracker.screen.source.PlayerSlot;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
