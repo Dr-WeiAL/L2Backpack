@@ -2,7 +2,7 @@
   "required": true,
   "priority": 1000,
   "package": "dev.xkmc.l2backpack.mixin",
-  "compatibilityLevel": "JAVA_16",
+  "compatibilityLevel": "JAVA_21",
   "refmap": "l2backpack.refmap.json",
   "mixins": [
 	"AbstractArrowMixin",

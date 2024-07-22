@@ -3,11 +3,7 @@ package dev.xkmc.l2backpack.content.common;
 import dev.xkmc.l2backpack.content.capability.PickupBagItem;
 import dev.xkmc.l2backpack.content.insert.InsertOnlyItem;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
-import dev.xkmc.l2core.util.Proxy;
 import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -28,8 +24,6 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,16 +45,6 @@ public abstract class BaseBagItem extends Item implements ContentTransfer.Quad, 
 
 	public static void setItems(ItemStack stack, List<ItemStack> list) {
 		stack.set(LBItems.BACKPACK_CONTENT, ItemContainerContents.fromItems(list));
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	public static float isOpened(ItemStack stack, ClientLevel level, LivingEntity entity, int i) {
-		if (entity != Proxy.getClientPlayer()) return 0;
-		Screen screen = Minecraft.getInstance().screen;
-		if ((screen instanceof BaseOpenableScreen<?> gui) && (gui.getMenu() instanceof BaseBagMenu<?> cont)) {
-			return cont.getStack() == stack ? 1 : 0;
-		}
-		return 0;
 	}
 
 	public BaseBagItem(Properties props) {

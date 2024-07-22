@@ -147,9 +147,4 @@ public class DimensionalItem extends BlockItem implements BackpackModelItem, Pic
 		return null;
 	}
 
-	@Override
-	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-		consumer.accept(BaseItemRenderer.EXTENSIONS);
-	}
-
 }

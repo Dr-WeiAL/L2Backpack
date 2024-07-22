@@ -76,11 +76,6 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 	}
 
 	@Override
-	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-		consumer.accept(BaseItemRenderer.EXTENSIONS);
-	}
-
-	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
 		ItemStack drawer = player.getItemInHand(hand);
 		if (world.isClientSide()) {
@@ -206,7 +201,7 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 		return this.getOrCreateDescriptionId();
 	}
 
-	public @Nullable DrawerInvWrapper getCaps(ItemStack stack, Void ignored) {
+	public DrawerInvWrapper getCaps(ItemStack stack, @Nullable Void ignored) {
 		var access = new DrawerInvAccess(stack, this);
 		return new DrawerInvWrapper(stack, trace -> access);
 	}

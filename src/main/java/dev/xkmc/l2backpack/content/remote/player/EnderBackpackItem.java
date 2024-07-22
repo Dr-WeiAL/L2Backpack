@@ -82,11 +82,6 @@ public class EnderBackpackItem extends Item implements
 	}
 
 	@Override
-	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-		consumer.accept(BaseItemRenderer.EXTENSIONS);
-	}
-
-	@Override
 	public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
 		return InvTooltip.get(this, stack);
 	}

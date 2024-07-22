@@ -77,9 +77,4 @@ public class BackpackItem extends BaseBagItem implements BackpackModelItem {
 		return false;
 	}
 
-	@Override
-	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-		consumer.accept(BaseItemRenderer.EXTENSIONS);
-	}
-
 }

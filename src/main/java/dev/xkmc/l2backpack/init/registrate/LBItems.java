@@ -13,9 +13,10 @@ import dev.xkmc.l2backpack.content.quickswap.armorswap.ArmorSetSwap;
 import dev.xkmc.l2backpack.content.quickswap.armorswap.ArmorSwap;
 import dev.xkmc.l2backpack.content.quickswap.quiver.Quiver;
 import dev.xkmc.l2backpack.content.quickswap.scabbard.Scabbard;
+import dev.xkmc.l2backpack.content.remote.dimensional.DimensionalItem;
 import dev.xkmc.l2backpack.content.remote.drawer.EnderDrawerItem;
 import dev.xkmc.l2backpack.content.remote.player.EnderBackpackItem;
-import dev.xkmc.l2backpack.content.remote.dimensional.DimensionalItem;
+import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.content.tool.DestroyTweakerTool;
 import dev.xkmc.l2backpack.content.tool.PickupTweakerTool;
 import dev.xkmc.l2backpack.init.L2Backpack;
@@ -103,6 +104,7 @@ public class LBItems {
 						.model((ctx, pvd) -> pvd.getBuilder(ctx.getName()).parent(
 								new ModelFile.UncheckedModelFile("builtin/entity")))
 						.lang(RegistrateLangProvider.toEnglishName(color.getName() + "_backpack"))
+						.clientExtension(() -> () -> BaseItemRenderer.EXTENSIONS)
 						.register();
 			}
 			DIMENSIONAL_STORAGE = new ItemEntry[16];
@@ -112,12 +114,16 @@ public class LBItems {
 						.tag(LBTagGen.DIMENSIONAL_STORAGES, curios_tag)
 						.model((ctx, pvd) -> pvd.getBuilder(ctx.getName()).parent(
 								new ModelFile.UncheckedModelFile("builtin/entity")))
-						.lang(RegistrateLangProvider.toEnglishName(color.getName() + "_dimensional_backpack")).register();
+						.lang(RegistrateLangProvider.toEnglishName(color.getName() + "_dimensional_backpack"))
+						.clientExtension(() -> () -> BaseItemRenderer.EXTENSIONS)
+						.register();
 			}
 			ENDER_BACKPACK = REGISTRATE.item("ender_backpack", EnderBackpackItem::new)
 					.model((ctx, pvd) -> pvd.getBuilder(ctx.getName()).parent(
 							new ModelFile.UncheckedModelFile("builtin/entity")))
-					.tag(curios_tag, LBTagGen.ENDER_CHEST).defaultLang().register();
+					.tag(curios_tag, LBTagGen.ENDER_CHEST).defaultLang()
+					.clientExtension(() -> () -> BaseItemRenderer.EXTENSIONS)
+					.register();
 
 			ENDER_POCKET = simpleItem("ender_pocket");
 
@@ -149,12 +155,16 @@ public class LBItems {
 			DRAWER = REGISTRATE.item("drawer", p -> new DrawerItem(LBBlocks.DRAWER.get(), p))
 					.model((ctx, pvd) -> pvd.getBuilder(ctx.getName()).parent(
 							new ModelFile.UncheckedModelFile("builtin/entity")))
-					.tag(LBTagGen.DRAWERS).defaultLang().register();
+					.tag(LBTagGen.DRAWERS).defaultLang()
+					.clientExtension(() -> () -> BaseItemRenderer.EXTENSIONS)
+					.register();
 
 			ENDER_DRAWER = REGISTRATE.item("ender_drawer", p -> new EnderDrawerItem(LBBlocks.ENDER_DRAWER.get(), p))
 					.model((ctx, pvd) -> pvd.getBuilder(ctx.getName()).parent(
 							new ModelFile.UncheckedModelFile("builtin/entity")))
-					.tag(LBTagGen.DRAWERS).defaultLang().register();
+					.tag(LBTagGen.DRAWERS).defaultLang()
+					.clientExtension(() -> () -> BaseItemRenderer.EXTENSIONS)
+					.register();
 		}
 	}
 

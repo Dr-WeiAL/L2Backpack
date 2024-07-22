@@ -27,6 +27,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -38,11 +39,6 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 
 	public EnderDrawerItem(Block block, Properties properties) {
 		super(block, properties.stacksTo(1).fireResistant());
-	}
-
-	@Override
-	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-		consumer.accept(BaseItemRenderer.EXTENSIONS);
 	}
 
 	@Override
@@ -171,7 +167,7 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 		return this.getOrCreateDescriptionId();
 	}
 
-	public DrawerInvWrapper getCaps(ItemStack stack, Void ignored) {
+	public DrawerInvWrapper getCaps(ItemStack stack, @Nullable Void ignored) {
 		return new DrawerInvWrapper(stack, trace -> trace.player == null ? null : new EnderDrawerInvAccess(stack, this, trace.player));
 	}
 

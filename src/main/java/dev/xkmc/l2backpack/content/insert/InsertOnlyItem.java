@@ -7,8 +7,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 public interface InsertOnlyItem extends CapInsertItem {
 
@@ -25,7 +23,6 @@ public interface InsertOnlyItem extends CapInsertItem {
 		L2Backpack.HANDLER.toServer(new ClickInteractToServer(method, cid, index, carried, suppress, limit));
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	default boolean mayClientTake() {
 		return false;
 	}
