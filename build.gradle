@@ -155,5 +155,5 @@ dependencies {
 
     implementation "mezz.jei:jei-${jei_minecraft_version}:${jei_version}"
     implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
-    implementation "curse.maven:mouse-tweaks-60089:5437296"
+    compileOnly "curse.maven:mouse-tweaks-60089:5437296"
 }

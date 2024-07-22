@@ -4,11 +4,13 @@ import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.common.ContentTransfer;
 import dev.xkmc.l2backpack.content.drawer.BaseDrawerItem;
 import dev.xkmc.l2backpack.content.drawer.DrawerInvWrapper;
+import dev.xkmc.l2backpack.content.insert.CapInsertItem;
+import dev.xkmc.l2backpack.content.insert.OverlayInsertItem;
 import dev.xkmc.l2backpack.content.remote.common.EnderDrawerAccess;
 import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.events.TooltipUpdateEvents;
 import dev.xkmc.l2backpack.init.L2Backpack;
-import dev.xkmc.l2backpack.init.data.LangData;
+import dev.xkmc.l2backpack.init.data.LBLang;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2backpack.init.registrate.LBTriggers;
 import net.minecraft.ChatFormatting;
@@ -25,6 +27,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -39,19 +42,15 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 	}
 
 	@Override
-	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-		consumer.accept(BaseItemRenderer.EXTENSIONS);
-	}
-
-	@Override
 	public ItemStack getDrawerContent(ItemStack drawer) {
 		return getItem(drawer).getDefaultInstance();
 	}
 
 	@Override
 	public boolean canAccept(ItemStack drawer, ItemStack stack) {
+		if (stack.getItem() instanceof OverlayInsertItem) return false;
 		Item item = getItem(drawer);
-		return item == Items.AIR || stack.isComponentsPatchEmpty() && stack.getItem() == item;
+		return stack.isComponentsPatchEmpty() && (item == Items.AIR || stack.getItem() == item);
 	}
 
 	void refresh(ItemStack drawer, Player player) {
@@ -78,8 +77,9 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 		} else {
 			EnderDrawerAccess access = EnderDrawerAccess.of(world, stack);
 			int count = access.getCount();
-			int max = getStacking(stack) * access.item().getDefaultMaxStackSize();
-			int ext = BaseDrawerItem.loadFromInventory(max, count, access.item().getDefaultInstance(), player);
+			ItemStack ins = access.item().getDefaultInstance();
+			int max = getStacking(stack, ins);
+			int ext = BaseDrawerItem.loadFromInventory(max, count, ins, player);
 			count += ext;
 			access.setCount(count);
 			ContentTransfer.onCollect(player, ext, stack);
@@ -96,7 +96,7 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 		if (getItem(context.getItemInHand()) == Items.AIR) {
 			if (!context.getLevel().isClientSide()) {
 				if (context.getPlayer() instanceof ServerPlayer serverPlayer) {
-					serverPlayer.sendSystemMessage(LangData.IDS.NO_ITEM.get().withStyle(ChatFormatting.RED), true);
+					serverPlayer.sendSystemMessage(LBLang.IDS.NO_ITEM.get().withStyle(ChatFormatting.RED), true);
 				}
 			}
 			return InteractionResult.FAIL;
@@ -114,7 +114,7 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 		refresh(drawer, player);
 		EnderDrawerAccess access = EnderDrawerAccess.of(player.level(), drawer);
 		int count = access.getCount();
-		int take = Math.min(getStacking(drawer) * stack.getMaxStackSize() - count, stack.getCount());
+		int take = Math.min(getStacking(drawer, stack) - count, stack.getCount());
 		access.setCount(access.getCount() + take);
 		stack.shrink(take);
 	}
@@ -147,27 +147,27 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 		var id = LBItems.DC_OWNER_ID.get(stack);
 		if (item != Items.AIR) {
 			int count = id == null ? -1 : TooltipUpdateEvents.getCount(id, item);
-			list.add(LangData.IDS.DRAWER_CONTENT.get(item.getDescription(), count < 0 ? "???" : count));
+			list.add(LBLang.IDS.DRAWER_CONTENT.get(item.getDescription(), count < 0 ? "???" : count));
 		}
 		var name = LBItems.DC_OWNER_NAME.get(stack);
 		if (name != null) {
-			list.add(LangData.IDS.STORAGE_OWNER.get(name));
+			list.add(LBLang.IDS.STORAGE_OWNER.get(name));
 			PickupConfig.addText(stack, list);
 
 		}
-		LangData.addInfo(list,
-				LangData.Info.ENDER_DRAWER,
-				LangData.Info.EXTRACT_DRAWER,
-				LangData.Info.PLACE,
-				LangData.Info.COLLECT_DRAWER,
-				LangData.Info.ENDER_DRAWER_USE);
+		LBLang.addInfo(list,
+				LBLang.Info.ENDER_DRAWER,
+				LBLang.Info.EXTRACT_DRAWER,
+				LBLang.Info.PLACE,
+				LBLang.Info.COLLECT_DRAWER,
+				LBLang.Info.ENDER_DRAWER_USE);
 	}
 
 	public String getDescriptionId() {
 		return this.getOrCreateDescriptionId();
 	}
 
-	public DrawerInvWrapper getCaps(ItemStack stack, Void ignored) {
+	public DrawerInvWrapper getCaps(ItemStack stack, @Nullable Void ignored) {
 		return new DrawerInvWrapper(stack, trace -> trace.player == null ? null : new EnderDrawerInvAccess(stack, this, trace.player));
 	}
 

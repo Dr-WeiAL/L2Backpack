@@ -1,20 +1,20 @@
 package dev.xkmc.l2backpack.content.capability;
 
-import dev.xkmc.l2backpack.init.data.LangData;
+import dev.xkmc.l2backpack.init.data.LBLang;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.MutableComponent;
 
 public enum DestroyMode {
-	NONE(LangData.IDS.DESTROY_NONE, true),
-	EXCESS(LangData.IDS.DESTROY_EXCESS, true),
-	MATCH(LangData.IDS.DESTROY_MATCH, false),
-	ALL(LangData.IDS.DESTROY_ALL, false);
+	NONE(LBLang.IDS.DESTROY_NONE, true),
+	EXCESS(LBLang.IDS.DESTROY_EXCESS, true),
+	MATCH(LBLang.IDS.DESTROY_MATCH, false),
+	ALL(LBLang.IDS.DESTROY_ALL, false);
 
-	private final LangData.IDS lang;
+	private final LBLang.IDS lang;
 
 	public final boolean attemptInsert;
 
-	DestroyMode(LangData.IDS lang, boolean attemptInsert) {
+	DestroyMode(LBLang.IDS lang, boolean attemptInsert) {
 		this.lang = lang;
 		this.attemptInsert = attemptInsert;
 	}

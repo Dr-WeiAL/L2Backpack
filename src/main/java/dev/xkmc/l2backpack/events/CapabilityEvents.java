@@ -18,6 +18,10 @@ public class CapabilityEvents {
 	@SubscribeEvent
 	public static void onItemPickup(ItemEntityPickupEvent.Pre event) {
 		if (!(event.getPlayer() instanceof ServerPlayer player)) return;
+		var e = event.getItemEntity();
+		var uuid = e.getTarget();
+		if (e.hasPickUpDelay() || (uuid != null && !uuid.equals(player.getUUID())))
+			return;
 		ItemStack stack = event.getItemEntity().getItem();
 		ItemStack copy = stack.copy();
 		int count = stack.getCount();
@@ -35,7 +39,7 @@ public class CapabilityEvents {
 	 */
 	public static void tryInsertItem(ServerPlayer player, ItemStack stack) {
 		ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
-		var cap = stack.getCapability(LBMisc.PICKUP);
+		var cap = chest.getCapability(LBMisc.PICKUP);
 		if (cap != null) cap.doPickup(stack, new PickupTrace(false, player));
 		if (stack.isEmpty()) return;
 		CuriosCompat.getSlot(player, e -> {

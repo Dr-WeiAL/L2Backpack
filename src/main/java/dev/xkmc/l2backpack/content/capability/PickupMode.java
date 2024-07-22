@@ -1,17 +1,17 @@
 package dev.xkmc.l2backpack.content.capability;
 
-import dev.xkmc.l2backpack.init.data.LangData;
+import dev.xkmc.l2backpack.init.data.LBLang;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.MutableComponent;
 
 public enum PickupMode {
-	NONE(LangData.IDS.MODE_NONE),
-	STACKING(LangData.IDS.MODE_STACKING),
-	ALL(LangData.IDS.MODE_ALL);
+	NONE(LBLang.IDS.MODE_NONE),
+	STACKING(LBLang.IDS.MODE_STACKING),
+	ALL(LBLang.IDS.MODE_ALL);
 
-	private final LangData.IDS lang;
+	private final LBLang.IDS lang;
 
-	PickupMode(LangData.IDS lang) {
+	PickupMode(LBLang.IDS lang) {
 		this.lang = lang;
 	}
 

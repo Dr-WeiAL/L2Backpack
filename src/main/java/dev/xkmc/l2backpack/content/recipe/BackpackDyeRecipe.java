@@ -1,6 +1,6 @@
 package dev.xkmc.l2backpack.content.recipe;
 
-import dev.xkmc.l2backpack.init.data.TagGen;
+import dev.xkmc.l2backpack.init.data.LBTagGen;
 import dev.xkmc.l2backpack.init.registrate.LBMisc;
 import dev.xkmc.l2core.serial.recipe.AbstractShapelessRecipe;
 import net.minecraft.core.HolderLookup;
@@ -19,7 +19,7 @@ public class BackpackDyeRecipe extends AbstractShapelessRecipe<BackpackDyeRecipe
 	public ItemStack assemble(CraftingInput container, HolderLookup.Provider access) {
 		ItemStack bag = ItemStack.EMPTY;
 		for (int i = 0; i < container.size(); i++) {
-			if (container.getItem(i).is(TagGen.BACKPACKS)) {
+			if (container.getItem(i).is(LBTagGen.BACKPACKS)) {
 				bag = container.getItem(i);
 			}
 		}

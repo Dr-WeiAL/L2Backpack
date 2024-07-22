@@ -8,10 +8,10 @@ import dev.xkmc.l2backpack.content.bag.BagItemHandler;
 import dev.xkmc.l2backpack.content.capability.PickupModeCap;
 import dev.xkmc.l2backpack.content.common.BaseBagInvWrapper;
 import dev.xkmc.l2backpack.content.common.BaseBagItemHandler;
+import dev.xkmc.l2backpack.content.remote.dimensional.DimensionalCaps;
 import dev.xkmc.l2backpack.content.remote.player.EnderBackpackCaps;
 import dev.xkmc.l2backpack.content.remote.player.EnderSyncCap;
 import dev.xkmc.l2backpack.content.remote.player.EnderSyncPacket;
-import dev.xkmc.l2backpack.content.remote.dimensional.DimensionalCaps;
 import dev.xkmc.l2backpack.events.BackpackSel;
 import dev.xkmc.l2backpack.events.BackpackSlotClickListener;
 import dev.xkmc.l2backpack.init.data.*;
@@ -51,7 +51,7 @@ public class L2Backpack {
 	public static final BackpackSlotClickListener SLOT_CLICK = new BackpackSlotClickListener();
 
 	public static final PacketHandler HANDLER = new PacketHandler(MODID, 3,
-			e -> e.create(DrawerInteractToServer.class, PLAY_TO_SERVER),
+			e -> e.create(ClickInteractToServer.class, PLAY_TO_SERVER),
 			e -> e.create(CreativeSetCarryToClient.class, PLAY_TO_CLIENT),
 			e -> e.create(CreativeSetCarryToServer.class, PLAY_TO_SERVER),
 			e -> e.create(RequestTooltipUpdateEvent.class, PLAY_TO_SERVER),
@@ -66,16 +66,16 @@ public class L2Backpack {
 		LBMisc.register();
 		Handlers.register();
 		LBTriggers.register();
-		BackpackConfig.init();
+		LBConfig.init();
 		PickupModeCap.register();
 		EnderSyncCap.register();
 		if (ModList.get().isLoaded("modulargolems")) GolemCompat.register();
 		//TODO if (ModList.get().isLoaded(L2Complements.MODID)) NeoForge.EVENT_BUS.register(LCCompat.class);
-		REGISTRATE.addDataGenerator(ProviderType.RECIPE, RecipeGen::genRecipe);
-		REGISTRATE.addDataGenerator(ProviderType.ADVANCEMENT, AdvGen::genAdvancements);
+		REGISTRATE.addDataGenerator(ProviderType.RECIPE, LBRecipeGen::genRecipe);
+		REGISTRATE.addDataGenerator(ProviderType.ADVANCEMENT, LBAdvGen::genAdvancements);
 		REGISTRATE.addDataGenerator(ProviderType.LOOT, LootGen::genLoot);
-		REGISTRATE.addDataGenerator(ProviderType.BLOCK_TAGS, TagGen::onBlockTagGen);
-		REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, TagGen::onItemTagGen);
+		REGISTRATE.addDataGenerator(ProviderType.BLOCK_TAGS, LBTagGen::onBlockTagGen);
+		REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, LBTagGen::onItemTagGen);
 		if (ModList.get().isLoaded("patchouli")) {
 			PatchouliCompat.gen();
 			// TODO new PatchouliClickListener();
@@ -116,10 +116,10 @@ public class L2Backpack {
 
 	@SubscribeEvent
 	public static void gatherData(GatherDataEvent event) {
-		LangData.addTranslations(REGISTRATE::addRawLang);
+		LBLang.addTranslations(REGISTRATE::addRawLang);
 		var gen = event.getGenerator();
 		boolean server = event.includeServer();
-		gen.addProvider(server, new SlotGen(gen, event.getLookupProvider()));
+		gen.addProvider(server, new SlotGen(gen.getPackOutput(), event.getExistingFileHelper(), event.getLookupProvider()));
 		//TODO event.getGenerator().addProvider(event.includeServer(), new BackpackGLMProvider(event.getGenerator().getPackOutput()));
 	}
 

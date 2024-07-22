@@ -3,9 +3,10 @@ package dev.xkmc.l2backpack.content.drawer;
 import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.click.DoubleClickItem;
 import dev.xkmc.l2backpack.content.common.ContentTransfer;
+import dev.xkmc.l2backpack.content.insert.OverlayInsertItem;
 import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.init.L2Backpack;
-import dev.xkmc.l2backpack.init.data.LangData;
+import dev.xkmc.l2backpack.init.data.LBLang;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2core.util.DCStack;
 import net.minecraft.ChatFormatting;
@@ -63,6 +64,8 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 
 	@Override
 	public boolean canAccept(ItemStack drawer, ItemStack stack) {
+		if (!stack.getItem().canFitInsideContainerItems()) return false;
+		if (stack.getItem() instanceof OverlayInsertItem) return false;
 		ItemStack content = getDrawerContent(drawer);
 		return content.isEmpty() || ItemStack.isSameItemSameComponents(content, stack);
 	}
@@ -70,11 +73,6 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 	@Override
 	public int getStacking(ItemStack drawer) {
 		return BaseDrawerItem.super.getStacking(drawer) * LBItems.DC_DRAWER_STACKING.getOrDefault(drawer, 1);
-	}
-
-	@Override
-	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-		consumer.accept(BaseItemRenderer.EXTENSIONS);
 	}
 
 	@Override
@@ -94,7 +92,7 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 		} else {
 			ItemStack item = getDrawerContent(drawer);
 			int count = getCount(drawer);
-			int max = item.getMaxStackSize() * getStacking(drawer);
+			int max = getStacking(drawer, item);
 			boolean perform = !canSetNewItem(drawer);
 			if (!perform) {
 				item = ContentTransfer.filterMaxItem(new InvWrapper(player.getInventory()));
@@ -147,7 +145,7 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 			}
 			if (perform) {
 				int count = getCount(stack);
-				int max = getStacking(stack) * item.getMaxStackSize();
+				int max = getStacking(stack, item);
 				int remain = ContentTransfer.loadFrom(item, max - count, target);
 				ContentTransfer.onLoad(player, remain, stack);
 				setCount(stack, count + remain);
@@ -159,7 +157,7 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 	@Override
 	public void insert(ItemStack drawer, ItemStack stack, @Nullable Player player) {
 		int count = getCount(drawer);
-		int allow = Math.min(getStacking(drawer) * stack.getMaxStackSize() - count, stack.getCount());
+		int allow = Math.min(getStacking(drawer, stack) - count, stack.getCount());
 		setCount(drawer, count + allow);
 		stack.shrink(allow);
 	}
@@ -185,25 +183,25 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 		ItemStack content = getDrawerContent(drawer);
 		int count = getCount(drawer);
 		if (!canSetNewItem(drawer)) {
-			list.add(LangData.IDS.DRAWER_CONTENT.get(content.getHoverName(), count));
+			list.add(LBLang.IDS.DRAWER_CONTENT.get(content.getHoverName(), count));
 		}
-		list.add(LangData.IDS.BACKPACK_SLOT.get(LBItems.DC_DRAWER_STACKING.getOrDefault(drawer, 1), MAX_FACTOR)
+		list.add(LBLang.IDS.BACKPACK_SLOT.get(LBItems.DC_DRAWER_STACKING.getOrDefault(drawer, 1), MAX_FACTOR)
 				.withStyle(ChatFormatting.GRAY));
 		PickupConfig.addText(drawer, list);
-		LangData.addInfo(list,
-				LangData.Info.DRAWER_USE,
-				LangData.Info.LOAD,
-				LangData.Info.PLACE,
-				LangData.Info.EXTRACT_DRAWER,
-				LangData.Info.COLLECT_DRAWER,
-				LangData.Info.PICKUP);
+		LBLang.addInfo(list,
+				LBLang.Info.DRAWER_USE,
+				LBLang.Info.LOAD,
+				LBLang.Info.PLACE,
+				LBLang.Info.EXTRACT_DRAWER,
+				LBLang.Info.COLLECT_DRAWER,
+				LBLang.Info.PICKUP);
 	}
 
 	public String getDescriptionId() {
 		return this.getOrCreateDescriptionId();
 	}
 
-	public @Nullable DrawerInvWrapper getCaps(ItemStack stack, Void ignored) {
+	public DrawerInvWrapper getCaps(ItemStack stack, @Nullable Void ignored) {
 		var access = new DrawerInvAccess(stack, this);
 		return new DrawerInvWrapper(stack, trace -> access);
 	}
@@ -219,8 +217,7 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 	public int remainingSpace(ItemStack drawer) {
 		if (canSetNewItem(drawer)) return 0;
 		int count = getCount(drawer);
-		int maxStack = getDrawerContent(drawer).getMaxStackSize();
-		return getStacking(drawer) * maxStack - count;
+		return getStacking(drawer, getDrawerContent(drawer)) - count;
 	}
 
 	@Override
@@ -232,7 +229,7 @@ public class DrawerItem extends BlockItem implements BaseDrawerItem, ContentTran
 	@Override
 	public void mergeStack(ItemStack drawer, ItemStack stack) {
 		int count = getCount(drawer);
-		int allow = Math.min(getStacking(drawer) * stack.getMaxStackSize() - count, stack.getCount());
+		int allow = Math.min(getStacking(drawer, stack) - count, stack.getCount());
 		setCount(drawer, count + allow);
 		stack.shrink(allow);
 	}

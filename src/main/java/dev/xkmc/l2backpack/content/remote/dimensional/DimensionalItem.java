@@ -9,7 +9,7 @@ import dev.xkmc.l2backpack.content.remote.common.StorageContainer;
 import dev.xkmc.l2backpack.content.remote.common.LBSavedData;
 import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.init.L2Backpack;
-import dev.xkmc.l2backpack.init.data.LangData;
+import dev.xkmc.l2backpack.init.data.LBLang;
 import dev.xkmc.l2backpack.init.registrate.LBBlocks;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2core.util.ServerOnly;
@@ -101,18 +101,18 @@ public class DimensionalItem extends BlockItem implements BackpackModelItem, Pic
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		var name = LBItems.DC_OWNER_NAME.get(stack);
 		if (name != null) {
-			list.add(LangData.IDS.STORAGE_OWNER.get(name));
+			list.add(LBLang.IDS.STORAGE_OWNER.get(name));
 			PickupConfig.addText(stack, list);
 		}
 		if (LBItems.DC_LOOT_ID.get(stack) != null)
-			list.add(LangData.IDS.LOOT.get().withStyle(ChatFormatting.AQUA));
-		LangData.addInfo(list, LangData.Info.QUICK_ANY_ACCESS,
-				LangData.Info.PLACE,
-				LangData.Info.DIMENSIONAL,
-				LangData.Info.KEYBIND,
-				LangData.Info.EXIT,
-				LangData.Info.PICKUP);
-		LangData.altInsert(list);
+			list.add(LBLang.IDS.LOOT.get().withStyle(ChatFormatting.AQUA));
+		LBLang.addInfo(list, LBLang.Info.QUICK_ANY_ACCESS,
+				LBLang.Info.PLACE,
+				LBLang.Info.DIMENSIONAL,
+				LBLang.Info.KEYBIND,
+				LBLang.Info.EXIT,
+				LBLang.Info.PICKUP);
+		LBLang.altInsert(list);
 	}
 
 	public String getDescriptionId() {
@@ -145,11 +145,6 @@ public class DimensionalItem extends BlockItem implements BackpackModelItem, Pic
 			return new DimensionalInvWrapper(storage.get(), storage.id);
 		}
 		return null;
-	}
-
-	@Override
-	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-		consumer.accept(BaseItemRenderer.EXTENSIONS);
 	}
 
 }

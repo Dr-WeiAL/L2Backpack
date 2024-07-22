@@ -5,7 +5,7 @@ import dev.xkmc.l2backpack.content.drawer.DrawerBlockEntity;
 import dev.xkmc.l2backpack.content.remote.drawer.EnderDrawerBlockEntity;
 import dev.xkmc.l2backpack.content.remote.dimensional.DimensionalBlockEntity;
 import dev.xkmc.l2backpack.events.TooltipUpdateEvents;
-import dev.xkmc.l2backpack.init.data.LangData;
+import dev.xkmc.l2backpack.init.data.LBLang;
 import dev.xkmc.l2core.util.Proxy;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -40,7 +40,7 @@ public class EnderPreviewOverlay implements LayeredDraw.Layer {
 		}
 		Font font = Minecraft.getInstance().font;
 		if (item != Items.AIR) {
-			Component text = LangData.IDS.DRAWER_CONTENT.get(item.getDescription(), count < 0 ? "???" : count);
+			Component text = LBLang.IDS.DRAWER_CONTENT.get(item.getDescription(), count < 0 ? "???" : count);
 			renderText(font, g, g.guiWidth() / 2, g.guiHeight() / 2 + 16, text);
 		}
 		if (entity instanceof DimensionalBlockEntity be) {

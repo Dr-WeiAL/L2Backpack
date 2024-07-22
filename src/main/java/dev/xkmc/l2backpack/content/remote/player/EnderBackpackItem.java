@@ -12,7 +12,7 @@ import dev.xkmc.l2backpack.content.quickswap.common.IQuickSwapToken;
 import dev.xkmc.l2backpack.content.quickswap.type.QuickSwapType;
 import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.init.L2Backpack;
-import dev.xkmc.l2backpack.init.data.LangData;
+import dev.xkmc.l2backpack.init.data.LBLang;
 import dev.xkmc.l2backpack.init.registrate.LBMisc;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -59,11 +59,11 @@ public class EnderBackpackItem extends Item implements
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		PickupConfig.addText(stack, list);
-		LangData.addInfo(list,
-				LangData.Info.QUICK_ANY_ACCESS,
-				LangData.Info.KEYBIND,
-				LangData.Info.PICKUP);
-		LangData.altInsert(list);
+		LBLang.addInfo(list,
+				LBLang.Info.QUICK_ANY_ACCESS,
+				LBLang.Info.KEYBIND,
+				LBLang.Info.PICKUP);
+		LBLang.altInsert(list);
 	}
 
 	@Override
@@ -79,11 +79,6 @@ public class EnderBackpackItem extends Item implements
 	@Override
 	public @Nullable IItemHandler getInvCap(ItemStack storage, ServerPlayer player) {
 		return new InvWrapper(player.getEnderChestInventory());
-	}
-
-	@Override
-	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-		consumer.accept(BaseItemRenderer.EXTENSIONS);
 	}
 
 	@Override

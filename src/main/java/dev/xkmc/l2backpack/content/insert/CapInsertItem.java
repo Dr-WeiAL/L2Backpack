@@ -1,6 +1,6 @@
 package dev.xkmc.l2backpack.content.insert;
 
-import dev.xkmc.l2backpack.network.DrawerInteractToServer;
+import dev.xkmc.l2backpack.network.ClickInteractToServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -17,7 +17,7 @@ public interface CapInsertItem extends OverlayInsertItem {
 
 	@Override
 	default boolean clientInsert(ItemStack storage, ItemStack carried, int cid, Slot slot, boolean perform, int button,
-								 DrawerInteractToServer.Callback suppress, int limit) {
+								 ClickInteractToServer.Callback suppress, int limit) {
 		if (carried.isEmpty()) return false;
 		if (!isValidContent(carried)) return false;
 		if (perform)

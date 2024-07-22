@@ -3,7 +3,7 @@ package dev.xkmc.l2backpack.content.quickswap.type;
 import dev.xkmc.l2backpack.content.common.BaseBagItem;
 import dev.xkmc.l2backpack.content.quickswap.common.SingleSwapItem;
 import dev.xkmc.l2backpack.content.quickswap.entry.*;
-import dev.xkmc.l2backpack.init.data.BackpackConfig;
+import dev.xkmc.l2backpack.init.data.LBConfig;
 import dev.xkmc.l2itemselector.overlay.OverlayUtil;
 import dev.xkmc.l2itemselector.overlay.SelectionSideBar;
 import net.minecraft.client.gui.GuiGraphics;
@@ -20,7 +20,7 @@ public class ArmorSwapType extends QuickSwapType
 
 	@Override
 	public boolean activePopup() {
-		return BackpackConfig.CLIENT.popupArmorOnSwitch.get();
+		return LBConfig.CLIENT.popupArmorOnSwitch.get();
 	}
 
 	@Override

@@ -38,7 +38,7 @@ public class MouseTweakCompat {
 			}
 			ItemStack item = drawer.getDrawerContent(stack);
 			int max = item.getMaxStackSize();
-			int cap = max * drawer.getStacking(stack);
+			int cap = drawer.getStacking(stack, item);
 			if (max == 1) {
 				return item.copyWithCount(1);
 			}

@@ -19,7 +19,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
@@ -29,12 +28,10 @@ import java.util.UUID;
 @EventBusSubscriber(value = Dist.CLIENT, modid = L2Backpack.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class TooltipUpdateEvents {
 
-	@OnlyIn(Dist.CLIENT)
 	public static void onEnderSync(int slot, ItemStack stack) {
 		LBMisc.ENDER_SYNC.type().getOrCreate(Proxy.getClientPlayer()).setItem(slot, stack);
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onClientTick(ClientTickEvent.Post event) {
 		if (!continueSession()) {
@@ -42,7 +39,6 @@ public class TooltipUpdateEvents {
 		}
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	private static boolean continueSession() {
 		Screen screen = Minecraft.getInstance().screen;
 		if (screen instanceof AbstractContainerScreen<?> cont)
@@ -52,7 +48,6 @@ public class TooltipUpdateEvents {
 		else return false;
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	private static boolean screenSession(AbstractContainerScreen<?> cont) {
 		Slot slot = cont.getSlotUnderMouse();
 		if (slot == null) return false;
@@ -65,7 +60,6 @@ public class TooltipUpdateEvents {
 		return true;
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	private static boolean blockSession() {
 		LocalPlayer player = Proxy.getClientPlayer();
 		var ray = Minecraft.getInstance().hitResult;
@@ -99,7 +93,6 @@ public class TooltipUpdateEvents {
 		id = null;
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	private static void startSession(Item content, UUID owner) {
 		if (step == Step.NONE) {
 			focus = content;

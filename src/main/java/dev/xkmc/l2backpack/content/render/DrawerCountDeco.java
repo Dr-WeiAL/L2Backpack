@@ -3,7 +3,7 @@ package dev.xkmc.l2backpack.content.render;
 import dev.xkmc.l2backpack.content.drawer.BaseDrawerItem;
 import dev.xkmc.l2backpack.content.drawer.DrawerItem;
 import dev.xkmc.l2backpack.content.remote.drawer.EnderDrawerItem;
-import dev.xkmc.l2backpack.init.data.BackpackConfig;
+import dev.xkmc.l2backpack.init.data.LBConfig;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -23,7 +23,7 @@ public class DrawerCountDeco implements IItemDecorator {
 	}
 
 	public static boolean showContent() {
-		if (BackpackConfig.CLIENT.drawerAlwaysRenderFlat.get())
+		if (LBConfig.CLIENT.drawerAlwaysRenderFlat.get())
 			return true;
 		if (renderTooltipContent > 0) return true;
 		return Screen.hasShiftDown() || Screen.hasControlDown() || Screen.hasAltDown();
@@ -72,7 +72,7 @@ public class DrawerCountDeco implements IItemDecorator {
 			else return count / 1000 + "k";
 		}
 		if (item instanceof EnderDrawerItem) {
-			return Screen.hasShiftDown() ? "?" : "";
+			return Screen.hasShiftDown() || showContent() ? "?" : "";
 		}
 		return "";
 	}

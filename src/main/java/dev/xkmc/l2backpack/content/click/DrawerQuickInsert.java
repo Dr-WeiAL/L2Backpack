@@ -35,7 +35,9 @@ public interface DrawerQuickInsert {
 			} else if (i >= end) break;
 
 			Slot slot = menu.slots.get(i);
-			if (tryMerge(pl, stack, slot.getItem(), slot, allowEmpty)) {
+			ItemStack content = slot.getItem();
+			if (tryMerge(pl, stack, content, slot, allowEmpty)) {
+				slot.set(content);
 				changed = true;
 			}
 			if (reverse) --i;
@@ -90,12 +92,10 @@ public interface DrawerQuickInsert {
 			if (j <= maxSize) {
 				src.setCount(0);
 				dst.setCount(j);
-				slot.set(dst);
 				return true;
 			} else if (dst.getCount() < maxSize) {
 				src.shrink(maxSize - dst.getCount());
 				dst.setCount(maxSize);
-				slot.set(dst);
 				return true;
 			}
 		}

@@ -1,7 +1,7 @@
 package dev.xkmc.l2backpack.content.recipe;
 
 import dev.xkmc.l2backpack.content.common.BaseBagItem;
-import dev.xkmc.l2backpack.init.data.BackpackConfig;
+import dev.xkmc.l2backpack.init.data.LBConfig;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2backpack.init.registrate.LBMisc;
 import dev.xkmc.l2core.serial.recipe.AbstractSmithingRecipe;
@@ -21,7 +21,7 @@ public class BackpackUpgradeRecipe extends AbstractSmithingRecipe<BackpackUpgrad
 
 	@Override
 	public ItemStack getResultItem(HolderLookup.Provider pvd) {
-		return LBItems.DC_ROW.set(super.getResultItem(pvd), BackpackConfig.SERVER.initialRows.get());
+		return LBItems.DC_ROW.set(super.getResultItem(pvd), LBConfig.SERVER.initialRows.get());
 	}
 
 	@Override

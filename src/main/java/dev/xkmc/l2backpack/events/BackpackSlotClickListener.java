@@ -5,9 +5,9 @@ import dev.xkmc.l2backpack.content.bag.AbstractBag;
 import dev.xkmc.l2backpack.content.capability.PickupBagItem;
 import dev.xkmc.l2backpack.content.common.BaseBagItem;
 import dev.xkmc.l2backpack.content.drawer.BaseDrawerItem;
-import dev.xkmc.l2backpack.content.remote.player.EnderBackpackItem;
 import dev.xkmc.l2backpack.content.remote.dimensional.DimensionalItem;
 import dev.xkmc.l2backpack.content.remote.dimensional.DimensionalMenuPvd;
+import dev.xkmc.l2backpack.content.remote.player.EnderBackpackItem;
 import dev.xkmc.l2backpack.content.tool.IBagTool;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
@@ -15,7 +15,9 @@ import dev.xkmc.l2backpack.init.registrate.LBTriggers;
 import dev.xkmc.l2menustacker.click.writable.ClickedPlayerSlotResult;
 import dev.xkmc.l2menustacker.click.writable.ContainerCallback;
 import dev.xkmc.l2menustacker.click.writable.WritableStackClickHandler;
+import dev.xkmc.l2menustacker.init.L2MenuStacker;
 import dev.xkmc.l2menustacker.screen.base.ScreenTracker;
+import dev.xkmc.l2menustacker.screen.packets.CacheMouseToClient;
 import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
@@ -77,11 +79,13 @@ public class BackpackSlotClickListener extends WritableStackClickHandler {
 	}
 
 	private void handleNoMenu(ServerPlayer player, int index) {
-		ItemStack stack = player.containerMenu.getSlot(index).getItem();
+		var slot = player.containerMenu.getSlot(index);
+		ItemStack stack = slot.getItem();
 		ItemStack carried = player.containerMenu.getCarried();
 		if (carried.getItem() instanceof IBagTool tool) {
 			if (stack.getItem() instanceof PickupBagItem) {
 				tool.click(stack);
+				slot.set(stack);
 				return;
 			}
 		}
@@ -121,12 +125,18 @@ public class BackpackSlotClickListener extends WritableStackClickHandler {
 		}
 		switch (result.stack().getItem()) {
 			case BaseBagItem bag -> {
+				L2MenuStacker.PACKET_HANDLER.toClientPlayer(new CacheMouseToClient(), player);
 				bag.open(player, result.slot(), result.stack());
 				result.container().update();
 			}
-			case EnderBackpackItem ender -> player.openMenu(new SimpleMenuProvider((id, inv, pl) ->
-					ChestMenu.threeRows(id, inv, pl.getEnderChestInventory()), result.stack().getHoverName()));
+			case EnderBackpackItem ender -> {
+				L2MenuStacker.PACKET_HANDLER.toClientPlayer(new CacheMouseToClient(), player);
+				player.openMenu(new SimpleMenuProvider((id, inv, pl) ->
+						ChestMenu.threeRows(id, inv, pl.getEnderChestInventory()),
+						result.stack().getHoverName()));
+			}
 			case DimensionalItem chest -> {
+				L2MenuStacker.PACKET_HANDLER.toClientPlayer(new CacheMouseToClient(), player);
 				var id = LBItems.DC_OWNER_ID.get(result.stack());
 				others = id != null && !id.equals(player.getUUID());
 				new DimensionalMenuPvd(player, result.stack(), chest).open();
