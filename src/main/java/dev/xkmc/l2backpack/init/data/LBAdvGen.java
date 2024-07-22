@@ -40,10 +40,10 @@ public class LBAdvGen {
 		gen.new TabBuilder("backpacks").root("root", backpack(DyeColor.WHITE),
 						CriterionBuilder.one(PlayerTrigger.TriggerInstance.tick()),
 						"Welcome to L2Backpack", "Guide to Backpacks")
-				.root().patchouli(L2Backpack.REGISTRATE,
+				/* TODO patchouli .root().patchouli(L2Backpack.REGISTRATE,
 						CriterionBuilder.one(PlayerTrigger.TriggerInstance.tick()),
 						L2Backpack.loc("backpack_guide"),
-						"Intro to Backpacks", "Read the backpack guide")
+						"Intro to Backpacks", "Read the backpack guide")*/
 				.root().create("backpack", backpack(DyeColor.RED),
 						CriterionBuilder.item(LBTagGen.BACKPACKS),
 						"Your First Backpack!", "Obtain a Backpack")
