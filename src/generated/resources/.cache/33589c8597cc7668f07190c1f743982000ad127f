@@ -1,9 +1,9 @@
-// 1.21	2024-07-22T20:55:29.37586	Registrate Provider for l2backpack [Registries, Data Maps, Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider, Tags (mob_effect), Tags (attribute), Tags (enchantment)]
+// 1.21	2024-07-22T22:00:35.918158	Registrate Provider for l2backpack [Registries, Data Maps, Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider, Patchouli Provider, Tags (mob_effect), Tags (attribute), Tags (enchantment)]
 530cfc8939fcc948a19b693d06af8389391a97a4 assets/l2backpack/blockstates/dimensional_storage.json
 c8a12d1045e3e7eccdfa66ade2f5fd44f2359d78 assets/l2backpack/blockstates/drawer.json
 1b95dd478e92493373a61b041acce8ee59dfdec7 assets/l2backpack/blockstates/ender_drawer.json
-2a7f3f537afd9c5a04157bde18319b906dbe1754 assets/l2backpack/lang/en_ud.json
-7fa72cb205bc0948f48f07c4ec75d1fae706794a assets/l2backpack/lang/en_us.json
+6a11266b6c97240f10e48fea64fcbf25d50e7c23 assets/l2backpack/lang/en_ud.json
+127bb625405122351e2d43ecd24ef03a3195f42a assets/l2backpack/lang/en_us.json
 3b258604ade2999f486e4cafd6e0e239a07ef986 assets/l2backpack/models/block/dimensional_storage_black.json
 1367dda416328c37ba0b14711a17836f3d47b011 assets/l2backpack/models/block/dimensional_storage_blue.json
 b699a725cdd4fc66a3559ebcf4b68266281696f7 assets/l2backpack/models/block/dimensional_storage_brown.json
@@ -175,6 +175,7 @@ a2a888648d8213a7ec849db8eb28da4d057152c1 data/l2backpack/advancements/backpacks/
 8bd9aa1f9bb7812814d1e1f0620fd377ba87a73f data/l2backpack/advancements/backpacks/folder_structure.json
 fcb8514e021dae5b1d317921d0fc69533365f00c data/l2backpack/advancements/backpacks/interact_dump.json
 f3f5f16a6a764f28ac147799326ee7c29594eac8 data/l2backpack/advancements/backpacks/interact_load.json
+68414b48d1d1b2a98a42587bf9355760d40b1a94 data/l2backpack/advancements/backpacks/patchouli.json
 4e2d754496aa60559f97386d9f22e23759b6b614 data/l2backpack/advancements/backpacks/press_b.json
 40dfb25a96a107f7da96e57d2f01e5cfe41bcd07 data/l2backpack/advancements/backpacks/quick_access.json
 3c971f48afebac2a7ec8147e86741c2d2aa0245c data/l2backpack/advancements/backpacks/quiver.json
@@ -186,6 +187,7 @@ cee4b4e172568d445a48f433aaeb098d9979a0cb data/l2backpack/advancements/backpacks/
 e70b0dcb8194490d392a05269ee90b2e0cd91b1b data/l2backpack/advancements/detection.json
 e63f2752535787dceae2dd52c4c12da77b5d3b21 data/l2backpack/loot_table/abandoned_mineshaft.json
 dfc10989b0d9198cce552a24a1f6727078cd3b8a data/l2backpack/loot_table/ancient_city.json
+1469e2c4351d031ba5cf297e9217755ecf02d6d8 data/l2backpack/loot_table/backpack_guide.json
 fe5a7cc7c2bd1e331740fcee35647614bd1ddfd3 data/l2backpack/loot_table/bastion_treasure.json
 02fd939e493976956eb74235f31201c852186625 data/l2backpack/loot_table/blocks/dimensional_storage.json
 b89751adb5e55d989a917e6f8722b1f2263d8800 data/l2backpack/loot_table/blocks/drawer.json
