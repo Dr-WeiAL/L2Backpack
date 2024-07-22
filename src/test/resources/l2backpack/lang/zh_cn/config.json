@@ -20,10 +20,14 @@
 	"previewOnCenter.tooltip": "开启时箭袋选择器渲染在屏幕靠近中间的地方\n关闭时渲染在靠近屏幕边缘的地方",
 	"reverseScroll": "滚轮反向",
 	"reverseScroll.tooltip": "选择器切换的滚轮操作方向反转",
-	"section.l2configs.l2backpack.client.toml.title": "莱特兰背包 - 客户端配置",
-	"section.l2configs.l2backpack.server.toml.title": "莱特兰背包 - 服务端配置",
 	"startupBackpackCondition": "开具打包数量要求",
 	"startupBackpackCondition.tooltip": "开局物品栏内物品数量达到这个数字时，把物品栏内所有能放进背包的物品放进一个背包里面给予玩家\n范围: 1 ~ 36",
-	"title": "莱特兰背包 - 配置"
+	"title": "莱特兰背包 - 配置",
+	"section.l2configs.l2backpack": {
+	  "client.toml": "莱特兰背包 - 客户端配置",
+	  "client.toml.title": "莱特兰背包 - 客户端配置",
+	  "server.toml": "莱特兰背包 - 服务端配置",
+	  "server.toml.title": "莱特兰背包 - 服务端配置"
+	}
   }
 }
