@@ -18,6 +18,7 @@ import dev.xkmc.l2backpack.init.data.*;
 import dev.xkmc.l2backpack.init.loot.LootGen;
 import dev.xkmc.l2backpack.init.registrate.*;
 import dev.xkmc.l2backpack.network.*;
+import dev.xkmc.l2core.compat.patchouli.PatchouliHelper;
 import dev.xkmc.l2core.init.reg.registrate.L2Registrate;
 import dev.xkmc.l2core.init.reg.simple.Reg;
 import dev.xkmc.l2core.util.MathHelper;
@@ -58,6 +59,8 @@ public class L2Backpack {
 			e -> e.create(RespondTooltipUpdateEvent.class, PLAY_TO_CLIENT),
 			e -> e.create(EnderSyncPacket.class, PLAY_TO_CLIENT)
 	);
+
+	public static final PatchouliHelper PATCHOULI = new PatchouliHelper(REGISTRATE, "backpack_guide");
 
 	public L2Backpack() {
 		LBBlocks.register();
