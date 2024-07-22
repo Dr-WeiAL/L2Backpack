@@ -1,0 +1,29 @@
+{
+  "l2backpack.configuration": {
+	"backpackEnableLeftClickInsert": "允许UI内持物品左键插入背包",
+	"backpackEnableLeftClickInsert.tooltip": "",
+	"backpackEnableRightClickInsert": "允许UI内持物品左键插入背包",
+	"backpackEnableRightClickInsert.tooltip": "",
+	"backpackInsertRequiresShift": "UI内物品插入背包需要按SHIFT",
+	"backpackInsertRequiresShift.tooltip": "",
+	"drawerAlwaysRenderFlat": "匣子永远直接显示物品",
+	"drawerAlwaysRenderFlat.tooltip": "关闭时，显示3D匣子模型，在里面渲染旋转的物品\n开启时，直接渲染内容物，在其后渲染2D匣子贴图",
+	"initialRows": "背包初始行数",
+	"initialRows.tooltip": "格子数=行数x9\n范围: 1 ~ 8",
+	"popupArmorOnSwitch": "激活时自动弹出盔甲切换选择",
+	"popupArmorOnSwitch.tooltip": "切换至空手时自动弹出工具切换袋的选择器",
+	"popupArrowOnSwitch": "切换弓时自动弹出箭袋选择",
+	"popupArrowOnSwitch.tooltip": "切换至弓时自动弹出箭袋的选择器",
+	"popupToolOnSwitch": "切换工具时自动弹出工具切换选择",
+	"popupToolOnSwitch.tooltip": "切换至工具时自动弹出工具切换袋的选择器",
+	"previewOnCenter": "箭袋切换渲染居中",
+	"previewOnCenter.tooltip": "开启时箭袋选择器渲染在屏幕靠近中间的地方\n关闭时渲染在靠近屏幕边缘的地方",
+	"reverseScroll": "滚轮反向",
+	"reverseScroll.tooltip": "选择器切换的滚轮操作方向反转",
+	"section.l2configs.l2backpack.client.toml.title": "莱特兰背包 - 客户端配置",
+	"section.l2configs.l2backpack.server.toml.title": "莱特兰背包 - 服务端配置",
+	"startupBackpackCondition": "开具打包数量要求",
+	"startupBackpackCondition.tooltip": "开局物品栏内物品数量达到这个数字时，把物品栏内所有能放进背包的物品放进一个背包里面给予玩家\n范围: 1 ~ 36",
+	"title": "莱特兰背包 - 配置"
+  }
+}
