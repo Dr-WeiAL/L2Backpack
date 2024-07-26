@@ -11,6 +11,21 @@
       "trigger": "minecraft:tick"
     }
   },
+  "display": {
+    "description": {
+      "translate": "advancements.l2backpack.backpacks.patchouli.description"
+    },
+    "icon": {
+      "components": {
+        "patchouli:book": "l2backpack:backpack_guide"
+      },
+      "count": 1,
+      "id": "patchouli:guide_book"
+    },
+    "title": {
+      "translate": "advancements.l2backpack.backpacks.patchouli.title"
+    }
+  },
   "requirements": [
     [
       "0"
