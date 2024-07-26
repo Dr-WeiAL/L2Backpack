@@ -2,7 +2,10 @@ package dev.xkmc.l2backpack.compat;
 
 import dev.xkmc.l2backpack.content.remote.player.EnderSyncCap;
 import dev.xkmc.l2backpack.content.remote.player.EnderTickEvent;
+import dev.xkmc.l2backpack.init.data.BackpackConfig;
+import dev.xkmc.l2backpack.init.registrate.BackpackItems;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -39,9 +42,18 @@ public class SophisticatedCompat {
 	public static void onEnderTick(EnderTickEvent event) {
 		var player = event.getPlayer();
 		if (player.isSpectator() || player.isDeadOrDying()) return;
+		if (!BackpackConfig.COMMON.sophisticatedEnderTicking.get()) return;
+		if (!hasEnder(player)) return;
 		event.getStack().getCapability(CapabilityBackpackWrapper.getCapabilityInstance()).ifPresent((wrapper) ->
 				wrapper.getUpgradeHandler().getWrappersThatImplement(ITickableUpgrade.class).forEach((upgrade) ->
 						upgrade.tick(player, player.level(), player.blockPosition())));
+	}
+
+	private static boolean hasEnder(ServerPlayer player) {
+		ItemStack stack = player.getItemBySlot(EquipmentSlot.CHEST);
+		if (stack.is(BackpackItems.ENDER_BACKPACK.get())) return true;
+		var pairOpt = CuriosCompat.getSlot(player, e -> e.is((BackpackItems.ENDER_BACKPACK.get())));
+		return pairOpt.isPresent();
 	}
 
 }

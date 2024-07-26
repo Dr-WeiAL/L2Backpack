@@ -1,3 +1,8 @@
+2.4.24
+- Fix sophisticated backpack insertion
+- Sophisticated backpacks ticking in ender inventory only when wearing ender backpack
+- Add config for sophisticated compat
+
 2.4.23
 - Allow opening Sophisticated backpacks via right click in player inventory and ender chest inventory
 - Upgrades in Sophisticated backpacks in Ender backpack will still work

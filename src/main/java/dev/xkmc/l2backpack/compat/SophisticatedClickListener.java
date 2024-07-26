@@ -1,6 +1,7 @@
 package dev.xkmc.l2backpack.compat;
 
 import dev.xkmc.l2backpack.init.L2Backpack;
+import dev.xkmc.l2backpack.init.data.BackpackConfig;
 import dev.xkmc.l2screentracker.click.SlotClickHandler;
 import dev.xkmc.l2screentracker.screen.base.ScreenTracker;
 import net.minecraft.resources.ResourceLocation;
@@ -22,6 +23,9 @@ public class SophisticatedClickListener extends SlotClickHandler {
 
 	@Override
 	public void handle(ServerPlayer player, int index, int slot, int wid) {
+		ItemStack carried = player.containerMenu.getCarried();
+		if (!carried.isEmpty()) return;
+
 		BackpackContext.Item ctx;
 		ItemStack stack;
 		if (slot >= 0) {
@@ -45,6 +49,7 @@ public class SophisticatedClickListener extends SlotClickHandler {
 
 	@Override
 	public boolean isAllowed(ItemStack stack) {
+		if (!BackpackConfig.COMMON.sophisticatedRightClickOpen.get()) return false;
 		return stack.getItem() instanceof BackpackItem;
 	}
 
