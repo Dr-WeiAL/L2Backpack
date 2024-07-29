@@ -1,3 +1,6 @@
+2.4.25
+- Fix ender backpack sophisticated backpack conpat when player cross dimension
+
 2.4.24
 - Fix sophisticated backpack insertion
 - Sophisticated backpacks ticking in ender inventory only when wearing ender backpack
