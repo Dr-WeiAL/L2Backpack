@@ -11,7 +11,7 @@ import net.neoforged.neoforge.common.NeoForge;
 public class GolemCompat {
 
 	public static void register() {
-		NeoForge.EVENT_BUS.register(GolemCompat.class);
+		//TODO NeoForge.EVENT_BUS.register(GolemCompat.class);
 	}
 
 	private static boolean canEquip(ItemStack stack) {

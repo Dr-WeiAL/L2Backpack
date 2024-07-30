@@ -19,7 +19,6 @@ import java.util.UUID;
 public class DimensionalContainer extends BaseContainerMenu<DimensionalContainer> implements DrawerQuickInsert {
 
 	public static DimensionalContainer fromNetwork(MenuType<DimensionalContainer> type, int windowId, Inventory inv) {
-		//TODO more space
 		return new DimensionalContainer(windowId, inv, new SimpleContainer(54), null, null);
 	}
 
