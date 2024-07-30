@@ -1,7 +1,7 @@
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 
-package dev.xkmc.l2backpack.content.render;
+package dev.xkmc.l2backpack.content.client;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 

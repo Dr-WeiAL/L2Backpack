@@ -7,7 +7,7 @@ import dev.xkmc.l2backpack.content.quickswap.common.SingleSwapItem;
 import dev.xkmc.l2backpack.content.quickswap.common.SingleSwapToken;
 import dev.xkmc.l2backpack.content.quickswap.type.QuickSwapType;
 import dev.xkmc.l2backpack.content.quickswap.type.QuickSwapTypes;
-import dev.xkmc.l2backpack.content.render.ItemOnBackItem;
+import dev.xkmc.l2backpack.content.client.ItemOnBackItem;
 import dev.xkmc.l2backpack.init.data.LBLang;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
 import dev.xkmc.l2menustacker.screen.source.PlayerSlot;

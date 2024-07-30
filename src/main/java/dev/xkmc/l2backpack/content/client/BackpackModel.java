@@ -1,4 +1,4 @@
-package dev.xkmc.l2backpack.content.render;
+package dev.xkmc.l2backpack.content.client;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.model.HumanoidModel;

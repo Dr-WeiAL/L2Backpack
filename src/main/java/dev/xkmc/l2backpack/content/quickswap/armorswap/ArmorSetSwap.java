@@ -3,7 +3,7 @@ package dev.xkmc.l2backpack.content.quickswap.armorswap;
 import dev.xkmc.l2backpack.content.quickswap.common.*;
 import dev.xkmc.l2backpack.content.quickswap.type.QuickSwapType;
 import dev.xkmc.l2backpack.content.quickswap.type.QuickSwapTypes;
-import dev.xkmc.l2backpack.content.render.ItemOnBackItem;
+import dev.xkmc.l2backpack.content.client.ItemOnBackItem;
 import dev.xkmc.l2backpack.init.data.LBLang;
 import dev.xkmc.l2menustacker.screen.source.PlayerSlot;
 import net.minecraft.network.chat.Component;

@@ -1,4 +1,4 @@
-package dev.xkmc.l2backpack.content.render;
+package dev.xkmc.l2backpack.content.client;
 
 import com.google.common.base.Suppliers;
 import com.mojang.blaze3d.platform.Lighting;
@@ -31,9 +31,9 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 
 import java.util.function.Supplier;
 
-public class BaseItemRenderer extends BlockEntityWithoutLevelRenderer {
+public class LBBEWLR extends BlockEntityWithoutLevelRenderer {
 
-	public static final Supplier<BlockEntityWithoutLevelRenderer> INSTANCE = Suppliers.memoize(() -> new BaseItemRenderer(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
+	public static final Supplier<BlockEntityWithoutLevelRenderer> INSTANCE = Suppliers.memoize(() -> new LBBEWLR(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
 
 	public static final IClientItemExtensions EXTENSIONS = new IClientItemExtensions() {
 
@@ -48,7 +48,7 @@ public class BaseItemRenderer extends BlockEntityWithoutLevelRenderer {
 
 	private final BackpackModel<LivingEntity> model;
 
-	public BaseItemRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet set) {
+	public LBBEWLR(BlockEntityRenderDispatcher dispatcher, EntityModelSet set) {
 		super(dispatcher, set);
 		model = new BackpackModel<>(set.bakeLayer(BackpackLayerRenderer.MLL));
 	}

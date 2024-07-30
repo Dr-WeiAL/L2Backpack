@@ -1,4 +1,4 @@
-package dev.xkmc.l2backpack.content.render;
+package dev.xkmc.l2backpack.content.client;
 
 import dev.xkmc.l2backpack.content.bag.AbstractBag;
 import net.minecraft.client.gui.Font;

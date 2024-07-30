@@ -3,7 +3,6 @@ package dev.xkmc.l2backpack.content.backpack;
 import dev.xkmc.l2backpack.content.capability.PickupConfig;
 import dev.xkmc.l2backpack.content.common.BackpackModelItem;
 import dev.xkmc.l2backpack.content.common.BaseBagItem;
-import dev.xkmc.l2backpack.content.render.BaseItemRenderer;
 import dev.xkmc.l2backpack.init.L2Backpack;
 import dev.xkmc.l2backpack.init.data.LBConfig;
 import dev.xkmc.l2backpack.init.data.LBLang;
@@ -17,10 +16,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public class BackpackItem extends BaseBagItem implements BackpackModelItem {
 

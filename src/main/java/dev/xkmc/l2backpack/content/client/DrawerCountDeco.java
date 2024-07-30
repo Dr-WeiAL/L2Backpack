@@ -1,4 +1,4 @@
-package dev.xkmc.l2backpack.content.render;
+package dev.xkmc.l2backpack.content.client;
 
 import dev.xkmc.l2backpack.content.drawer.BaseDrawerItem;
 import dev.xkmc.l2backpack.content.drawer.DrawerItem;
@@ -72,7 +72,7 @@ public class DrawerCountDeco implements IItemDecorator {
 			else return count / 1000 + "k";
 		}
 		if (item instanceof EnderDrawerItem) {
-			return Screen.hasShiftDown() || showContent() ? "?" : "";
+			return showContent() ? "?" : "";
 		}
 		return "";
 	}
