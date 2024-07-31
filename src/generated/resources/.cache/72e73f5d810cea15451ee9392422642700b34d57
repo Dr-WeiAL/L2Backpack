@@ -1,4 +1,4 @@
-// 1.21	2024-07-30T23:53:20.534817	Registrate Provider for l2backpack [Registries, Data Maps, Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider, Patchouli Provider, Tags (mob_effect), Tags (attribute), Tags (enchantment)]
+// 1.21	2024-07-31T11:26:13.51851	Registrate Provider for l2backpack [Registries, Data Maps, Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider, Patchouli Provider, Tags (mob_effect), Tags (attribute), Tags (enchantment), Tags (damage_type)]
 530cfc8939fcc948a19b693d06af8389391a97a4 assets/l2backpack/blockstates/dimensional_storage.json
 c8a12d1045e3e7eccdfa66ade2f5fd44f2359d78 assets/l2backpack/blockstates/drawer.json
 1b95dd478e92493373a61b041acce8ee59dfdec7 assets/l2backpack/blockstates/ender_drawer.json
@@ -296,3 +296,4 @@ e54b0578e6ab57fef6bd8ca6a80f35699af7b186 data/l2backpack/tags/item/ender_chest_a
 968af41bf6321268c1efb24bf9944fb23bb2e783 data/l2backpack/tags/item/swaps.json
 16a231773329fbf821267d7c07608ea9331164a7 data/minecraft/tags/block/mineable/pickaxe.json
 5df7448d10cb15bab9a7e5140d40a4e4aaf3ea86 data/minecraft/tags/block/needs_diamond_tool.json
+2abd774925161fbade02d959f3298e9133efd092 data/modulargolems/tags/block/potential_destination.json

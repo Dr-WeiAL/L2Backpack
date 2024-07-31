@@ -46,7 +46,7 @@ public class DimensionalBlock implements CreateBlockStateBlockMethod, DefaultSta
 	protected static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
 
 	public static final BlockEntityBlockMethod<DimensionalBlockEntity> TILE_ENTITY_SUPPLIER_BUILDER =
-			new DimensionalAnalogBlockEntity<>(LBBlocks.TE_WORLD_CHEST, DimensionalBlockEntity.class);
+			new DimensionalAnalogBlockEntity<>(LBBlocks.TE_DIMENSIONAL, DimensionalBlockEntity.class);
 
 	public static final EnumProperty<DyeColor> COLOR = EnumProperty.create("color", DyeColor.class);
 

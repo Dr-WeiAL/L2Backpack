@@ -23,8 +23,8 @@ import static dev.xkmc.l2backpack.init.L2Backpack.REGISTRATE;
  */
 public class LBBlocks {
 
-	public static final BlockEntry<DelegateBlock> WORLD_CHEST;
-	public static final BlockEntityEntry<DimensionalBlockEntity> TE_WORLD_CHEST;
+	public static final BlockEntry<DelegateBlock> DIMENSIONAL;
+	public static final BlockEntityEntry<DimensionalBlockEntity> TE_DIMENSIONAL;
 
 	public static final BlockEntry<DelegateBlock> ENDER_DRAWER;
 	public static final BlockEntityEntry<EnderDrawerBlockEntity> TE_ENDER_DRAWER;
@@ -33,7 +33,7 @@ public class LBBlocks {
 	public static final BlockEntityEntry<DrawerBlockEntity> TE_DRAWER;
 
 	static {
-		WORLD_CHEST = REGISTRATE.block("dimensional_storage", p -> DelegateBlock.newBaseBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.ENDER_CHEST),
+		DIMENSIONAL = REGISTRATE.block("dimensional_storage", p -> DelegateBlock.newBaseBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.ENDER_CHEST),
 						BlockTemplates.HORIZONTAL, DimensionalBlock.INSTANCE, EnderParticleBlock.INSTANCE,
 						DimensionalBlock.TILE_ENTITY_SUPPLIER_BUILDER))
 				.blockstate((ctx, pvd) -> pvd.horizontalBlock(ctx.getEntry(), state -> pvd.models()
@@ -43,8 +43,8 @@ public class LBBlocks {
 				.loot((table, block) -> table.dropOther(block, Blocks.ENDER_CHEST))
 				.tag(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL)
 				.defaultLang().register();
-		TE_WORLD_CHEST = REGISTRATE.blockEntity("dimensional_storage", DimensionalBlockEntity::new)
-				.validBlock(WORLD_CHEST).register();
+		TE_DIMENSIONAL = REGISTRATE.blockEntity("dimensional_storage", DimensionalBlockEntity::new)
+				.validBlock(DIMENSIONAL).register();
 
 		ENDER_DRAWER = REGISTRATE.block("ender_drawer", p -> DelegateBlock.newBaseBlock(
 						BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).requiresCorrectToolForDrops()

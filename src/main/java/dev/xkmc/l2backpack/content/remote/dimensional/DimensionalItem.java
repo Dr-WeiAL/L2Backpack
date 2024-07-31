@@ -50,7 +50,7 @@ public class DimensionalItem extends BlockItem implements BackpackModelItem, Pic
 	public final DyeColor color;
 
 	public DimensionalItem(DyeColor color, Properties props) {
-		super(LBBlocks.WORLD_CHEST.get(), props.stacksTo(1).fireResistant());
+		super(LBBlocks.DIMENSIONAL.get(), props.stacksTo(1).fireResistant());
 		this.color = color;
 	}
 
