@@ -101,11 +101,6 @@ jar {
     }
 }
 
-dependencies {
-    //annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
-    //compileOnly fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
-}
-
 // project specific
 
 repositories {
