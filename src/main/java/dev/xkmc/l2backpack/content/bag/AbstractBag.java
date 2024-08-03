@@ -9,8 +9,8 @@ import dev.xkmc.l2backpack.content.common.TooltipInvItem;
 import dev.xkmc.l2backpack.content.insert.CapInsertItem;
 import dev.xkmc.l2backpack.init.data.LBLang;
 import dev.xkmc.l2backpack.init.registrate.LBItems;
+import dev.xkmc.l2core.util.TooltipHelper;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -122,18 +122,18 @@ public abstract class AbstractBag extends Item
 	}
 
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-		if (Screen.hasAltDown()) {
-			return;
-		}
-		list.add(LBLang.IDS.BAG_SIZE.get(getSize(stack), SIZE));
-		PickupConfig.addText(stack, list);
-		LBLang.addInfo(list,
-				LBLang.Info.COLLECT_BAG,
-				LBLang.Info.LOAD,
-				LBLang.Info.EXTRACT_BAG);
-		if (!Screen.hasShiftDown()) {
+		TooltipHelper.addClient(context, flag, helper -> {//TODO
+			if (helper.alt()) return;
+			list.add(LBLang.IDS.BAG_SIZE.get(getSize(stack), SIZE));
+			PickupConfig.addText(stack, list);
+			LBLang.addInfo(list,
+					LBLang.Info.COLLECT_BAG,
+					LBLang.Info.LOAD,
+					LBLang.Info.EXTRACT_BAG);
+			if (helper.shift()) return;
 			list.add(LBLang.Info.ALT_CONTENT.get().withStyle(ChatFormatting.GRAY));
-		}
+
+		});
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLEnvironment;
 
 import java.util.List;
 import java.util.Locale;
@@ -18,7 +19,7 @@ import java.util.function.BiConsumer;
 public class LBLang {
 
 	public static void addInfo(List<Component> list, Info... text) {
-		if (Screen.hasShiftDown()) {
+		if (FMLEnvironment.dist.isClient() && Screen.hasShiftDown()) {//TODO
 			boolean col = false;
 			for (Info info : text) {
 				list.add(info.get().withStyle(col ? Style.EMPTY.withColor(0x6abe30) : Style.EMPTY.withColor(0x5fcde4)));
@@ -31,7 +32,7 @@ public class LBLang {
 		}
 	}
 
-	public static void altInsert(List<Component> list) {
+	public static void altInsert(List<Component> list) {//TODO
 		if (Screen.hasShiftDown()) return;
 		var player = Minecraft.getInstance().player;
 		var menu = player.containerMenu;
