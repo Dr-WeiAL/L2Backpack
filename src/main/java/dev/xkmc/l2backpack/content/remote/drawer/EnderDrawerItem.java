@@ -116,7 +116,7 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 		refresh(drawer, player);
 		DrawerAccess access = DrawerAccess.of(player.level(), drawer);
 		int count = access.getCount();
-		int take = Math.min(BaseDrawerItem.getStacking(stack) * stack.getMaxStackSize() - count, stack.getCount());
+		int take = Math.min(BaseDrawerItem.getStacking(drawer) * stack.getMaxStackSize() - count, stack.getCount());
 		access.setCount(access.getCount() + take);
 		stack.shrink(take);
 	}
@@ -172,7 +172,8 @@ public class EnderDrawerItem extends BlockItem implements BaseDrawerItem {
 
 	@Override
 	public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-		return new DrawerInvWrapper(stack, trace -> trace.player == null ? null : new EnderDrawerInvAccess(stack, this, trace.player));
+		return new DrawerInvWrapper(stack, trace -> !stack.getOrCreateTag().contains(KEY_OWNER_ID) && trace.player == null ? null :
+				new EnderDrawerInvAccess(stack, this, trace.level, trace.player));
 	}
 
 	@Override
